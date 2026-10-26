@@ -1,0 +1,3149 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnEAKs | Ghana's #1 Exclusive Sneaker Vault</title>
+    <meta name="description"
+        content="Authentic, limited-edition kicks and exclusive drops in Ghana. Fast Mobile Money (MoMo), Paystack Card, Cash on Delivery in Accra, and WhatsApp dispatch.">
+
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            /* Theme Tokens: Default Dark Mode */
+            --primary: #e11d48;
+            /* Vibrant Sneaker Red */
+            --primary-hover: #f43f5e;
+            --primary-light: rgba(225, 29, 72, 0.15);
+            --primary-glow: rgba(225, 29, 72, 0.4);
+            --bg-body: #090d16;
+            /* Obsidian */
+            --bg-surface: #111827;
+            /* Deep Slate */
+            --bg-card: #151d2f;
+            /* Card Container */
+            --bg-card-hover: #1b253b;
+            --bg-input: #1e293b;
+            --border: #223049;
+            --border-hover: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --badge-bg: #1e293b;
+            --green: #10b981;
+            --green-light: rgba(16, 185, 129, 0.15);
+            --gold: #f59e0b;
+            --gold-light: rgba(245, 158, 11, 0.15);
+            --font-heading: 'Outfit', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --radius-full: 9999px;
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 20px 45px rgba(0, 0, 0, 0.6);
+            --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Light Theme Overrides */
+        [data-theme="light"] {
+            --primary: #9f1239;
+            --primary-hover: #be123c;
+            --primary-light: #ffe4e6;
+            --primary-glow: rgba(225, 29, 72, 0.25);
+            --bg-body: #f8fafc;
+            --bg-surface: #ffffff;
+            --bg-card: #ffffff;
+            --bg-card-hover: #fcfdfe;
+            --bg-input: #f1f5f9;
+            --border: #e2e8f0;
+            --border-hover: #cbd5e1;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --badge-bg: #f1f5f9;
+            --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.05);
+            --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+            --shadow-lg: 0 20px 35px -10px rgba(15, 23, 42, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .font-heading {
+            font-family: var(--font-heading);
+            letter-spacing: -0.02em;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+        }
+
+        /* Announcement Bar */
+        .announcement-bar {
+            background: linear-gradient(90deg, #18050e 0%, #310815 50%, #18050e 100%);
+            color: #ffe4e6;
+            padding: 0.55rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid rgba(225, 29, 72, 0.25);
+            text-align: center;
+        }
+
+        .announcement-bar span {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .announcement-badge {
+            background: var(--primary);
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: var(--radius-full);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        /* Navbar */
+        header {
+            background: rgba(17, 24, 39, 0.85);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.9rem 6%;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        [data-theme="light"] header {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.85rem;
+            font-weight: 900;
+            letter-spacing: -1.2px;
+            color: var(--text-main);
+            cursor: pointer;
+        }
+
+        .logo-badge {
+            background: linear-gradient(135deg, #e11d48 0%, #881337 100%);
+            color: #ffffff;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: 0 4px 14px var(--primary-glow);
+            position: relative;
+        }
+
+        .logo-text .accent {
+            color: var(--primary);
+            font-weight: 900;
+        }
+
+        /* Header Actions */
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theme-toggle-btn,
+        .nav-btn {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .theme-toggle-btn:hover,
+        .nav-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-light);
+            transform: scale(1.05);
+        }
+
+        .cart-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, #be123c 100%);
+            color: #fff;
+            border: none;
+            padding: 0.65rem 1.35rem;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.92rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 16px var(--primary-glow);
+            transition: var(--transition);
+        }
+
+        .cart-btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(225, 29, 72, 0.5);
+        }
+
+        .cart-badge {
+            background: #ffffff;
+            color: #9f1239;
+            border-radius: var(--radius-full);
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            min-width: 20px;
+            text-align: center;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .badge-pop {
+            animation: badgePop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes badgePop {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.4);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Hero Banner */
+        .hero {
+            background: linear-gradient(135deg, rgba(9, 13, 22, 0.94) 0%, rgba(17, 24, 39, 0.88) 100%),
+                url('https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+            color: #fff;
+            padding: 5.5rem 1.5rem 6.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(225, 29, 72, 0.35) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(225, 29, 72, 0.2);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(225, 29, 72, 0.4);
+            color: #fecdd3;
+            padding: 6px 16px;
+            border-radius: var(--radius-full);
+            font-size: 0.82rem;
+            font-weight: 800;
+            margin-bottom: 1.25rem;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .hero-pill i {
+            color: #f43f5e;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.4rem, 5.5vw, 4.4rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -1.5px;
+            line-height: 1.05;
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        .hero h1 span.gradient-text {
+            background: linear-gradient(135deg, #ffffff 30%, #fca5a5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: #cbd5e1;
+            margin: 1.2rem auto 2.2rem;
+            max-width: 680px;
+            font-weight: 400;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .btn-hero-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, #be123c 100%);
+            color: #fff;
+            padding: 0.9rem 2.2rem;
+            border-radius: var(--radius-full);
+            font-weight: 800;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 25px var(--primary-glow);
+            transition: var(--transition);
+        }
+
+        .btn-hero-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(225, 29, 72, 0.6);
+        }
+
+        .btn-hero-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 0.9rem 1.8rem;
+            border-radius: var(--radius-full);
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+        }
+
+        .btn-hero-secondary:hover {
+            background: #25d366;
+            border-color: #25d366;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+        }
+
+        /* Trust / Values Strip */
+        .trust-strip {
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1.25rem 5%;
+        }
+
+        .trust-grid {
+            max-width: 1250px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .trust-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .trust-text h4 {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .trust-text p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1280px;
+            margin: 2.5rem auto 4rem;
+            padding: 0 1.5rem;
+        }
+
+        /* Controls Card */
+        .controls-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            margin-bottom: 2.2rem;
+        }
+
+        .search-and-sort {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.25rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 260px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-full);
+            background: var(--bg-input);
+            font-size: 0.92rem;
+            color: var(--text-main);
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: var(--bg-card);
+            box-shadow: 0 0 0 4px var(--primary-light);
+        }
+
+        .sort-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .sort-select {
+            padding: 0.65rem 1.1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-full);
+            background: var(--bg-input);
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .sort-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Filter Chips */
+        .filter-bar {
+            display: flex;
+            gap: 0.55rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-chip {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 0.5rem 1.15rem;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+        }
+
+        .filter-chip .chip-count {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 1px 6px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+        }
+
+        [data-theme="light"] .filter-chip .chip-count {
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        .filter-chip:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .filter-chip.active {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 4px 14px var(--primary-glow);
+        }
+
+        .filter-chip.active .chip-count {
+            background: #ffffff;
+            color: var(--primary);
+        }
+
+        /* Section Results Header */
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .results-header h2 {
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .results-count {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Product Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
+            gap: 1.75rem;
+        }
+
+        /* Sneaker Card */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            padding: 1.15rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-7px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--border-hover);
+        }
+
+        .card-top-badges {
+            position: absolute;
+            top: 1.75rem;
+            left: 1.75rem;
+            right: 1.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .tag {
+            background: rgba(9, 13, 22, 0.85);
+            backdrop-filter: blur(6px);
+            color: #fff;
+            padding: 4px 10px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            border-radius: var(--radius-full);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tag.hot {
+            background: linear-gradient(135deg, #e11d48, #9f1239);
+            border: none;
+        }
+
+        .wishlist-btn {
+            pointer-events: auto;
+            background: rgba(17, 24, 39, 0.85);
+            backdrop-filter: blur(6px);
+            border: 1px solid var(--border);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+        }
+
+        [data-theme="light"] .wishlist-btn {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .wishlist-btn:hover {
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .wishlist-btn.active {
+            color: var(--primary);
+            background: var(--bg-card);
+        }
+
+        .image-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius-md);
+            margin-bottom: 1.1rem;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0.15) 100%);
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        [data-theme="light"] .image-container {
+            background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .card:hover .image-container img {
+            transform: scale(1.08) rotate(-1deg);
+        }
+
+        .quick-view-btn {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(9, 13, 22, 0.92);
+            backdrop-filter: blur(8px);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.55rem 1.15rem;
+            border-radius: var(--radius-full);
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity: 0;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .card:hover .quick-view-btn {
+            bottom: 14px;
+            opacity: 1;
+        }
+
+        .quick-view-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.35rem;
+        }
+
+        .card .category {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .card .stock-pill {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #34d399;
+            background: rgba(16, 185, 129, 0.15);
+            padding: 1px 7px;
+            border-radius: var(--radius-full);
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 0.35rem;
+            color: var(--text-main);
+            line-height: 1.25;
+        }
+
+        .card .price-row {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 0.9rem;
+        }
+
+        .card .price {
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+
+        .card .original-price {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-decoration: line-through;
+            font-weight: 600;
+            opacity: 0.7;
+        }
+
+        /* Card Option Selectors */
+        .card-options {
+            background: var(--bg-input);
+            border-radius: var(--radius-sm);
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .option-label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .option-selected-val {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Size Pills */
+        .size-pills-row {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .size-pill {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 4px 7px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-main);
+        }
+
+        .size-pill:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .size-pill.selected {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        /* Color Input Group */
+        .color-input-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .color-text-input {
+            width: 100%;
+            padding: 0.45rem 0.65rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            background: var(--bg-card);
+            color: var(--text-main);
+            transition: var(--transition);
+        }
+
+        .color-text-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--primary-light);
+        }
+
+        /* Card Action Buttons */
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: auto;
+        }
+
+        .btn-add-cart {
+            flex: 1;
+            padding: 0.78rem 1rem;
+            background: var(--bg-input);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-add-cart:hover {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px var(--primary-glow);
+        }
+
+        .btn-wa-direct {
+            background: #25d366;
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-md);
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            cursor: pointer;
+            transition: var(--transition);
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.25);
+        }
+
+        .btn-wa-direct:hover {
+            background: #1eb857;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(37, 211, 102, 0.4);
+        }
+
+        /* Slide-in Cart Drawer */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(9, 13, 22, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .drawer-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .cart-drawer {
+            position: fixed;
+            top: 0;
+            right: -480px;
+            width: 100%;
+            max-width: 460px;
+            height: 100%;
+            background: var(--bg-surface);
+            z-index: 1001;
+            box-shadow: -10px 0 35px rgba(0, 0, 0, 0.5);
+            transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid var(--border);
+        }
+
+        .cart-drawer.active {
+            right: 0;
+        }
+
+        .drawer-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-surface);
+        }
+
+        .drawer-header h3 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .drawer-close {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .drawer-close:hover {
+            color: var(--text-main);
+            background: var(--border);
+        }
+
+        /* Free Delivery Progress in Drawer */
+        .delivery-bar-wrapper {
+            background: var(--primary-light);
+            padding: 0.85rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .delivery-bar-text {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+        }
+
+        [data-theme="light"] .progress-track {
+            background: #fecdd3;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .drawer-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.25rem 1.5rem;
+        }
+
+        .empty-cart-state {
+            text-align: center;
+            padding: 3.5rem 1rem;
+            color: var(--text-muted);
+        }
+
+        .empty-cart-icon {
+            font-size: 3.5rem;
+            color: var(--border-hover);
+            margin-bottom: 1rem;
+        }
+
+        .empty-cart-state h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Cart Items List */
+        .cart-item {
+            display: flex;
+            gap: 14px;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+
+        .cart-item-img {
+            width: 75px;
+            height: 75px;
+            object-fit: cover;
+            border-radius: var(--radius-sm);
+            background: var(--bg-input);
+            flex-shrink: 0;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            margin-bottom: 3px;
+        }
+
+        .cart-item-details {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .item-badge {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            padding: 1px 7px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .cart-item-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-item-price {
+            font-weight: 800;
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-full);
+            background: var(--bg-card);
+            overflow: hidden;
+        }
+
+        .qty-btn {
+            background: transparent;
+            border: none;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .qty-btn:hover {
+            background: var(--bg-input);
+            color: var(--primary);
+        }
+
+        .qty-value {
+            padding: 0 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .cart-item-remove {
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 10px;
+            transition: var(--transition);
+        }
+
+        .cart-item-remove:hover {
+            color: #ef4444;
+        }
+
+        /* Drawer Footer */
+        .drawer-footer {
+            padding: 1.5rem;
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border);
+            box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .drawer-summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.6rem;
+            font-size: 0.92rem;
+            color: var(--text-muted);
+        }
+
+        .drawer-summary-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border);
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--text-main);
+        }
+
+        .drawer-summary-total span.total-price {
+            color: var(--primary);
+        }
+
+        .drawer-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 1.2rem;
+        }
+
+        .btn-drawer-checkout {
+            background: linear-gradient(135deg, var(--primary) 0%, #be123c 100%);
+            color: #fff;
+            padding: 0.9rem;
+            border-radius: var(--radius-md);
+            font-weight: 800;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: var(--transition);
+            box-shadow: 0 4px 14px var(--primary-glow);
+        }
+
+        .btn-drawer-checkout:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-drawer-whatsapp {
+            background: #25d366;
+            color: #fff;
+            padding: 0.85rem;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: var(--transition);
+        }
+
+        .btn-drawer-whatsapp:hover {
+            background: #1eb857;
+            transform: translateY(-2px);
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(9, 13, 22, 0.85);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 1.25rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-surface);
+            color: var(--text-main);
+            padding: 2.2rem;
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 580px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            animation: modalFadeUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalFadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.97);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .close {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.5rem;
+            cursor: pointer;
+            font-size: 1.4rem;
+            color: var(--text-muted);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .close:hover {
+            color: var(--text-main);
+            background: var(--border);
+        }
+
+        /* Quick View Modal Layout */
+        .quick-view-body {
+            display: grid;
+            grid-template-columns: 1fr 1.15fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        @media (max-width: 680px) {
+            .quick-view-body {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .quick-view-img-wrapper {
+            background: var(--bg-input);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .quick-view-img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: var(--radius-sm);
+            transition: transform 0.3s ease;
+        }
+
+        .quick-view-details h3 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 0.4rem;
+        }
+
+        .quick-view-details .price {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 900;
+            margin: 0.4rem 0 0.8rem;
+        }
+
+        .quick-view-details .description {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 1.25rem;
+        }
+
+        /* Payment Method Tabs in Checkout */
+        .payment-methods-tabs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 1.2rem 0;
+        }
+
+        .pay-tab-btn {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 0.65rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            transition: var(--transition);
+        }
+
+        .pay-tab-btn i {
+            font-size: 1.1rem;
+        }
+
+        .pay-tab-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .pay-tab-btn.active {
+            background: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .pay-method-panel {
+            display: none;
+            margin-bottom: 1.2rem;
+        }
+
+        .pay-method-panel.active {
+            display: block;
+            animation: panelFade 0.25s ease;
+        }
+
+        @keyframes panelFade {
+            from {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* MoMo Box */
+        .momo-box {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(245, 158, 11, 0.05) 100%);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            padding: 1.25rem;
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+
+        .momo-box .momo-title {
+            font-weight: 800;
+            color: var(--gold);
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .momo-networks {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 0.6rem;
+        }
+
+        .momo-badge {
+            font-size: 0.72rem;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .momo-badge.mtn {
+            background: #fbbf24;
+            color: #78350f;
+        }
+
+        .momo-badge.telecel {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        .momo-badge.at {
+            background: #3b82f6;
+            color: #fff;
+        }
+
+        .momo-number-wrapper {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-card);
+            padding: 0.5rem 1.2rem;
+            border-radius: var(--radius-full);
+            border: 1px dashed var(--gold);
+            margin: 0.4rem 0 0.8rem;
+        }
+
+        .momo-box .momo-number {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--text-main);
+            letter-spacing: 1.5px;
+            font-family: var(--font-heading);
+        }
+
+        .btn-copy-momo {
+            background: var(--gold);
+            color: #000;
+            border: none;
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-copy-momo:hover {
+            background: #d97706;
+            color: #fff;
+        }
+
+        /* Card / Paystack simulation box */
+        .paystack-box {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            padding: 1.25rem;
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+
+        /* Cash on delivery box */
+        .cod-box {
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            padding: 1.25rem;
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+
+        /* Form Controls */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        @media (max-width: 500px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-group {
+            margin-bottom: 1.1rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.35rem;
+            font-size: 0.84rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 0.75rem 0.95rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            color: var(--text-main);
+            background: var(--bg-input);
+            transition: var(--transition);
+        }
+
+        .input-group input:focus,
+        .input-group select:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .checkout-items-preview {
+            background: var(--bg-input);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            margin-bottom: 1.2rem;
+            max-height: 160px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+        }
+
+        /* Floating Toast Notification */
+        .toast-container {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: var(--bg-surface);
+            color: var(--text-main);
+            padding: 0.9rem 1.3rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            pointer-events: auto;
+            border-left: 4px solid var(--primary);
+            border: 1px solid var(--border);
+            animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            max-width: 380px;
+        }
+
+        @keyframes toastSlideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-surface);
+            color: var(--text-muted);
+            padding: 4rem 6% 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-grid {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr;
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 900px) {
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .footer-col h4 {
+            color: var(--text-main);
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 1.2rem;
+        }
+
+        .footer-col p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.6rem;
+            font-size: 0.88rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        .footer-bottom {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .momo-pay-icons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .momo-icon-tag {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        /* Wishlist Modal Items */
+        .wishlist-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.9rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* Responsiveness */
+        @media (max-width: 768px) {
+            header {
+                padding: 0.8rem 4%;
+            }
+
+            .hero {
+                padding: 3.5rem 1rem 4.5rem;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .container {
+                margin: 1.5rem auto 3rem;
+            }
+
+            .search-and-sort {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .sort-box {
+                justify-content: space-between;
+            }
+
+            .grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 1.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ANNOUNCEMENT BAR -->
+    <div class="announcement-bar">
+        <span><span class="announcement-badge">EXCLUSIVE DROP</span> Authentic Kicks Delivered Across Accra &
+            Nationwide!</span>
+        <span style="opacity: 0.85;">• Direct MoMo, Paystack, Cash on Delivery & WhatsApp Checkout</span>
+    </div>
+
+    <!-- NAVBAR -->
+    <header>
+        <div class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+            <div class="logo-badge"><i class="fas fa-shoe-prints"></i></div>
+            <span class="logo-text">SnEAK<span class="accent">s</span></span>
+        </div>
+
+        <div class="nav-actions">
+            <!-- Theme Toggle -->
+            <button class="theme-toggle-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+                <i class="fas fa-moon" id="theme-icon"></i>
+            </button>
+            <!-- Wishlist -->
+            <button class="nav-btn" onclick="openWishlist()" title="View Wishlist">
+                <i class="far fa-heart"></i>
+                <span id="wishlist-count" style="font-weight: 800; margin-left: 2px;">0</span>
+            </button>
+            <!-- Cart Bag -->
+            <button class="cart-btn" onclick="openCart()" id="main-cart-btn">
+                <i class="fas fa-shopping-bag"></i> Bag
+                <span class="cart-badge" id="cart-count">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-pill">
+            <i class="fas fa-bolt"></i> Ghana's Premier Sneaker Vault & Customizer
+        </div>
+        <h1><span class="gradient-text">Fresh Sneaker Drops.</span><br>Bespoke Colorways.</h1>
+        <p>100% verified original kicks and custom editions hand-checked for sneakerheads in Ghana. Instant MoMo line,
+            online card, cash on delivery, and rapid express dispatch.</p>
+
+        <div class="hero-cta-group">
+            <button class="btn-hero-primary" onclick="scrollToProducts()">
+                <i class="fas fa-fire"></i> Explore Trending Kicks
+            </button>
+            <a href="https://wa.me/233501019565?text=Hello%20SnEAKs!%20I'd%20like%20to%20inquire%20about%20your%20current%20sneaker%20stock%20and%20sizes."
+                target="_blank" class="btn-hero-secondary">
+                <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+            </a>
+        </div>
+    </section>
+
+    <!-- TRUST STRIP -->
+    <div class="trust-strip">
+        <div class="trust-grid">
+            <div class="trust-item">
+                <div class="trust-icon"><i class="fas fa-certificate"></i></div>
+                <div class="trust-text">
+                    <h4>100% Authentic</h4>
+                    <p>Inspected original kicks only</p>
+                </div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon"><i class="fas fa-truck-fast"></i></div>
+                <div class="trust-text">
+                    <h4>Express Dispatch</h4>
+                    <p>Same-day & next-day in Accra</p>
+                </div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon"><i class="fas fa-mobile-screen-button"></i></div>
+                <div class="trust-text">
+                    <h4>Verified MoMo Line</h4>
+                    <p>Direct to 0256514988</p>
+                </div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon"><i class="fas fa-arrows-rotate"></i></div>
+                <div class="trust-text">
+                    <h4>Size Exchange</h4>
+                    <p>Hassle-free fit guarantee</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRODUCTS SECTION -->
+    <main class="container" id="kicks-section">
+
+        <!-- Controls Card (Search + Sort + Filters) -->
+        <div class="controls-card">
+            <div class="search-and-sort">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="search-input" class="search-input"
+                        placeholder="Search Jordans, Air Force 1, Dunks, Yeezy, Birkenstocks..."
+                        oninput="handleSearch(this.value)">
+                </div>
+                <div class="sort-box">
+                    <span>Sort by:</span>
+                    <select id="sort-select" class="sort-select" onchange="handleSort(this.value)">
+                        <option value="featured">Featured Drops</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="name-az">Name: A to Z</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Category Filters -->
+            <div class="filter-bar" id="filter-bar"></div>
+        </div>
+
+        <!-- Section Results Header -->
+        <div class="results-header">
+            <h2><i class="fas fa-fire-flame-curved" style="color: var(--primary);"></i> Trending Kicks</h2>
+            <span class="results-count" id="results-count">Showing 26 pairs</span>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="grid" id="product-grid"></div>
+    </main>
+
+    <!-- SLIDE-IN CART DRAWER -->
+    <div class="drawer-overlay" id="drawer-overlay" onclick="closeCart()"></div>
+    <aside class="cart-drawer" id="cart-drawer">
+        <div class="drawer-header">
+            <h3><i class="fas fa-shopping-bag" style="color: var(--primary);"></i> Shopping Bag</h3>
+            <button class="drawer-close" onclick="closeCart()">&times;</button>
+        </div>
+
+        <!-- Free Delivery Progress -->
+        <div class="delivery-bar-wrapper">
+            <div class="delivery-bar-text" id="delivery-text">
+                <i class="fas fa-truck"></i> Add GH₵ 350.00 more for Free Accra Delivery!
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="delivery-progress"></div>
+            </div>
+        </div>
+
+        <div class="drawer-body" id="cart-items-container">
+            <!-- Dynamic items or empty state -->
+        </div>
+
+        <div class="drawer-footer" id="drawer-footer">
+            <div class="drawer-summary-row">
+                <span>Subtotal:</span>
+                <span id="drawer-subtotal">GH₵ 0.00</span>
+            </div>
+            <div class="drawer-summary-row">
+                <span>Estimated Accra Dispatch:</span>
+                <span id="drawer-shipping" style="color: var(--green); font-weight: 700;">FREE</span>
+            </div>
+            <div class="drawer-summary-total">
+                <span>Total Amount:</span>
+                <span class="total-price" id="drawer-total">GH₵ 0.00</span>
+            </div>
+
+            <div class="drawer-buttons">
+                <button class="btn-drawer-checkout" onclick="openCheckoutModal()">
+                    <i class="fas fa-lock"></i> Proceed to Checkout
+                </button>
+                <button class="btn-drawer-whatsapp" onclick="checkoutViaWhatsApp()">
+                    <i class="fab fa-whatsapp"></i> Order Bag via WhatsApp
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- QUICK VIEW MODAL -->
+    <div class="modal" id="quick-view-modal">
+        <div class="modal-content" style="max-width: 720px;">
+            <button class="close" onclick="closeQuickView()">&times;</button>
+            <div id="quick-view-content"></div>
+        </div>
+    </div>
+
+    <!-- WISHLIST MODAL -->
+    <div class="modal" id="wishlist-modal">
+        <div class="modal-content" style="max-width: 550px;">
+            <button class="close" onclick="closeWishlist()">&times;</button>
+            <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem;"><i class="fas fa-heart"
+                    style="color: var(--primary);"></i> Saved Favorites</h3>
+            <div id="wishlist-items-container"></div>
+        </div>
+    </div>
+
+    <!-- CHECKOUT MODAL (MOMO, CARD, CASH ON DELIVERY) -->
+    <div class="modal" id="checkout-modal">
+        <div class="modal-content">
+            <button class="close" onclick="closeCheckoutModal()">&times;</button>
+            <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.4rem;">Complete Your Order</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Choose your preferred payment
+                method and enter delivery details.</p>
+
+            <!-- Order Items Preview -->
+            <div class="checkout-items-preview" id="checkout-items-preview"></div>
+
+            <!-- Payment Method Selector Tabs -->
+            <div class="payment-methods-tabs">
+                <button type="button" class="pay-tab-btn active" id="tab-momo" onclick="switchPayMethod('momo')">
+                    <i class="fas fa-mobile-screen-button"></i> Mobile Money
+                </button>
+                <button type="button" class="pay-tab-btn" id="tab-card" onclick="switchPayMethod('card')">
+                    <i class="fas fa-credit-card"></i> Paystack Card
+                </button>
+                <button type="button" class="pay-tab-btn" id="tab-cod" onclick="switchPayMethod('cod')">
+                    <i class="fas fa-hand-holding-dollar"></i> Cash on Delivery
+                </button>
+            </div>
+
+            <!-- MOMO PAYMENT PANEL -->
+            <div class="pay-method-panel active" id="panel-momo">
+                <div class="momo-box">
+                    <div class="momo-title">
+                        <i class="fas fa-mobile-screen-button"></i> Mobile Money (MoMo) Line
+                    </div>
+                    <div class="momo-networks">
+                        <span class="momo-badge mtn">MTN MoMo</span>
+                        <span class="momo-badge telecel">Telecel Cash</span>
+                        <span class="momo-badge at">AT Money</span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Send payment to the official SnEAKs MoMo
+                        number:</p>
+                    <div class="momo-number-wrapper">
+                        <span class="momo-number">0256514988</span>
+                        <button type="button" class="btn-copy-momo" onclick="copyMoMoNumber(this)">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    <p style="font-size: 0.82rem; color: var(--gold); font-weight: 600;">
+                        <i class="fas fa-info-circle"></i> Use your <strong>Full Name</strong> as the transaction
+                        reference.
+                    </p>
+                </div>
+            </div>
+
+            <!-- PAYSTACK / CARD PANEL -->
+            <div class="pay-method-panel" id="panel-card">
+                <div class="paystack-box">
+                    <i class="fas fa-shield-halved" style="font-size: 2rem; color: #10b981; margin-bottom: 0.5rem;"></i>
+                    <h4 style="font-size: 1rem; margin-bottom: 0.3rem;">Paystack Online Gateway</h4>
+                    <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.8rem;">
+                        Securely pay via Visa, Mastercard, GhQR, or Bank Card. Instant verified receipt generated upon
+                        submitting.
+                    </p>
+                    <div style="display:flex; justify-content:center; gap:8px;">
+                        <span class="momo-icon-tag"><i class="fab fa-cc-visa"></i> Visa</span>
+                        <span class="momo-icon-tag"><i class="fab fa-cc-mastercard"></i> Mastercard</span>
+                        <span class="momo-icon-tag"><i class="fas fa-qrcode"></i> GhQR</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CASH ON DELIVERY PANEL -->
+            <div class="pay-method-panel" id="panel-cod">
+                <div class="cod-box">
+                    <i class="fas fa-motorcycle" style="font-size: 2rem; color: #10b981; margin-bottom: 0.5rem;"></i>
+                    <h4 style="font-size: 1rem; margin-bottom: 0.3rem; color: var(--green);">Cash on Delivery (Accra
+                        Only)</h4>
+                    <p style="font-size: 0.82rem; color: var(--text-muted);">
+                        Pay cash or MoMo directly to the dispatch rider when your sneakers are brought to your doorstep
+                        in Accra.
+                    </p>
+                </div>
+            </div>
+
+            <form id="payment-form">
+                <div class="input-group">
+                    <label for="cust-name">Full Name *</label>
+                    <input type="text" id="cust-name" required placeholder="e.g. Kwame Mensah">
+                </div>
+
+                <div class="form-row">
+                    <div class="input-group">
+                        <label for="cust-phone">WhatsApp / Phone Number *</label>
+                        <input type="tel" id="cust-phone" required placeholder="e.g. 0244123456">
+                    </div>
+                    <div class="input-group">
+                        <label for="cust-email">Email Address</label>
+                        <input type="email" id="cust-email" placeholder="e.g. kwame@example.com">
+                    </div>
+                </div>
+
+                <!-- DROPOFF LOCATION INPUT -->
+                <div class="input-group">
+                    <label for="cust-address">Dropoff Location / Delivery Address *</label>
+                    <input type="text" id="cust-address" required
+                        placeholder="e.g. House No. 14, East Legon, Accra / Hall 7 KNUST">
+                </div>
+
+                <div class="input-group">
+                    <label for="cust-region">Region / City Area</label>
+                    <select id="cust-region">
+                        <option value="Accra - East Legon / Airport / Cantonments">Accra - East Legon / Airport /
+                            Cantonments</option>
+                        <option value="Accra - Osu / Labone / Ridge">Accra - Osu / Labone / Ridge</option>
+                        <option value="Accra - Spintex / Tema / Sakumono">Accra - Spintex / Tema / Sakumono</option>
+                        <option value="Accra - Dansoman / Kaneshie / Circle">Accra - Dansoman / Kaneshie / Circle
+                        </option>
+                        <option value="Kumasi Metro">Kumasi Metro</option>
+                        <option value="Takoradi / Cape Coast">Takoradi / Cape Coast</option>
+                        <option value="Other Region / Nationwide Courier">Other Region / Nationwide Courier</option>
+                    </select>
+                </div>
+
+                <button class="btn-drawer-checkout" style="width: 100%; font-size: 1.05rem;" id="pay-btn" type="submit">
+                    <i class="fas fa-check-circle"></i> Confirm & Submit Order
+                </button>
+                <div id="payment-message" style="margin-top: 1rem; font-size: 0.9rem; text-align: center;"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ORDER RECEIPT MODAL -->
+    <div class="modal" id="order-success-modal">
+        <div class="modal-content" style="text-align: center;">
+            <div
+                style="width: 65px; height: 65px; background: rgba(16, 185, 129, 0.15); color: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.9rem; margin: 0 auto 1rem;">
+                <i class="fas fa-check"></i>
+            </div>
+            <h2 style="font-size: 1.6rem; font-weight: 800; color: var(--text-main);">Order Received!</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.3rem;">Order Reference: <strong
+                    id="order-ref-code" style="color: var(--primary);">#SNK-8921</strong></p>
+
+            <div style="background: var(--bg-input); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.25rem; margin: 1.25rem 0; text-align: left; font-size: 0.9rem;"
+                id="order-receipt-details">
+                <!-- Injected via JS -->
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <a id="btn-wa-confirm-order" href="#" target="_blank" class="btn-drawer-whatsapp"
+                    style="text-decoration: none;">
+                    <i class="fab fa-whatsapp"></i> Send Receipt via WhatsApp for Priority Dispatch
+                </a>
+                <button class="btn-hero-primary" style="width: 100%; border-radius: var(--radius-md);"
+                    onclick="closeSuccessModal()">
+                    Back to Sneaker Vault
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="logo" style="margin-bottom: 1rem;">
+                    <div class="logo-badge"><i class="fas fa-shoe-prints"></i></div>
+                    <span class="logo-text">SnEAK<span class="accent">s</span></span>
+                </div>
+                <p>Ghana's premier destination for exclusive kicks, iconic silhouettes, and limited drops. Authentic
+                    footwear sourced worldwide and delivered straight to your doorstep.</p>
+                <div class="momo-pay-icons">
+                    <span class="momo-icon-tag"><i class="fas fa-bolt"></i> MTN MoMo</span>
+                    <span class="momo-icon-tag"><i class="fas fa-signal"></i> Telecel</span>
+                    <span class="momo-icon-tag"><i class="fab fa-cc-visa"></i> Paystack</span>
+                    <span class="momo-icon-tag"><i class="fas fa-shield-halved"></i> 100% Original</span>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Collections</h4>
+                <ul class="footer-links">
+                    <li><a href="javascript:void(0)" onclick="setCategory('High Tops')">High Tops</a></li>
+                    <li><a href="javascript:void(0)" onclick="setCategory('Low Tops')">Low Tops</a></li>
+                    <li><a href="javascript:void(0)" onclick="setCategory('Streetwear')">Streetwear</a></li>
+                    <li><a href="javascript:void(0)" onclick="setCategory('Court')">Court Classics</a></li>
+                    <li><a href="javascript:void(0)" onclick="setCategory('Chunky')">Chunky Runners</a></li>
+                    <li><a href="javascript:void(0)" onclick="setCategory('Runners')">Runners</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Help & Payment</h4>
+                <ul class="footer-links">
+                    <li><a href="javascript:void(0)" onclick="showMoMoHelp()">How MoMo Ordering Works</a></li>
+                    <li><a href="javascript:void(0)" onclick="openCart()">Shopping Bag</a></li>
+                    <li><a href="javascript:void(0)" onclick="openWishlist()">Saved Favorites</a></li>
+                    <li><a href="https://wa.me/233501019565" target="_blank">Direct WhatsApp Desk</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Ghana Dispatch Desk</h4>
+                <p><strong>Official MoMo Line:</strong> 0256514988</p>
+                <p><strong>WhatsApp Support:</strong> +233 50 101 9565</p>
+                <p><strong>Payment Accepted:</strong> MoMo, Paystack, Cash on Delivery (Accra).</p>
+                <p><strong>Delivery Locations:</strong> Greater Accra, Kumasi, Takoradi & All Major Ghana Towns.</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>&copy; 2026 SnEAKs Vault Ghana. All rights reserved.</span>
+            <span>Designed for Sneakerheads • MoMo Line: 0256514988</span>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // EXPANDED 17-SNEAKER CATALOG WITH EXACT VERIFIED MATCHING IMAGES
+        const products = [
+            {
+                id: 1,
+                name: "Birkenstock Boston Clog",
+                price: 450.00,
+                originalPrice: 550.00,
+                tag: "Hot Drop",
+                category: "Lifestyle",
+                image: "https://res.cloudinary.com/imqjmexy/image/upload/v1789673784/Screenshot_20260917_192529_Snapchat.jpg",
+                fallbackImage: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600",
+                description: "Slip-on suede Boston clog featuring signature contoured cork-latex footbed and adjustable brass buckle."
+            },
+            {
+                id: 2,
+                name: "Air Jordan 11 Retro",
+                price: 400.00,
+                originalPrice: 500.00,
+                tag: "Popular",
+                category: "Streetwear",
+                image: "https://res.cloudinary.com/imqjmexy/image/upload/v1789673781/Screenshot_20260917_192419_Snapchat.jpg",
+                fallbackImage: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600",
+                description: "Iconic patent leather mudguard paired with breathable ballistic mesh and full-length responsive Air unit."
+            },
+            {
+                id: 3,
+                name: "Nike Air Force 1",
+                price: 400.00,
+                originalPrice: 480.00,
+                tag: "Essential",
+                category: "Low Tops",
+                image: "https://res.cloudinary.com/imqjmexy/image/upload/v1789673759/Screenshot_20260917_192449_Snapchat.jpg",
+                fallbackImage: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600",
+                description: "Crisp stitched leather overlays, clean perforations on the toe box, and encapsulated Air-Sole cushioning."
+            },
+            {
+                id: 4,
+                name: "Air Jordan 4 Retro",
+                price: 450.00,
+                originalPrice: 580.00,
+                tag: "Bestseller",
+                category: "High Tops",
+                image: "https://res.cloudinary.com/imqjmexy/image/upload/v1789673756/Screenshot_20260917_192538_Snapchat.jpg",
+                fallbackImage: "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=600",
+                description: "Signature triangular wing eyelets, breathable side mesh quarter panels, and visible heel Air cushioning."
+            },
+            {
+                id: 5,
+                name: "Nike Air Force 1",
+                price: 400.00,
+                originalPrice: 490.00,
+                tag: "Trending",
+                category: "Chunky",
+                image: "https://res.cloudinary.com/imqjmexy/image/upload/v1789673756/Screenshot_20260917_192535_Snapchat.jpg",
+                fallbackImage: "https://images.unsplash.com/photo-1539185441755-769473a23570?w=600",
+                description: "Playful layered double-swoosh styling, exaggerated platform midsole, and eye-catching shadow accents."
+            },
+            {
+                id: 6,
+                name: "Nike Dunk Low",
+                price: 650.00,
+                originalPrice: 750.00,
+                tag: "New",
+                category: "Performance",
+                image: "https://res.cloudinary.com/imqjmexy/image/upload/v1789673740/Screenshot_20260917_192520_Snapchat.jpg",
+                fallbackImage: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600",
+                description: "Classic two-tone basketball silhouette with padded low-cut collar, durable rubber cupsole, and court grip."
+            },
+            {
+                id: 7,
+                name: "Air Jordan 1 High OG",
+                price: 500.00,
+                originalPrice: 620.00,
+                tag: "Classic",
+                category: "Court",
+                image: "https://res.cloudinary.com/imqjmexy/image/upload/v1789673740/Screenshot_20260917_192500_Snapchat.jpg",
+                fallbackImage: "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=600",
+                description: "The iconic 1985 silhouette in smooth red, white, and black leather with embossed Jordan Wings collar logo."
+            },
+            {
+                id: 7,
+                name: "Nike Air Max",
+                price: 480.00,
+                originalPrice: 590.00,
+                tag: "Bestseller",
+                category: "Runners",
+                image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80",
+                fallbackImage: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600",
+                description: "Nike's biggest heel Max Air unit yet wrapped in vibrant crimson mesh for super-soft all-day bounce."
+            },
+            {
+                id: 8,
+                name: "Vans",
+                price: 350.00,
+                originalPrice: 420.00,
+                tag: "Essential",
+                category: "Low Tops",
+                image: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=600&q=80",
+                fallbackImage: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600",
+                description: "Sturdy mustard canvas and suede uppers, reinforced toe caps, and signature rubber waffle outsoles."
+            },
+            {
+                id: 9,
+                name: "Minimalist Leather Court",
+                price: 420.00,
+                originalPrice: 520.00,
+                tag: "Classic",
+                category: "Lifestyle",
+                image: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=600&q=80",
+                fallbackImage: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=600",
+                description: "Ultra-clean Italian-inspired calfskin leather sneaker with minimal branding and cushioned ortholite insoles."
+            },
+            {
+                id: 10,
+                name: "Puma Suede Classic XXI",
+                price: 380.00,
+                originalPrice: 460.00,
+                tag: "Heritage",
+                category: "Court",
+                image: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=600&q=80",
+                fallbackImage: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600",
+                description: "Silky full suede upper, synthetic lining, and white Puma formstrip that has defined street style since 1968."
+            },
+            {
+                id: 11,
+                name: "New Balance 990v5 Suede",
+                price: 580.00,
+                originalPrice: 720.00,
+                tag: "Popular",
+                category: "Streetwear",
+                image: "https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=600&q=80",
+                fallbackImage: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600",
+                description: "Premium pigskin suede and breathable mesh with ENCAP midsole technology for legendary all-day comfort."
+            },
+            {
+                id: 12,
+                name: "Nike ZoomX Vaporfly Volt",
+                price: 680.00,
+                originalPrice: 850.00,
+                tag: "Pro Runner",
+                category: "Performance",
+                image: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&w=600&q=80",
+                fallbackImage: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=600",
+                description: "Full-length carbon fiber Flyplate paired with ultra-responsive ZoomX foam for record-shattering speed."
+            },
+            {
+                id: 13,
+                name: "Asics Gel-Lyte III Retro",
+                price: 460.00,
+                originalPrice: 560.00,
+                tag: "Streetwear",
+                category: "Performance",
+                image: "https://images.unsplash.com/photo-1560072810-1cffb09faf0f?auto=format&fit=crop&w=600&q=80",
+                fallbackImage: "https://images.unsplash.com/photo-1539185441755-769473a23570?w=600",
+                description: "Original split-tongue design eliminates tongue shifting, coupled with signature GEL technology cushioning."
+            },
+            {
+                id: 14,
+                name: "Nike Air Max 95 Neon",
+                price: 590.00,
+                originalPrice: 720.00,
+                tag: "Bestseller",
+                category: "Chunky",
+                image: "https://images.unsplash.com/photo-1608667508764-33cf0726b13a?auto=format&fit=crop&w=600&q=80",
+                fallbackImage: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600",
+                description: "Human anatomy-inspired wavy side panels with forefoot and heel Air Max units for aggressive 90s presence."
+            },
+            {
+                id: 15,
+                name: "Nike Flyknit Racer Stealth",
+                price: 530.00,
+                originalPrice: 650.00,
+                tag: "Lightweight",
+                category: "Runners",
+                image: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=600&q=80",
+                fallbackImage: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600",
+                description: "Featherlight seamless Flyknit upper offering second-skin fit with responsive forefoot Zoom Air unit."
+            },
+            {
+                id: 16,
+                name: "Adidas Samba OG White Green",
+                price: 490.00,
+                originalPrice: 600.00,
+                tag: "Viral Heat",
+                category: "Low Tops",
+                image: "https://images.unsplash.com/photo-1695552835054-95b185af3d11?auto=format&fit=crop&w=600&q=80",
+                fallbackImage: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600",
+                description: "The quintessential terrace icon featuring full-grain leather, suede T-toe overlay, and authentic gum rubber sole."
+            },
+            {
+                id: 17,
+                name: "Adidas Samba OG Brown Suede",
+                price: 490.00,
+                originalPrice: 600.00,
+                tag: "Terrace",
+                category: "Lifestyle",
+                image: "https://images.unsplash.com/photo-1695552837468-a336693ff6ae?auto=format&fit=crop&w=600&q=80",
+                fallbackImage: "https://images.unsplash.com/photo-1539185441755-769473a23570?w=600",
+                description: "Rich chocolate suede finish with contrasting serrated 3-Stripes and retro low-profile gum cupsole."
+            }
+        ];
+
+        // State Management
+        let cart = JSON.parse(localStorage.getItem('sneaks_cart')) || [];
+        let wishlist = JSON.parse(localStorage.getItem('sneaks_wishlist')) || [];
+        let selectedCategory = "All";
+        let searchQuery = "";
+        let currentSort = "featured";
+        let selectedPayMethod = "momo";
+
+        // Card selections memory
+        const cardSelections = {};
+        products.forEach(p => {
+            cardSelections[p.id] = { size: 'US 9', color: '' };
+        });
+
+        // Theme Toggle
+        function initTheme() {
+            const savedTheme = localStorage.getItem('sneaks_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme') || 'dark';
+            const nextTheme = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', nextTheme);
+            localStorage.setItem('sneaks_theme', nextTheme);
+            updateThemeIcon(nextTheme);
+        }
+
+        function updateThemeIcon(theme) {
+            const icon = document.getElementById('theme-icon');
+            if (icon) {
+                icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            }
+        }
+
+        // Initialize App
+        function initApp() {
+            initTheme();
+            updateCartBadges();
+            updateWishlistBadge();
+            renderFilters();
+            renderProducts();
+        }
+
+        function saveCart() {
+            localStorage.setItem('sneaks_cart', JSON.stringify(cart));
+            updateCartBadges();
+            renderDrawerItems();
+        }
+
+        function saveWishlist() {
+            localStorage.setItem('sneaks_wishlist', JSON.stringify(wishlist));
+            updateWishlistBadge();
+        }
+
+        function updateCartBadges() {
+            const totalCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+            const badge = document.getElementById('cart-count');
+            if (badge) {
+                badge.textContent = totalCount;
+                badge.classList.remove('badge-pop');
+                void badge.offsetWidth;
+                badge.classList.add('badge-pop');
+            }
+        }
+
+        function updateWishlistBadge() {
+            const badge = document.getElementById('wishlist-count');
+            if (badge) badge.textContent = wishlist.length;
+        }
+
+        // Category Filter & Search
+        function renderFilters() {
+            const categories = ["All", ...new Set(products.map(p => p.category))];
+            const filterContainer = document.getElementById('filter-bar');
+
+            filterContainer.innerHTML = categories.map(cat => {
+                const count = cat === "All" ? products.length : products.filter(p => p.category === cat).length;
+                return `
+                    <button 
+                        class="filter-chip ${cat === selectedCategory ? 'active' : ''}" 
+                        onclick="setCategory('${cat}')">
+                        ${cat}
+                        <span class="chip-count">${count}</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function setCategory(category) {
+            selectedCategory = category;
+            renderFilters();
+            renderProducts();
+            scrollToProducts();
+        }
+
+        function handleSearch(query) {
+            searchQuery = query.toLowerCase().trim();
+            renderProducts();
+        }
+
+        function handleSort(sortType) {
+            currentSort = sortType;
+            renderProducts();
+        }
+
+        function scrollToProducts() {
+            const section = document.getElementById('kicks-section');
+            if (section) section.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Size Pill Selection
+        function selectCardSize(productId, size) {
+            if (!cardSelections[productId]) cardSelections[productId] = { size: 'US 9', color: '' };
+            cardSelections[productId].size = size;
+
+            const container = document.getElementById(`sizes-row-${productId}`);
+            if (container) {
+                container.querySelectorAll('.size-pill').forEach(btn => {
+                    btn.classList.toggle('selected', btn.getAttribute('data-size') === size);
+                });
+            }
+            const labelVal = document.getElementById(`selected-size-label-${productId}`);
+            if (labelVal) labelVal.textContent = size;
+        }
+
+        function handleCardColorInput(productId, value) {
+            if (!cardSelections[productId]) cardSelections[productId] = { size: 'US 9', color: '' };
+            cardSelections[productId].color = value.trim();
+        }
+
+        // Render Sneaker Cards Grid
+        function renderProducts() {
+            let filtered = products.filter(p => {
+                const matchesCategory = selectedCategory === "All" || p.category === selectedCategory;
+                const matchesSearch = searchQuery === "" ||
+                    p.name.toLowerCase().includes(searchQuery) ||
+                    p.category.toLowerCase().includes(searchQuery) ||
+                    p.tag.toLowerCase().includes(searchQuery);
+                return matchesCategory && matchesSearch;
+            });
+
+            if (currentSort === "price-low") {
+                filtered.sort((a, b) => a.price - b.price);
+            } else if (currentSort === "price-high") {
+                filtered.sort((a, b) => b.price - a.price);
+            } else if (currentSort === "name-az") {
+                filtered.sort((a, b) => a.name.localeCompare(b.name));
+            }
+
+            const grid = document.getElementById('product-grid');
+            const countLabel = document.getElementById('results-count');
+            countLabel.textContent = `Showing ${filtered.length} pair${filtered.length === 1 ? '' : 's'}`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 4rem 1rem; background: var(--bg-card); border-radius: 16px; border: 1px dashed var(--border);">
+                        <i class="fas fa-search" style="font-size: 2.5rem; color: var(--border-hover); margin-bottom: 1rem;"></i>
+                        <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">No sneakers match "${searchQuery}"</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Try clearing your search query or switching categories.</p>
+                        <button class="btn-hero-primary" onclick="clearFilters()" style="padding: 0.6rem 1.4rem; font-size: 0.9rem;">
+                            View All Kicks
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            const sizeOptions = ['US 7', 'US 8', 'US 9', 'US 10', 'US 11', 'US 12'];
+
+            grid.innerHTML = filtered.map(p => {
+                const currentSize = cardSelections[p.id]?.size || 'US 9';
+                const currentColor = cardSelections[p.id]?.color || '';
+                const isFavorite = wishlist.includes(p.id);
+
+                return `
+                    <div class="card" id="card-${p.id}">
+                        <div class="card-top-badges">
+                            <span class="tag ${p.tag === 'Hot Drop' || p.tag === 'Grail Drop' ? 'hot' : ''}">${p.tag}</span>
+                            <button class="wishlist-btn ${isFavorite ? 'active' : ''}" onclick="toggleWishlist(${p.id})" title="${isFavorite ? 'Remove from favorites' : 'Save to favorites'}">
+                                <i class="${isFavorite ? 'fas' : 'far'} fa-heart"></i>
+                            </button>
+                        </div>
+
+                        <div class="image-container">
+                            <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.onerror=null; this.src='${p.fallbackImage}';">
+                            <button class="quick-view-btn" onclick="openQuickView(${p.id})">
+                                <i class="fas fa-eye"></i> Quick View
+                            </button>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <span class="category">${p.category}</span>
+                                <span class="stock-pill"><i class="fas fa-check"></i> In Stock</span>
+                            </div>
+
+                            <h3>${p.name}</h3>
+
+                            <div class="price-row">
+                                <span class="price">GH₵ ${p.price.toFixed(2)}</span>
+                                <span class="original-price">GH₵ ${p.originalPrice.toFixed(2)}</span>
+                            </div>
+
+                            <!-- Interactive Card Options -->
+                            <div class="card-options">
+                                <div>
+                                    <div class="option-label-row" style="margin-bottom: 5px;">
+                                        <span>Size:</span>
+                                        <span class="option-selected-val" id="selected-size-label-${p.id}">${currentSize}</span>
+                                    </div>
+                                    <div class="size-pills-row" id="sizes-row-${p.id}">
+                                        ${sizeOptions.map(s => `
+                                            <button 
+                                                type="button" 
+                                                data-size="${s}"
+                                                class="size-pill ${s === currentSize ? 'selected' : ''}" 
+                                                onclick="selectCardSize(${p.id}, '${s}')">
+                                                ${s.replace('US ', '')}
+                                            </button>
+                                        `).join('')}
+                                    </div>
+                                </div>
+
+                                <div style="margin-top: 4px;">
+                                    <div class="option-label-row" style="margin-bottom: 4px;">
+                                        <span>Color / Custom:</span>
+                                    </div>
+                                    <div class="color-input-row">
+                                        <input 
+                                            type="text" 
+                                            class="color-text-input" 
+                                            id="color-${p.id}" 
+                                            placeholder="e.g. As shown, Black/White, Bred" 
+                                            value="${currentColor}"
+                                            oninput="handleCardColorInput(${p.id}, this.value)">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-actions">
+                                <button class="btn-add-cart" onclick="addToCartFromCard(${p.id})">
+                                    <i class="fas fa-bag-shopping"></i> Add to Bag
+                                </button>
+                                <button class="btn-wa-direct" onclick="orderDirectWhatsApp(${p.id})" title="Order directly on WhatsApp">
+                                    <i class="fab fa-whatsapp"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function clearFilters() {
+            selectedCategory = "All";
+            searchQuery = "";
+            document.getElementById('search-input').value = "";
+            renderFilters();
+            renderProducts();
+        }
+
+        // Add from Card
+        function addToCartFromCard(id) {
+            const size = cardSelections[id]?.size || 'US 9';
+            const colorInput = document.getElementById(`color-${id}`);
+            const color = (colorInput && colorInput.value.trim() !== '') ? colorInput.value.trim() : 'As shown';
+
+            addToCart(id, color, size);
+        }
+
+        // Central Add to Cart
+        function addToCart(id, customColor, customSize) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+
+            const selectedSize = customSize || 'US 9';
+            const selectedColor = customColor && customColor.trim() !== '' ? customColor.trim() : 'As shown';
+
+            const existingItem = cart.find(i =>
+                i.id === id &&
+                i.size === selectedSize &&
+                i.color.toLowerCase() === selectedColor.toLowerCase()
+            );
+
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    fallbackImage: product.fallbackImage,
+                    size: selectedSize,
+                    color: selectedColor,
+                    quantity: 1
+                });
+            }
+
+            saveCart();
+            showToast(`<i class="fas fa-check-circle" style="color:#10b981;"></i> Added <strong>${product.name}</strong> (${selectedSize}, ${selectedColor}) to your bag!`);
+        }
+
+        // Cart Drawer Operations
+        function openCart() {
+            renderDrawerItems();
+            document.getElementById('drawer-overlay').classList.add('active');
+            document.getElementById('cart-drawer').classList.add('active');
+        }
+
+        function closeCart() {
+            document.getElementById('drawer-overlay').classList.remove('active');
+            document.getElementById('cart-drawer').classList.remove('active');
+        }
+
+        function changeItemQty(index, delta) {
+            if (cart[index]) {
+                cart[index].quantity += delta;
+                if (cart[index].quantity <= 0) {
+                    cart.splice(index, 1);
+                }
+                saveCart();
+            }
+        }
+
+        function removeItemFromCart(index) {
+            if (cart[index]) {
+                const name = cart[index].name;
+                cart.splice(index, 1);
+                saveCart();
+                showToast(`<i class="fas fa-trash-can" style="color:#ef4444;"></i> Removed <strong>${name}</strong> from bag.`);
+            }
+        }
+
+        function renderDrawerItems() {
+            const container = document.getElementById('cart-items-container');
+            const subtotalEl = document.getElementById('drawer-subtotal');
+            const totalEl = document.getElementById('drawer-total');
+            const deliveryText = document.getElementById('delivery-text');
+            const deliveryProgress = document.getElementById('delivery-progress');
+            const drawerFooter = document.getElementById('drawer-footer');
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-cart-state">
+                        <div class="empty-cart-icon"><i class="fas fa-box-open"></i></div>
+                        <h4>Your shopping bag is empty</h4>
+                        <p style="font-size:0.88rem; margin-bottom:1.5rem;">Explore our latest limited kicks and add your size to get started!</p>
+                        <button class="btn-hero-primary" onclick="closeCart(); scrollToProducts();" style="padding: 0.75rem 1.5rem; font-size: 0.9rem;">
+                            Start Shopping
+                        </button>
+                    </div>
+                `;
+                subtotalEl.textContent = 'GH₵ 0.00';
+                totalEl.textContent = 'GH₵ 0.00';
+                deliveryText.innerHTML = '<i class="fas fa-truck"></i> Add items to calculate free delivery';
+                deliveryProgress.style.width = '0%';
+                if (drawerFooter) drawerFooter.style.display = 'none';
+                return;
+            }
+
+            if (drawerFooter) drawerFooter.style.display = 'block';
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const freeDeliveryThreshold = 800.00;
+            const progressPercent = Math.min(100, Math.round((subtotal / freeDeliveryThreshold) * 100));
+
+            if (subtotal >= freeDeliveryThreshold) {
+                deliveryText.innerHTML = '<i class="fas fa-check-circle" style="color:var(--green);"></i> <strong>Congratulations!</strong> You qualify for FREE Express Dispatch in Accra!';
+                deliveryProgress.style.background = 'var(--green)';
+                deliveryProgress.style.width = '100%';
+            } else {
+                const diff = (freeDeliveryThreshold - subtotal).toFixed(2);
+                deliveryText.innerHTML = `<i class="fas fa-truck"></i> Add <strong>GH₵ ${diff}</strong> more for Free Accra Delivery!`;
+                deliveryProgress.style.background = 'var(--primary)';
+                deliveryProgress.style.width = `${progressPercent}%`;
+            }
+
+            subtotalEl.textContent = `GH₵ ${subtotal.toFixed(2)}`;
+            totalEl.textContent = `GH₵ ${subtotal.toFixed(2)}`;
+
+            container.innerHTML = cart.map((item, idx) => `
+                <div class="cart-item">
+                    <img src="${item.image}" alt="${item.name}" class="cart-item-img" onerror="this.onerror=null; this.src='${item.fallbackImage || "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200"}';">
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-details">
+                            <span class="item-badge">Size: ${item.size}</span>
+                            <span class="item-badge">Color: ${item.color}</span>
+                        </div>
+                        <div class="cart-item-bottom">
+                            <div class="qty-controls">
+                                <button class="qty-btn" onclick="changeItemQty(${idx}, -1)">-</button>
+                                <span class="qty-value">${item.quantity}</span>
+                                <button class="qty-btn" onclick="changeItemQty(${idx}, 1)">+</button>
+                            </div>
+                            <div style="display:flex; align-items:center;">
+                                <span class="cart-item-price">GH₵ ${(item.price * item.quantity).toFixed(2)}</span>
+                                <span class="cart-item-remove" onclick="removeItemFromCart(${idx})" title="Remove item">
+                                    <i class="fas fa-trash-can"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // WhatsApp Direct Item Order
+        function orderDirectWhatsApp(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const size = cardSelections[productId]?.size || 'US 9';
+            const colorInput = document.getElementById(`color-${productId}`);
+            const color = (colorInput && colorInput.value.trim() !== '') ? colorInput.value.trim() : 'As shown in photo';
+
+            const message = `Hello SnEAKs! I want to order this pair directly:\n\n` +
+                `👟 *${product.name}*\n` +
+                `🏷️ Price: GH₵ ${product.price.toFixed(2)}\n` +
+                `📏 Size: ${size}\n` +
+                `🎨 Colorway: ${color}\n\n` +
+                `Please let me know if it's available for dispatch via MoMo to 0256514988. Thank you!`;
+
+            window.open(`https://wa.me/233501019565?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        // Checkout Bag via WhatsApp
+        function checkoutViaWhatsApp() {
+            if (cart.length === 0) return alert("Your shopping bag is empty!");
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            let message = `Hello SnEAKs! I'm placing an order from my bag:\n\n`;
+
+            cart.forEach((item, index) => {
+                message += `${index + 1}. *${item.name}* (Qty: ${item.quantity})\n` +
+                    `   • Size: ${item.size} | Color: ${item.color}\n` +
+                    `   • GH₵ ${(item.price * item.quantity).toFixed(2)}\n\n`;
+            });
+
+            message += `💰 *Total Amount: GH₵ ${total.toFixed(2)}*\n\n` +
+                `I'm ready to pay via MoMo to 0256514988. Please confirm delivery details.`;
+
+            window.open(`https://wa.me/233501019565?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        // Quick View Modal
+        function openQuickView(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+
+            const currentSize = cardSelections[id]?.size || 'US 9';
+            const currentColor = cardSelections[id]?.color || '';
+            const sizeOptions = ['US 7', 'US 8', 'US 9', 'US 10', 'US 11', 'US 12'];
+
+            document.getElementById('quick-view-content').innerHTML = `
+                <div class="quick-view-body">
+                    <div class="quick-view-img-wrapper">
+                        <img src="${product.image}" alt="${product.name}" class="quick-view-img" onerror="this.onerror=null; this.src='${product.fallbackImage}';">
+                    </div>
+                    <div class="quick-view-details">
+                        <div class="category" style="margin-bottom: 0.3rem;">
+                            ${product.category} • <span style="color:var(--primary); font-weight:800;">${product.tag}</span>
+                        </div>
+                        <h3>${product.name}</h3>
+                        <div class="price">GH₵ ${product.price.toFixed(2)}</div>
+                        <p class="description">${product.description}</p>
+                        
+                        <div class="input-group" style="margin-bottom: 1rem;">
+                            <label style="font-size:0.85rem; font-weight:700;">Select Size:</label>
+                            <div class="size-pills-row" id="qv-sizes-row">
+                                ${sizeOptions.map(s => `
+                                    <button 
+                                        type="button" 
+                                        class="size-pill ${s === currentSize ? 'selected' : ''}" 
+                                        onclick="selectQuickViewSize('${s}')">
+                                        ${s}
+                                    </button>
+                                `).join('')}
+                            </div>
+                            <input type="hidden" id="qv-size-${product.id}" value="${currentSize}">
+                        </div>
+
+                        <div class="input-group" style="margin-bottom: 1.25rem;">
+                            <label for="qv-color-${product.id}" style="font-size:0.85rem; font-weight:700;">Preferred Color / Customization:</label>
+                            <input type="text" id="qv-color-${product.id}" placeholder="e.g. As shown, Black/White, Bred" value="${currentColor}">
+                        </div>
+
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn-drawer-checkout" style="flex:1;" onclick="addFromQuickView(${product.id})">
+                                <i class="fas fa-bag-shopping"></i> Add to Bag
+                            </button>
+                            <button class="btn-wa-direct" onclick="orderDirectWhatsApp(${product.id})" title="Order via WhatsApp">
+                                <i class="fab fa-whatsapp"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('quick-view-modal').classList.add('active');
+        }
+
+        function selectQuickViewSize(size) {
+            const hiddenInput = document.querySelector('[id^="qv-size-"]');
+            if (hiddenInput) hiddenInput.value = size;
+
+            const row = document.getElementById('qv-sizes-row');
+            if (row) {
+                row.querySelectorAll('.size-pill').forEach(btn => {
+                    btn.classList.toggle('selected', btn.textContent.trim() === size);
+                });
+            }
+        }
+
+        function closeQuickView() {
+            document.getElementById('quick-view-modal').classList.remove('active');
+        }
+
+        function addFromQuickView(id) {
+            const sizeVal = document.getElementById(`qv-size-${id}`).value;
+            const colorVal = document.getElementById(`qv-color-${id}`).value;
+
+            selectCardSize(id, sizeVal);
+            const mainCardColor = document.getElementById(`color-${id}`);
+            if (mainCardColor) mainCardColor.value = colorVal;
+            cardSelections[id].color = colorVal;
+
+            addToCart(id, colorVal, sizeVal);
+            closeQuickView();
+        }
+
+        // Wishlist
+        function toggleWishlist(id) {
+            const index = wishlist.indexOf(id);
+            const product = products.find(p => p.id === id);
+
+            if (index > -1) {
+                wishlist.splice(index, 1);
+                showToast(`<i class="far fa-heart"></i> Removed <strong>${product?.name || 'sneaker'}</strong> from favorites.`);
+            } else {
+                wishlist.push(id);
+                showToast(`<i class="fas fa-heart" style="color:var(--primary);"></i> Saved <strong>${product?.name || 'sneaker'}</strong> to favorites!`);
+            }
+            saveWishlist();
+            renderProducts();
+        }
+
+        function openWishlist() {
+            const container = document.getElementById('wishlist-items-container');
+            if (wishlist.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2.5rem 1rem; color: var(--text-muted);">
+                        <i class="far fa-heart" style="font-size: 3rem; color: var(--border-hover); margin-bottom: 0.8rem;"></i>
+                        <h4 style="font-size: 1.15rem; color: var(--text-main);">No saved favorites yet</h4>
+                        <p style="font-size: 0.85rem; margin-top: 0.3rem;">Click the heart icon on any kick to save it to your wishlist.</p>
+                    </div>
+                `;
+            } else {
+                const favProducts = products.filter(p => wishlist.includes(p.id));
+                container.innerHTML = favProducts.map(p => `
+                    <div class="wishlist-item">
+                        <div style="display:flex; align-items:center; gap:12px;">
+                            <img src="${p.image}" alt="${p.name}" style="width:50px; height:50px; object-fit:cover; border-radius:8px;" onerror="this.onerror=null; this.src='${p.fallbackImage}';">
+                            <div>
+                                <strong style="font-size:0.95rem;">${p.name}</strong>
+                                <div style="color:var(--primary); font-weight:800; font-size:0.9rem;">GH₵ ${p.price.toFixed(2)}</div>
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:8px;">
+                            <button class="btn-drawer-checkout" style="padding:0.4rem 0.9rem; font-size:0.8rem; border-radius:var(--radius-full);" onclick="closeWishlist(); addToCartFromCard(${p.id}); openCart();">
+                                Add to Bag
+                            </button>
+                            <button class="drawer-close" style="width:30px; height:30px; font-size:0.9rem;" onclick="toggleWishlist(${p.id}); openWishlist();">
+                                &times;
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            document.getElementById('wishlist-modal').classList.add('active');
+        }
+
+        function closeWishlist() {
+            document.getElementById('wishlist-modal').classList.remove('active');
+        }
+
+        // Payment Method Switcher
+        function switchPayMethod(method) {
+            selectedPayMethod = method;
+            ['momo', 'card', 'cod'].forEach(m => {
+                document.getElementById(`tab-${m}`).classList.toggle('active', m === method);
+                document.getElementById(`panel-${m}`).classList.toggle('active', m === method);
+            });
+        }
+
+        // Checkout Modal & MoMo
+        function openCheckoutModal() {
+            if (cart.length === 0) return alert("Your shopping bag is empty!");
+            closeCart();
+
+            const preview = document.getElementById('checkout-items-preview');
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            preview.innerHTML = `
+                <div style="font-weight: 700; margin-bottom: 0.5rem; font-size: 0.9rem; display:flex; justify-content:space-between;">
+                    <span>Items in Bag (${cart.reduce((a, b) => a + b.quantity, 0)})</span>
+                    <span style="color:var(--primary);">Total: GH₵ ${total.toFixed(2)}</span>
+                </div>
+                ${cart.map(item => `
+                    <div style="display:flex; justify-content:space-between; font-size:0.85rem; padding: 4px 0; border-top: 1px dashed var(--border);">
+                        <span>${item.quantity}x ${item.name} (${item.size}, ${item.color})</span>
+                        <strong>GH₵ ${(item.price * item.quantity).toFixed(2)}</strong>
+                    </div>
+                `).join('')}
+            `;
+
+            document.getElementById('checkout-modal').classList.add('active');
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkout-modal').classList.remove('active');
+        }
+
+        function copyMoMoNumber(btn) {
+            navigator.clipboard.writeText("0256514988").then(() => {
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                btn.style.background = '#10b981';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = 'var(--gold)';
+                }, 2000);
+            });
+        }
+
+        // Order Submission Processing
+        document.getElementById('payment-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const email = document.getElementById('cust-email').value.trim();
+            const address = document.getElementById('cust-address').value.trim();
+            const region = document.getElementById('cust-region').value;
+
+            const orderRef = '#SNK-' + Math.floor(10000 + Math.random() * 90000);
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            let paymentMethodName = "Mobile Money (MoMo to 0256514988)";
+            if (selectedPayMethod === 'card') paymentMethodName = "Paystack Card / Online Gateway";
+            if (selectedPayMethod === 'cod') paymentMethodName = "Cash on Delivery (Accra)";
+
+            document.getElementById('order-ref-code').textContent = orderRef;
+            document.getElementById('order-receipt-details').innerHTML = `
+                <p><strong>Customer Name:</strong> ${name}</p>
+                <p><strong>Contact Phone:</strong> ${phone}</p>
+                ${email ? `<p><strong>Email:</strong> ${email}</p>` : ''}
+                <p><strong>Delivery Address:</strong> ${address} (${region})</p>
+                <p><strong>Payment Chosen:</strong> <span style="font-weight:700; color:var(--primary);">${paymentMethodName}</span></p>
+                <hr style="border:none; border-top:1px solid var(--border); margin: 0.6rem 0;">
+                <p><strong>Total Amount:</strong> <span style="font-size:1.15rem; font-weight:800; color:var(--primary);">GH₵ ${total.toFixed(2)}</span></p>
+                ${selectedPayMethod === 'momo' ? `
+                    <p><strong>MoMo Number:</strong> <span style="font-weight:800;">0256514988</span></p>
+                    <p><strong>Transaction Reference:</strong> Use <u>${name}</u> as MoMo ref</p>
+                ` : ''}
+            `;
+
+            // Pre-filled WhatsApp link
+            let waMsg = `*NEW SNEAKER ORDER ${orderRef}*\n\n` +
+                `👤 *Name:* ${name}\n` +
+                `📞 *Phone:* ${phone}\n` +
+                `📍 *Dropoff Address:* ${address} (${region})\n` +
+                `💳 *Payment Method:* ${paymentMethodName}\n\n` +
+                `*Items Ordered:*\n`;
+
+            cart.forEach((item, index) => {
+                waMsg += `${index + 1}. ${item.name} x${item.quantity} [${item.size}, ${item.color}] - GH₵ ${(item.price * item.quantity).toFixed(2)}\n`;
+            });
+
+            waMsg += `\n💰 *Total Due:* GH₵ ${total.toFixed(2)}\n\n` +
+                `Please confirm my order and dispatch timeline. Thank you!`;
+
+            document.getElementById('btn-wa-confirm-order').href = `https://wa.me/233501019565?text=${encodeURIComponent(waMsg)}`;
+
+            // Clear Cart
+            cart = [];
+            saveCart();
+            closeCheckoutModal();
+            document.getElementById('order-success-modal').classList.add('active');
+        });
+
+        function closeSuccessModal() {
+            document.getElementById('order-success-modal').classList.remove('active');
+        }
+
+        function showMoMoHelp() {
+            alert("How MoMo Ordering Works:\n\n1. Select your size and custom color.\n2. Tap 'Add to Bag'.\n3. Tap 'Proceed to Checkout'.\n4. Choose Mobile Money, Paystack Card, or Cash on Delivery.\n5. If MoMo, transfer total to 0256514988 using your name as reference.\n6. Tap 'Send Receipt via WhatsApp' to get immediate delivery dispatch!");
+        }
+
+        // Toast Notification System
+        function showToast(messageHtml) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = messageHtml;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3200);
+        }
+
+        // Close on Escape or click outside
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeCart();
+                closeQuickView();
+                closeCheckoutModal();
+                closeWishlist();
+                closeSuccessModal();
+            }
+        });
+
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', initApp);
+        initApp();
+    </script>
+</body>
+
+</html>
