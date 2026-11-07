@@ -7,12 +7,14 @@
     <title>SnEAKs | Ghana's #1 Exclusive Sneaker Vault</title>
     <meta name="description"
         content="Authentic, limited-edition kicks and exclusive drops in Ghana. Fast Mobile Money (MoMo), Cash on Delivery in Accra, and WhatsApp dispatch.">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👟</text></svg>">
-    
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👟</text></svg>">
+
     <!-- Open Graph / WhatsApp Social Sharing Meta -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="SnEAKs | Ghana's #1 Exclusive Sneaker Vault">
-    <meta property="og:description" content="Authentic, limited-edition kicks and exclusive drops in Ghana. Fast MoMo, Cash on Delivery in Accra, and WhatsApp dispatch.">
+    <meta property="og:description"
+        content="Authentic, limited-edition kicks and exclusive drops in Ghana. Fast MoMo, Cash on Delivery in Accra, and WhatsApp dispatch.">
     <meta property="og:site_name" content="SnEAKs Ghana">
     <meta name="theme-color" content="#e11d48">
 
@@ -342,6 +344,7 @@
 
         .hero h1 span.gradient-text {
             background: linear-gradient(135deg, #ffffff 30%, #fca5a5 100%);
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -1840,6 +1843,92 @@
             opacity: 1;
             visibility: visible;
         }
+
+        /* Backend Status Pill */
+        .backend-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 3px 12px;
+            border-radius: var(--radius-full);
+            font-size: 0.72rem;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-left: 10px;
+        }
+
+        .backend-pill:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-dot.online {
+            background: #10b981;
+            box-shadow: 0 0 8px #10b981;
+        }
+
+        .status-dot.offline {
+            background: #f59e0b;
+            box-shadow: 0 0 6px #f59e0b;
+        }
+
+        /* Admin Desk Order Cards */
+        .order-card-admin {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-bottom: 0.85rem;
+            transition: var(--transition);
+        }
+
+        .order-card-admin:hover {
+            border-color: var(--border-hover);
+        }
+
+        .status-badge-admin {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .status-badge-admin.pending_payment {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .status-badge-admin.pending_dispatch {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .status-badge-admin.payment_verified,
+        .status-badge-admin.delivered {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-badge-admin.dispatched {
+            background: rgba(168, 85, 247, 0.15);
+            color: #a855f7;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
     </style>
 </head>
 
@@ -1849,7 +1938,11 @@
     <div class="announcement-bar">
         <span><span class="announcement-badge">EXCLUSIVE DROP</span> Authentic Kicks Delivered Across Accra &
             Nationwide!</span>
-        <span style="opacity: 0.85;">• Direct MoMo, Cash on Delivery & WhatsApp Checkout</span>
+        <span class="backend-pill" id="backend-status-pill" onclick="openAdminModal()"
+            title="Click to view Backend & Orders Desk">
+            <span class="status-dot offline" id="status-dot"></span>
+            <span id="status-text">Backend: Connecting...</span>
+        </span>
     </div>
 
     <!-- NAVBAR -->
@@ -1863,6 +1956,12 @@
             <!-- Theme Toggle -->
             <button class="theme-toggle-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
                 <i class="fas fa-moon" id="theme-icon"></i>
+            </button>
+            <!-- Orders & Backend Desk -->
+            <button class="nav-btn" onclick="openAdminModal()" title="Orders & Backend Desk"
+                style="display:inline-flex; align-items:center; gap:5px;">
+                <i class="fas fa-server"></i>
+                <span style="font-size:0.8rem; font-weight:700;">Orders Desk</span>
             </button>
             <!-- Wishlist -->
             <button class="nav-btn" onclick="openWishlist()" title="View Wishlist">
@@ -2030,6 +2129,116 @@
             <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem;"><i class="fas fa-heart"
                     style="color: var(--primary);"></i> Saved Favorites</h3>
             <div id="wishlist-items-container"></div>
+        </div>
+    </div>
+
+    <!-- ORDERS & BACKEND DESK MODAL -->
+    <div class="modal" id="admin-modal">
+        <div class="modal-content" style="max-width: 780px;">
+            <button class="close" onclick="closeAdminModal()">&times;</button>
+            <div
+                style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; flex-wrap: wrap; gap: 10px;">
+                <div>
+                    <h3 style="font-size: 1.35rem; font-weight: 800; display:flex; align-items:center; gap:8px;">
+                        <i class="fas fa-server" style="color:var(--primary);"></i> Orders & Backend Desk
+                    </h3>
+                    <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 2px;">
+                        Real-time synchronization between Storefront and Node.js REST API
+                    </p>
+                </div>
+                <div id="modal-conn-badge"
+                    style="padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; background: var(--bg-input); border: 1px solid var(--border); display:inline-flex; align-items:center; gap:6px;">
+                    <span class="status-dot offline" id="modal-status-dot"></span>
+                    <span id="modal-conn-text">Checking API...</span>
+                </div>
+            </div>
+
+            <!-- Server Connection Bar -->
+            <div
+                style="background: var(--bg-input); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.85rem 1rem; margin-bottom: 1.25rem;">
+                <div style="display:flex; gap: 8px; align-items:center; flex-wrap: wrap;">
+                    <label style="font-size: 0.82rem; font-weight: 700; white-space: nowrap;"><i
+                            class="fas fa-link"></i> API Endpoint:</label>
+                    <input type="text" id="api-url-input" value="http://localhost:5000/api"
+                        style="flex:1; min-width: 200px; padding: 6px 12px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-main); font-size: 0.85rem; font-family: monospace;">
+                    <button type="button" class="btn-copy-momo" onclick="testBackendConnection()"
+                        style="padding: 7px 14px; font-size: 0.8rem; display:inline-flex; align-items:center; gap:5px;">
+                        <i class="fas fa-arrows-rotate"></i> Ping / Reconnect
+                    </button>
+                </div>
+                <div id="conn-details" style="font-size: 0.78rem; color: var(--text-muted); margin-top: 6px;"></div>
+            </div>
+
+            <!-- Desk Tabs -->
+            <div
+                style="display:flex; gap: 8px; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
+                <button class="filter-chip active" id="desk-tab-orders" onclick="switchDeskTab('orders')">
+                    <i class="fas fa-clipboard-list"></i> Customer Orders (<span id="desk-orders-count">0</span>)
+                </button>
+                <button class="filter-chip" id="desk-tab-add" onclick="switchDeskTab('add')">
+                    <i class="fas fa-plus"></i> Add Sneaker to Vault
+                </button>
+            </div>
+
+            <!-- Orders List Panel -->
+            <div id="desk-panel-orders">
+                <div id="desk-orders-container" style="max-height: 420px; overflow-y: auto;">
+                    <!-- Injected dynamically -->
+                </div>
+            </div>
+
+            <!-- Add Product Panel -->
+            <div id="desk-panel-add" style="display:none;">
+                <form id="desk-add-form" onsubmit="handleDeskAddProduct(event)">
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label style="font-size:0.8rem; font-weight:700;">Sneaker Model Name *</label>
+                            <input type="text" id="new-prod-name" required placeholder="e.g. Air Jordan 1 Low OG Retro">
+                        </div>
+                        <div class="input-group">
+                            <label style="font-size:0.8rem; font-weight:700;">Category *</label>
+                            <select id="new-prod-cat">
+                                <option value="Lifestyle">Lifestyle</option>
+                                <option value="Streetwear">Streetwear</option>
+                                <option value="Low Tops">Low Tops</option>
+                                <option value="High Tops">High Tops</option>
+                                <option value="Court">Court</option>
+                                <option value="Chunky">Chunky</option>
+                                <option value="Runners">Runners</option>
+                                <option value="Performance">Performance</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label style="font-size:0.8rem; font-weight:700;">Price (GH₵) *</label>
+                            <input type="number" step="0.01" id="new-prod-price" required placeholder="480.00">
+                        </div>
+                        <div class="input-group">
+                            <label style="font-size:0.8rem; font-weight:700;">Original Price (GH₵)</label>
+                            <input type="number" step="0.01" id="new-prod-orig" placeholder="580.00">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label style="font-size:0.8rem; font-weight:700;">Badge / Tag</label>
+                            <input type="text" id="new-prod-tag" placeholder="e.g. Exclusive Drop, Bestseller">
+                        </div>
+                        <div class="input-group">
+                            <label style="font-size:0.8rem; font-weight:700;">Image URL</label>
+                            <input type="url" id="new-prod-img" placeholder="https://images.unsplash.com/...">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label style="font-size:0.8rem; font-weight:700;">Description</label>
+                        <input type="text" id="new-prod-desc"
+                            placeholder="Premium leather finish with authentic responsive sole.">
+                    </div>
+                    <button type="submit" class="btn-drawer-checkout" style="width:100%; margin-top:8px;">
+                        <i class="fas fa-plus-circle"></i> Save & Publish to Sneaker Vault
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -2262,7 +2471,7 @@
             },
             {
                 id: 3,
-                name: "Nike Air Force 1 '07",
+                name: "Nike Air Force 1",
                 price: 400.00,
                 originalPrice: 480.00,
                 tag: "Essential",
@@ -2284,7 +2493,7 @@
             },
             {
                 id: 5,
-                name: "Nike Air Force 1 Shadow",
+                name: "Nike Air Force 1",
                 price: 400.00,
                 originalPrice: 490.00,
                 tag: "Trending",
@@ -2446,6 +2655,278 @@
         let currentSort = "featured";
         let selectedPayMethod = "momo";
 
+        // Backend API Integration Layer
+        let isBackendConnected = false;
+        let deskOrders = [];
+
+        function getApiUrl() {
+            return localStorage.getItem('sneaks_api_url') || (
+                (window.location.port === '5000' || window.location.origin.includes(':5000'))
+                    ? '/api'
+                    : 'http://localhost:5000/api'
+            );
+        }
+
+        async function checkBackendStatus() {
+            const apiUrl = getApiUrl();
+            const statusDot = document.getElementById('status-dot');
+            const statusText = document.getElementById('status-text');
+            const modalDot = document.getElementById('modal-status-dot');
+            const modalText = document.getElementById('modal-conn-text');
+            const urlInput = document.getElementById('api-url-input');
+            const detailsEl = document.getElementById('conn-details');
+
+            if (urlInput) urlInput.value = apiUrl;
+
+            try {
+                const startTime = performance.now();
+                const res = await fetch(`${apiUrl}/health`, { method: 'GET', signal: AbortSignal.timeout(3000) });
+                const pingTime = Math.round(performance.now() - startTime);
+
+                if (res.ok) {
+                    const health = await res.json();
+                    isBackendConnected = true;
+
+                    if (statusDot) statusDot.className = 'status-dot online';
+                    if (statusText) statusText.textContent = `Backend: Connected (${pingTime}ms)`;
+                    if (modalDot) modalDot.className = 'status-dot online';
+                    if (modalText) modalText.textContent = `Connected (${health.mode || 'Online'})`;
+                    if (detailsEl) {
+                        detailsEl.innerHTML = `<span style="color:#10b981; font-weight:700;"><i class="fas fa-check-circle"></i> Live REST API Active on port 5000</span> • Latency: <strong>${pingTime}ms</strong> • Service: ${health.service || 'SnEAKs API'}`;
+                    }
+                    return true;
+                }
+            } catch (err) {
+                isBackendConnected = false;
+                if (statusDot) statusDot.className = 'status-dot offline';
+                if (statusText) statusText.textContent = 'Vault: Standalone Mode';
+                if (modalDot) modalDot.className = 'status-dot offline';
+                if (modalText) modalText.textContent = 'Standalone Mode (Offline)';
+                if (detailsEl) {
+                    detailsEl.innerHTML = `<span style="color:#f59e0b;"><i class="fas fa-info-circle"></i> Backend not detected at ${apiUrl}</span> — Run <strong>start-server.bat</strong> in your project folder to launch the server!`;
+                }
+                return false;
+            }
+        }
+
+        async function testBackendConnection() {
+            const input = document.getElementById('api-url-input');
+            if (input && input.value.trim()) {
+                localStorage.setItem('sneaks_api_url', input.value.trim());
+            }
+            const online = await checkBackendStatus();
+            if (online) {
+                showToast('<i class="fas fa-check-circle" style="color:#10b981;"></i> Connected to SnEAKs Backend Server!');
+                fetchProductsFromBackend();
+                loadDeskOrders();
+            } else {
+                showToast('<i class="fas fa-exclamation-triangle" style="color:#f59e0b;"></i> Could not reach server at that address. Make sure server is running.');
+            }
+        }
+
+        async function fetchProductsFromBackend() {
+            try {
+                const res = await fetch(`${getApiUrl()}/products`, { signal: AbortSignal.timeout(3000) });
+                if (res.ok) {
+                    const json = await res.json();
+                    if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+                        products.length = 0;
+                        products.push(...json.data);
+                        products.forEach(p => {
+                            if (!cardSelections[p.id]) {
+                                cardSelections[p.id] = { size: 'US 9', color: '' };
+                            }
+                        });
+                        renderFilters();
+                        renderProducts();
+                        console.log('✅ Synchronized inventory with SnEAKs backend API.');
+                    }
+                }
+            } catch (err) {
+                console.log('ℹ️ SnEAKs running in standalone mode with cached catalog.');
+            }
+        }
+
+        function openAdminModal() {
+            checkBackendStatus();
+            loadDeskOrders();
+            document.getElementById('admin-modal').classList.add('active');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-modal').classList.remove('active');
+        }
+
+        function switchDeskTab(tab) {
+            document.getElementById('desk-tab-orders').classList.toggle('active', tab === 'orders');
+            document.getElementById('desk-tab-add').classList.toggle('active', tab === 'add');
+            document.getElementById('desk-panel-orders').style.display = tab === 'orders' ? 'block' : 'none';
+            document.getElementById('desk-panel-add').style.display = tab === 'add' ? 'block' : 'none';
+        }
+
+        async function loadDeskOrders() {
+            const container = document.getElementById('desk-orders-container');
+            const countEl = document.getElementById('desk-orders-count');
+            if (!container) return;
+            container.innerHTML = '<div style="text-align:center; padding:1.5rem; color:var(--text-muted);"><i class="fas fa-spinner fa-spin"></i> Loading orders...</div>';
+
+            let orders = [];
+
+            if (isBackendConnected) {
+                try {
+                    const res = await fetch(`${getApiUrl()}/orders`);
+                    if (res.ok) {
+                        const json = await res.json();
+                        if (json.success && Array.isArray(json.orders)) {
+                            orders = json.orders;
+                        }
+                    }
+                } catch (e) { }
+            }
+
+            const localOrders = JSON.parse(localStorage.getItem('sneaks_orders')) || [];
+            if (orders.length === 0) {
+                orders = localOrders;
+            } else {
+                localOrders.forEach(lo => {
+                    if (!orders.some(o => o.orderRef === lo.orderRef)) {
+                        orders.unshift(lo);
+                    }
+                });
+            }
+
+            deskOrders = orders;
+            if (countEl) countEl.textContent = orders.length;
+
+            if (orders.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2.5rem 1rem; color: var(--text-muted);">
+                        <i class="fas fa-box-open" style="font-size: 2.5rem; margin-bottom: 0.8rem; color: var(--border-hover);"></i>
+                        <h4 style="color:var(--text-main); font-size:1.1rem; margin-bottom: 0.3rem;">No customer orders yet</h4>
+                        <p style="font-size: 0.85rem;">When an order is placed through checkout, it appears here instantly!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = orders.map(ord => {
+                const dateStr = ord.createdAt ? new Date(ord.createdAt).toLocaleString('en-GH', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Recent';
+                const statusClass = ord.status || 'pending_payment';
+                const statusLabel = (ord.status || 'pending').replace('_', ' ');
+
+                return `
+                    <div class="order-card-admin">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.5rem; flex-wrap:wrap; gap:6px;">
+                            <div>
+                                <strong style="font-size: 1rem; color: var(--primary);">${ord.orderRef}</strong>
+                                <span style="font-size: 0.78rem; color: var(--text-muted); margin-left: 8px;">${dateStr}</span>
+                            </div>
+                            <span class="status-badge-admin ${statusClass}">${statusLabel}</span>
+                        </div>
+                        <div style="font-size: 0.85rem; margin-bottom: 0.5rem;">
+                            <strong>Customer:</strong> ${ord.customer?.name || 'Customer'} • 📞 <a href="tel:${ord.customer?.phone}" style="color:var(--primary); font-weight:700;">${ord.customer?.phone || ''}</a>
+                            <br>
+                            <strong>📍 Address:</strong> ${ord.customer?.address || ''} (${ord.customer?.region || 'Accra'})
+                            <br>
+                            <strong>💳 Payment:</strong> ${ord.payment?.label || ord.payment?.method || 'MoMo'}
+                        </div>
+                        <div style="font-size: 0.82rem; background: var(--bg-surface); padding: 6px 10px; border-radius: 6px; margin-bottom: 0.6rem;">
+                            <strong>Items:</strong> ${(ord.items || []).map(i => `${i.name} (${i.size}, ${i.color}) x${i.quantity}`).join('; ')}
+                            <div style="font-weight: 800; color: var(--primary); margin-top: 3px; font-size: 0.9rem;">
+                                Total: GH₵ ${(ord.totalAmount || 0).toFixed(2)}
+                            </div>
+                        </div>
+                        <div style="display:flex; gap: 8px; justify-content: flex-end; align-items: center; flex-wrap: wrap;">
+                            <select onchange="updateDeskOrderStatus('${ord.orderRef}', this.value)" style="padding: 4px 8px; font-size: 0.78rem; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 4px; color: var(--text-main);">
+                                <option value="" disabled selected>Update Status...</option>
+                                <option value="payment_verified">Mark Payment Verified</option>
+                                <option value="dispatched">Mark Dispatched</option>
+                                <option value="delivered">Mark Delivered</option>
+                                <option value="cancelled">Cancel Order</option>
+                            </select>
+                            ${ord.whatsappDispatchUrl ? `
+                                <a href="${ord.whatsappDispatchUrl}" target="_blank" class="btn-copy-momo" style="text-decoration:none; display:inline-flex; align-items:center; gap:4px; padding: 4px 10px;">
+                                    <i class="fab fa-whatsapp"></i> WhatsApp Dispatch
+                                </a>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function updateDeskOrderStatus(orderRef, newStatus) {
+            if (!newStatus) return;
+
+            if (isBackendConnected) {
+                try {
+                    await fetch(`${getApiUrl()}/orders/${encodeURIComponent(orderRef)}/status`, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ status: newStatus })
+                    });
+                } catch (e) { }
+            }
+
+            const localOrders = JSON.parse(localStorage.getItem('sneaks_orders')) || [];
+            const idx = localOrders.findIndex(o => o.orderRef === orderRef);
+            if (idx !== -1) {
+                localOrders[idx].status = newStatus;
+                localStorage.setItem('sneaks_orders', JSON.stringify(localOrders));
+            }
+
+            showToast(`<i class="fas fa-check-circle" style="color:#10b981;"></i> Order <strong>${orderRef}</strong> updated to <em>${newStatus.replace('_', ' ')}</em>`);
+            loadDeskOrders();
+        }
+
+        async function handleDeskAddProduct(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('new-prod-name').value.trim();
+            const category = document.getElementById('new-prod-cat').value;
+            const price = parseFloat(document.getElementById('new-prod-price').value);
+            const originalPrice = parseFloat(document.getElementById('new-prod-orig').value) || (price * 1.2);
+            const tag = document.getElementById('new-prod-tag').value.trim() || 'Exclusive Drop';
+            const image = document.getElementById('new-prod-img').value.trim() || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600';
+            const description = document.getElementById('new-prod-desc').value.trim() || 'Authentic limited edition sneaker sourced and verified by SnEAKs Vault.';
+
+            const newProduct = {
+                id: products.reduce((max, p) => (p.id > max ? p.id : max), 0) + 1,
+                name,
+                category,
+                price,
+                originalPrice,
+                tag,
+                image,
+                fallbackImage: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600',
+                description
+            };
+
+            if (isBackendConnected) {
+                try {
+                    const res = await fetch(`${getApiUrl()}/products`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(newProduct)
+                    });
+                    if (res.ok) {
+                        const json = await res.json();
+                        if (json.data) newProduct.id = json.data.id;
+                    }
+                } catch (e) { }
+            }
+
+            products.push(newProduct);
+            cardSelections[newProduct.id] = { size: 'US 9', color: '' };
+            renderFilters();
+            renderProducts();
+
+            showToast(`<i class="fas fa-check-circle" style="color:#10b981;"></i> Published <strong>${name}</strong> to the Sneaker Vault!`);
+            document.getElementById('desk-add-form').reset();
+            closeAdminModal();
+            scrollToProducts();
+        }
+
         // Card selections memory
         const cardSelections = {};
         products.forEach(p => {
@@ -2481,6 +2962,9 @@
             updateWishlistBadge();
             renderFilters();
             renderProducts();
+            checkBackendStatus().then(online => {
+                if (online) fetchProductsFromBackend();
+            });
         }
 
         function saveCart() {
@@ -3094,7 +3578,7 @@
         }
 
         // Order Submission Processing
-        document.getElementById('payment-form').addEventListener('submit', (e) => {
+        document.getElementById('payment-form').addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const name = document.getElementById('cust-name').value.trim();
@@ -3103,11 +3587,36 @@
             const address = document.getElementById('cust-address').value.trim();
             const region = document.getElementById('cust-region').value;
 
-            const orderRef = '#SNK-' + Math.floor(10000 + Math.random() * 90000);
+            let orderRef = '#SNK-' + Math.floor(10000 + Math.random() * 90000);
             const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
             let paymentMethodName = "Mobile Money (MoMo to 0256514988)";
             if (selectedPayMethod === 'cod') paymentMethodName = "Cash on Delivery (Accra)";
+
+            let waUrl = null;
+
+            // Attempt to persist order to Node.js backend API
+            try {
+                const res = await fetch(`${API_BASE_URL}/orders`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        customer: { name, phone, email, address, region },
+                        paymentMethod: selectedPayMethod,
+                        items: cart
+                    })
+                });
+                if (res.ok) {
+                    const json = await res.json();
+                    if (json.success && json.data) {
+                        orderRef = json.data.orderRef;
+                        waUrl = json.data.whatsappDispatchUrl;
+                        console.log('✅ Order saved to backend database:', orderRef);
+                    }
+                }
+            } catch (err) {
+                console.log('ℹ️ Order placed in offline mode.');
+            }
 
             document.getElementById('order-ref-code').textContent = orderRef;
             document.getElementById('order-receipt-details').innerHTML = `
@@ -3124,22 +3633,26 @@
                 ` : ''}
             `;
 
-            // Pre-filled WhatsApp link
-            let waMsg = `*NEW SNEAKER ORDER ${orderRef}*\n\n` +
-                `👤 *Name:* ${name}\n` +
-                `📞 *Phone:* ${phone}\n` +
-                `📍 *Dropoff Address:* ${address} (${region})\n` +
-                `💳 *Payment Method:* ${paymentMethodName}\n\n` +
-                `*Items Ordered:*\n`;
+            if (!waUrl) {
+                // Fallback pre-filled WhatsApp link
+                let waMsg = `*NEW SNEAKER ORDER ${orderRef}*\n\n` +
+                    `👤 *Name:* ${name}\n` +
+                    `📞 *Phone:* ${phone}\n` +
+                    `📍 *Dropoff Address:* ${address} (${region})\n` +
+                    `💳 *Payment Method:* ${paymentMethodName}\n\n` +
+                    `*Items Ordered:*\n`;
 
-            cart.forEach((item, index) => {
-                waMsg += `${index + 1}. ${item.name} x${item.quantity} [${item.size}, ${item.color}] - GH₵ ${(item.price * item.quantity).toFixed(2)}\n`;
-            });
+                cart.forEach((item, index) => {
+                    waMsg += `${index + 1}. ${item.name} x${item.quantity} [${item.size}, ${item.color}] - GH₵ ${(item.price * item.quantity).toFixed(2)}\n`;
+                });
 
-            waMsg += `\n💰 *Total Due:* GH₵ ${total.toFixed(2)}\n\n` +
-                `Please confirm my order and dispatch timeline. Thank you!`;
+                waMsg += `\n💰 *Total Due:* GH₵ ${total.toFixed(2)}\n\n` +
+                    `Please confirm my order and dispatch timeline. Thank you!`;
 
-            document.getElementById('btn-wa-confirm-order').href = `https://wa.me/233501019565?text=${encodeURIComponent(waMsg)}`;
+                waUrl = `https://wa.me/233501019565?text=${encodeURIComponent(waMsg)}`;
+            }
+
+            document.getElementById('btn-wa-confirm-order').href = waUrl;
 
             // Clear Cart & Reset Form
             cart = [];
