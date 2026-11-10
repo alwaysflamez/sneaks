@@ -27,7 +27,7 @@ Sneaks/
 ├── index.html                     # Frontend storefront
 └── src/
     ├── data/
-    │   ├── products.json          # 18 authentic sneaker products
+    │   ├── products.json          # 16 authentic sneaker products
     │   └── orders.json            # Order storage database
     ├── services/
     │   ├── productService.js      # Product query, search, and CRUD logic
