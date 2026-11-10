@@ -2,6 +2,21 @@ const fs = require('fs');
 const path = require('path');
 
 const PRODUCTS_FILE = path.join(__dirname, '..', 'data', 'products.json');
+const DEFAULT_INVENTORY = {
+    'US 7': 5,
+    'US 8': 6,
+    'US 9': 8,
+    'US 10': 7,
+    'US 11': 5,
+    'US 12': 3
+};
+
+function ensureInventory(p) {
+    if (!p.inventory || typeof p.inventory !== 'object') {
+        p.inventory = { ...DEFAULT_INVENTORY };
+    }
+    return p.inventory;
+}
 
 function readProducts() {
     try {
@@ -10,7 +25,11 @@ function readProducts() {
             return [];
         }
         const data = fs.readFileSync(PRODUCTS_FILE, 'utf8');
-        return JSON.parse(data || '[]');
+        const list = JSON.parse(data || '[]');
+        return list.map(p => {
+            ensureInventory(p);
+            return p;
+        });
     } catch (err) {
         console.error('Error reading products.json:', err);
         return [];
@@ -97,7 +116,10 @@ const productService = {
             category: productData.category || 'Lifestyle',
             image: productData.image || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600',
             fallbackImage: productData.fallbackImage || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600',
-            description: productData.description || 'Authentic limited edition sneakers sourced and verified by SnEAKs Vault.'
+            description: productData.description || 'Authentic limited edition sneakers sourced and verified by SnEAKs Vault.',
+            inventory: productData.inventory && typeof productData.inventory === 'object'
+                ? { ...productData.inventory }
+                : { ...DEFAULT_INVENTORY }
         };
 
         products.push(newProduct);
@@ -123,10 +145,66 @@ const productService = {
 
         if (updates.price !== undefined) updated.price = Number(updates.price);
         if (updates.originalPrice !== undefined) updated.originalPrice = Number(updates.originalPrice);
+        if (updates.inventory && typeof updates.inventory === 'object') {
+            updated.inventory = { ...current.inventory, ...updates.inventory };
+        }
 
         products[index] = updated;
         writeProducts(products);
         return updated;
+    },
+
+    decrementStock(id, size, quantity = 1) {
+        if (!id) return null;
+        const numericId = Number(id);
+        const products = readProducts();
+        const product = products.find(p => p.id === numericId);
+        if (!product) return null;
+
+        ensureInventory(product);
+        const normalizedSize = size || 'US 9';
+        const currentQty = product.inventory[normalizedSize] !== undefined ? product.inventory[normalizedSize] : 5;
+        const newQty = Math.max(0, currentQty - (parseInt(quantity, 10) || 1));
+        product.inventory[normalizedSize] = newQty;
+
+        writeProducts(products);
+        return product;
+    },
+
+    incrementStock(id, size, quantity = 1) {
+        if (!id) return null;
+        const numericId = Number(id);
+        const products = readProducts();
+        const product = products.find(p => p.id === numericId);
+        if (!product) return null;
+
+        ensureInventory(product);
+        const normalizedSize = size || 'US 9';
+        const currentQty = product.inventory[normalizedSize] !== undefined ? product.inventory[normalizedSize] : 0;
+        product.inventory[normalizedSize] = currentQty + (parseInt(quantity, 10) || 1);
+
+        writeProducts(products);
+        return product;
+    },
+
+    updateInventory(id, inventoryObj) {
+        const numericId = Number(id);
+        const products = readProducts();
+        const product = products.find(p => p.id === numericId);
+        if (!product) return null;
+
+        ensureInventory(product);
+        if (inventoryObj && typeof inventoryObj === 'object') {
+            Object.keys(inventoryObj).forEach(sizeKey => {
+                const val = parseInt(inventoryObj[sizeKey], 10);
+                if (!isNaN(val) && val >= 0) {
+                    product.inventory[sizeKey] = val;
+                }
+            });
+        }
+
+        writeProducts(products);
+        return product;
     },
 
     delete(id) {

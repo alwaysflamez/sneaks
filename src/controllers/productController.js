@@ -65,6 +65,22 @@ const productController = {
         }
     },
 
+    updateInventory(req, res) {
+        try {
+            const updated = productService.updateInventory(req.params.id, req.body.inventory);
+            if (!updated) {
+                return res.status(404).json({ success: false, message: `Sneaker with ID ${req.params.id} not found.` });
+            }
+            res.json({
+                success: true,
+                message: 'Sneaker inventory updated successfully.',
+                data: updated
+            });
+        } catch (error) {
+            res.status(400).json({ success: false, message: error.message });
+        }
+    },
+
     deleteProduct(req, res) {
         try {
             const deleted = productService.delete(req.params.id);

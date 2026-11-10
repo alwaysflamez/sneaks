@@ -140,6 +140,16 @@ const nativeServer = http.createServer(async (req, res) => {
                 : sendJson(res, 404, { success: false, message: 'Sneaker not found' });
         }
 
+        // Product Inventory Update
+        const invMatch = pathname.match(/^\/api\/products\/(\d+)\/inventory$/);
+        if (invMatch && req.method === 'PATCH') {
+            const body = await parseBody(req);
+            const updated = productService.updateInventory(invMatch[1], body.inventory);
+            return updated
+                ? sendJson(res, 200, { success: true, message: 'Inventory updated', data: updated })
+                : sendJson(res, 404, { success: false, message: 'Sneaker not found' });
+        }
+
         // Create Product
         if (pathname === '/api/products' && req.method === 'POST') {
             const body = await parseBody(req);
@@ -160,7 +170,7 @@ const nativeServer = http.createServer(async (req, res) => {
             return sendJson(res, 201, { success: true, message: 'Order created', data: order });
         }
 
-        // Track Order by Ref
+        // Track Order by Ref (GET /api/orders/:ref)
         const orderMatch = pathname.match(/^\/api\/orders\/([^/]+)$/);
         if (orderMatch && req.method === 'GET') {
             const order = orderService.getByRef(decodeURIComponent(orderMatch[1]));
@@ -169,10 +179,11 @@ const nativeServer = http.createServer(async (req, res) => {
                 : sendJson(res, 404, { success: false, message: 'Order not found' });
         }
 
-        // Update Order Status
-        if (orderMatch && req.method === 'PATCH') {
+        // Update Order Status (PATCH /api/orders/:ref or PATCH /api/orders/:ref/status)
+        const statusMatch = pathname.match(/^\/api\/orders\/([^/]+)(?:\/status)?$/);
+        if (statusMatch && req.method === 'PATCH') {
             const body = await parseBody(req);
-            const updated = orderService.updateStatus(decodeURIComponent(orderMatch[1]), body.status);
+            const updated = orderService.updateStatus(decodeURIComponent(statusMatch[1]), body.status);
             return updated
                 ? sendJson(res, 200, { success: true, data: updated })
                 : sendJson(res, 404, { success: false, message: 'Order not found' });

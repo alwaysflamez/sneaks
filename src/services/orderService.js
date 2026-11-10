@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const productService = require('./productService');
 
 const ORDERS_FILE = path.join(__dirname, '..', 'data', 'orders.json');
 const DISPATCH_WHATSAPP = process.env.WHATSAPP_SUPPORT_PHONE || '233501019565';
@@ -165,6 +166,17 @@ const orderService = {
         orders.push(newOrder);
         writeOrders(orders);
 
+        // Decrement sneaker stock for each item ordered
+        try {
+            sanitizedItems.forEach(item => {
+                if (item.id) {
+                    productService.decrementStock(item.id, item.size, item.quantity);
+                }
+            });
+        } catch (stockErr) {
+            console.error('Inventory decrement warning:', stockErr);
+        }
+
         return newOrder;
     },
 
@@ -189,11 +201,25 @@ const orderService = {
             return null;
         }
 
+        const previousStatus = orders[index].status;
         orders[index].status = newStatus;
         orders[index].updatedAt = new Date().toISOString();
 
         if (newStatus === 'payment_verified') {
             orders[index].payment.status = 'verified';
+        }
+
+        // If order was cancelled and wasn't already cancelled, restock the sneaker inventory
+        if (newStatus === 'cancelled' && previousStatus !== 'cancelled') {
+            try {
+                (orders[index].items || []).forEach(item => {
+                    if (item.id) {
+                        productService.incrementStock(item.id, item.size, item.quantity);
+                    }
+                });
+            } catch (restockErr) {
+                console.error('Inventory restock warning:', restockErr);
+            }
         }
 
         writeOrders(orders);

@@ -7,6 +7,9 @@ Modern RESTful API and backend server for **SnEAKs Vault**, Ghana's exclusive sn
 ## 🚀 Features
 
 - **Product Catalog API**: Full CRUD, category filtering, keyword search, price range filters, and multi-mode sorting (`price-low`, `price-high`, `name-az`, `featured`).
+- **Inventory Stock Control**: Real-time size-level inventory decrementing upon order placement, restock upon cancellation, low stock indicators, and instant admin inventory adjustments.
+- **Admin PIN Security Gate**: Passcode protected Orders Desk (Default PIN: `2330`) preventing customers from viewing private order records.
+- **Live Order Tracking**: Instant customer lookup via `#SNK-` reference code with a 4-step delivery progress stepper (`Order Placed` ➔ `Payment Verified` ➔ `Dispatched` ➔ `Delivered`).
 - **Order Management API**: Submit orders with items, calculate subtotal and free express dispatch thresholds (GH₵ 800+), generate unique `#SNK-XXXXX` order reference codes, and track status (`pending_payment`, `payment_verified`, `pending_dispatch`, `dispatched`, `delivered`, `cancelled`).
 - **Mobile Money (MoMo) Integration**: Pre-formatted WhatsApp order dispatch receipts, official MoMo line verification (`0256514988`), and transaction logging.
 - **Persistent Data Store**: Clean JSON file-based database (`src/data/products.json` and `src/data/orders.json`), running out-of-the-box without requiring external database setups.
@@ -100,6 +103,21 @@ Server will start on: **`http://localhost:5000`**
   * Returns list of all available categories.
 * **`GET /api/products/:id`**
   * Returns product details for a specific sneaker ID.
+* **`PATCH /api/products/:id/inventory`**
+  * Adjust size-level inventory for a sneaker model (Admin).
+  * Request Body:
+    ```json
+    {
+      "inventory": {
+        "US 7": 4,
+        "US 8": 5,
+        "US 9": 8,
+        "US 10": 6,
+        "US 11": 4,
+        "US 12": 2
+      }
+    }
+    ```
 * **`POST /api/products`**
   * Add a new sneaker to catalog (Admin).
   * Request Body:
