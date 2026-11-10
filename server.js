@@ -34,7 +34,7 @@ try {
             mode: 'Express.js',
             version: '1.0.0',
             timestamp: new Date().toISOString(),
-            officialMoMoLine: process.env.MOMO_OFFICIAL_NUMBER || '0256514988',
+            paymentMethod: 'Cash on Delivery',
             whatsappSupport: `+${process.env.WHATSAPP_SUPPORT_PHONE || '233501019565'}`
         });
     });
@@ -115,7 +115,7 @@ const nativeServer = http.createServer(async (req, res) => {
                 mode: 'Native Node.js (Zero Dependency)',
                 version: '1.0.0',
                 timestamp: new Date().toISOString(),
-                officialMoMoLine: process.env.MOMO_OFFICIAL_NUMBER || '0256514988',
+                paymentMethod: 'Cash on Delivery',
                 whatsappSupport: `+${process.env.WHATSAPP_SUPPORT_PHONE || '233501019565'}`
             });
         }

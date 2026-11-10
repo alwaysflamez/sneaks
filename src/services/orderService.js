@@ -86,11 +86,9 @@ const orderService = {
             throw new Error('Order must include at least one sneaker item.');
         }
 
-        const validPaymentMethods = ['momo', 'cod'];
-        const method = (paymentMethod || 'momo').toLowerCase();
-        if (!validPaymentMethods.includes(method)) {
-            throw new Error(`Invalid payment method "${paymentMethod}". Allowed: momo, cod.`);
-        }
+        const validPaymentMethods = ['cod', 'momo'];
+        // Default strictly to cash on delivery (cod)
+        const method = 'cod';
 
         // Compute items with accurate pricing and formatting
         const sanitizedItems = items.map(item => {
@@ -113,9 +111,7 @@ const orderService = {
         const totalAmount = subtotal + deliveryFee;
 
         const orderRef = generateOrderRef();
-        const paymentLabel = method === 'momo'
-            ? `Mobile Money (MoMo to ${OFFICIAL_MOMO_NUMBER})`
-            : 'Cash on Delivery (Accra)';
+        const paymentLabel = 'Cash on Delivery (Pay rider upon arrival)';
 
         // Build pre-formatted WhatsApp Dispatch Message
         let waMsg = `*NEW SNEAKER ORDER ${orderRef}*\n\n` +
@@ -129,14 +125,14 @@ const orderService = {
             waMsg += `${index + 1}. ${item.name} x${item.quantity} [${item.size}, ${item.color}] - GH₵ ${item.total.toFixed(2)}\n`;
         });
 
-        waMsg += `\n💰 *Total Due:* GH₵ ${totalAmount.toFixed(2)}\n\n` +
-            `Please confirm my order and dispatch timeline. Thank you!`;
+        waMsg += `\n💰 *Total Due on Delivery:* GH₵ ${totalAmount.toFixed(2)}\n\n` +
+            `Please confirm my order and dispatch timeline. I will pay in cash upon doorstep delivery. Thank you!`;
 
         const whatsappUrl = `https://wa.me/${DISPATCH_WHATSAPP}?text=${encodeURIComponent(waMsg)}`;
 
         const newOrder = {
             orderRef,
-            status: method === 'momo' ? 'pending_payment' : 'pending_dispatch',
+            status: 'pending_dispatch',
             createdAt: new Date().toISOString(),
             customer: {
                 name: customer.name.trim(),
@@ -146,11 +142,9 @@ const orderService = {
                 region: customer.region || 'Accra'
             },
             payment: {
-                method: method,
+                method: 'cod',
                 label: paymentLabel,
-                momoNumber: method === 'momo' ? OFFICIAL_MOMO_NUMBER : null,
-                momoTransactionRef: payload.momoTransactionRef || null,
-                status: method === 'momo' ? 'awaiting_transfer' : 'payable_on_delivery'
+                status: 'payable_on_delivery'
             },
             delivery: {
                 tier: qualifiesFreeExpress ? 'Free Express Dispatch' : 'Standard Delivery',
