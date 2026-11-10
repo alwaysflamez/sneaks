@@ -1963,9 +1963,21 @@
         }
 
         @keyframes pinShake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-6px); }
-            40%, 80% { transform: translateX(6px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            20%,
+            60% {
+                transform: translateX(-6px);
+            }
+
+            40%,
+            80% {
+                transform: translateX(6px);
+            }
         }
 
         /* Size Pill Inventory States */
@@ -2070,7 +2082,8 @@
             font-size: 0.82rem;
         }
 
-        .inv-table th, .inv-table td {
+        .inv-table th,
+        .inv-table td {
             padding: 8px 10px;
             border-bottom: 1px solid var(--border);
             text-align: left;
@@ -2326,7 +2339,8 @@
                 style="width: 60px; height: 60px; background: rgba(225, 29, 72, 0.12); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.7rem; margin: 0 auto 1rem;">
                 <i class="fas fa-shield-halved"></i>
             </div>
-            <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.3rem;">Vault Desk Security</h3>
+            <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.3rem;">Vault Desk
+                Security</h3>
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
                 Enter your 4-digit security PIN to access the Orders & Inventory Desk.
             </p>
@@ -2344,7 +2358,8 @@
                 </button>
             </div>
             <p style="font-size: 0.78rem; color: var(--text-muted);">
-                <i class="fas fa-key"></i> Default Passcode: <strong style="color:var(--primary);">2330</strong> (can be changed in settings)
+                <i class="fas fa-key"></i> Default Passcode: <strong style="color:var(--primary);">2330</strong> (can be
+                changed in settings)
             </p>
         </div>
     </div>
@@ -2353,29 +2368,35 @@
     <div class="modal" id="track-order-modal">
         <div class="modal-content" style="max-width: 660px;">
             <button class="close" onclick="closeTrackOrderModal()">&times;</button>
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
-                <div style="width: 44px; height: 44px; background: rgba(59, 130, 246, 0.15); color: #3b82f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+            <div
+                style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
+                <div
+                    style="width: 44px; height: 44px; background: rgba(59, 130, 246, 0.15); color: #3b82f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
                     <i class="fas fa-truck-fast"></i>
                 </div>
                 <div>
                     <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 2px;">Track Your Sneaker Order</h3>
-                    <p style="font-size: 0.82rem; color: var(--text-muted);">Real-time dispatch and fulfillment tracker across Ghana</p>
+                    <p style="font-size: 0.82rem; color: var(--text-muted);">Real-time dispatch and fulfillment tracker
+                        across Ghana</p>
                 </div>
             </div>
 
             <div style="display: flex; gap: 8px; margin-bottom: 1.25rem;">
-                <input type="text" id="track-ref-input" placeholder="Enter Order Ref (e.g. #SNK-74892)" 
+                <input type="text" id="track-ref-input" placeholder="Enter Order Ref (e.g. #SNK-74892)"
                     style="flex:1; padding: 10px 14px; background: var(--bg-input); border: 1px solid var(--border); border-radius: var(--radius-md); color: var(--text-main); font-weight: 700; font-size: 0.95rem; text-transform: uppercase;"
                     onkeydown="if(event.key==='Enter') performOrderTrack()">
-                <button type="button" class="btn-drawer-checkout" onclick="performOrderTrack()" style="padding: 10px 20px; font-size: 0.9rem; white-space:nowrap;">
+                <button type="button" class="btn-drawer-checkout" onclick="performOrderTrack()"
+                    style="padding: 10px 20px; font-size: 0.9rem; white-space:nowrap;">
                     <i class="fas fa-magnifying-glass"></i> Track Order
                 </button>
             </div>
 
             <div id="track-result-container">
                 <div style="text-align: center; padding: 2.5rem 1rem; color: var(--text-muted);">
-                    <i class="fas fa-shoe-prints" style="font-size: 2.5rem; margin-bottom: 0.8rem; color: var(--border-hover);"></i>
-                    <p style="font-size: 0.9rem;">Enter your <strong>#SNK-</strong> reference code received at checkout to view live order progress.</p>
+                    <i class="fas fa-shoe-prints"
+                        style="font-size: 2.5rem; margin-bottom: 0.8rem; color: var(--border-hover);"></i>
+                    <p style="font-size: 0.9rem;">Enter your <strong>#SNK-</strong> reference code received at checkout
+                        to view live order progress.</p>
                 </div>
             </div>
         </div>
@@ -2401,7 +2422,8 @@
                         <span class="status-dot offline" id="modal-status-dot"></span>
                         <span id="modal-conn-text">Checking API...</span>
                     </div>
-                    <button class="btn-copy-momo" onclick="lockAdminDesk()" title="Lock Vault Desk" style="padding: 5px 10px; font-size: 0.75rem;">
+                    <button class="btn-copy-momo" onclick="lockAdminDesk()" title="Lock Vault Desk"
+                        style="padding: 5px 10px; font-size: 0.75rem;">
                         <i class="fas fa-lock"></i> Lock
                     </button>
                 </div>
@@ -2449,9 +2471,12 @@
 
             <!-- Inventory Panel -->
             <div id="desk-panel-inv" style="display:none;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; flex-wrap:wrap; gap:8px;">
-                    <span style="font-size:0.83rem; color:var(--text-muted);">Adjust stock levels per size (US 7 - US 12). Orders automatically decrement available stock.</span>
-                    <button type="button" class="btn-copy-momo" onclick="loadInventoryDesk()" style="padding:4px 10px; font-size:0.75rem;">
+                <div
+                    style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; flex-wrap:wrap; gap:8px;">
+                    <span style="font-size:0.83rem; color:var(--text-muted);">Adjust stock levels per size (US 7 - US
+                        12). Orders automatically decrement available stock.</span>
+                    <button type="button" class="btn-copy-momo" onclick="loadInventoryDesk()"
+                        style="padding:4px 10px; font-size:0.75rem;">
                         <i class="fas fa-arrows-rotate"></i> Refresh Stock
                     </button>
                 </div>
@@ -2515,8 +2540,10 @@
 
             <!-- Passcode Settings Panel -->
             <div id="desk-panel-settings" style="display:none;">
-                <div style="background:var(--bg-input); border:1px solid var(--border); border-radius:var(--radius-md); padding:1.25rem; max-width:440px; margin:1rem auto; text-align:center;">
-                    <div style="width:50px; height:50px; background:rgba(225,29,72,0.12); color:var(--primary); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.4rem; margin:0 auto 0.8rem;">
+                <div
+                    style="background:var(--bg-input); border:1px solid var(--border); border-radius:var(--radius-md); padding:1.25rem; max-width:440px; margin:1rem auto; text-align:center;">
+                    <div
+                        style="width:50px; height:50px; background:rgba(225,29,72,0.12); color:var(--primary); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.4rem; margin:0 auto 0.8rem;">
                         <i class="fas fa-key"></i>
                     </div>
                     <h4 style="font-size:1.15rem; font-weight:800; margin-bottom:0.3rem;">Change Vault Passcode</h4>
@@ -2525,8 +2552,9 @@
                     </p>
                     <div class="input-group" style="margin-bottom:1rem; text-align:left;">
                         <label style="font-size:0.8rem; font-weight:700;">New 4-Digit Passcode</label>
-                        <input type="password" maxlength="4" id="new-admin-pin" placeholder="Enter 4 digits" 
-                            style="font-size:1.3rem; letter-spacing:6px; font-weight:800; text-align:center; padding:8px;" inputmode="numeric">
+                        <input type="password" maxlength="4" id="new-admin-pin" placeholder="Enter 4 digits"
+                            style="font-size:1.3rem; letter-spacing:6px; font-weight:800; text-align:center; padding:8px;"
+                            inputmode="numeric">
                     </div>
                     <button type="button" class="btn-drawer-checkout" style="width:100%;" onclick="saveNewAdminPin()">
                         <i class="fas fa-save"></i> Save New Passcode
@@ -2664,7 +2692,8 @@
                     style="text-decoration: none;">
                     <i class="fab fa-whatsapp"></i> Send Receipt via WhatsApp for Priority Dispatch
                 </a>
-                <button type="button" class="btn-copy-momo" style="width: 100%; justify-content: center; padding: 10px; font-size: 0.9rem;"
+                <button type="button" class="btn-copy-momo"
+                    style="width: 100%; justify-content: center; padding: 10px; font-size: 0.9rem;"
                     onclick="trackPlacedOrder()">
                     <i class="fas fa-truck-fast"></i> Track This Order Live
                 </button>
@@ -2727,7 +2756,8 @@
                 <p><strong>Payment Accepted:</strong> MoMo, Cash on Delivery (Accra).</p>
                 <p><strong>Delivery Locations:</strong> Greater Accra, Kumasi, Takoradi & All Major Ghana Towns.</p>
                 <div style="margin-top: 10px;">
-                    <a href="javascript:void(0)" onclick="openTrackOrderModal()" style="display:inline-flex; align-items:center; gap:6px; color:var(--primary); font-weight:700; text-decoration:none;">
+                    <a href="javascript:void(0)" onclick="openTrackOrderModal()"
+                        style="display:inline-flex; align-items:center; gap:6px; color:var(--primary); font-weight:700; text-decoration:none;">
                         <i class="fas fa-truck-fast"></i> Track an Order Live &rarr;
                     </a>
                 </div>
@@ -2926,18 +2956,39 @@
                 image: "https://images.unsplash.com/photo-1695552837468-a336693ff6ae?auto=format&fit=crop&w=600&q=80",
                 fallbackImage: "https://images.unsplash.com/photo-1539185441755-769473a23570?w=600",
                 description: "Rich chocolate suede finish with contrasting serrated 3-Stripes and retro low-profile gum cupsole."
+            },
+            {
+                id: 17,
+                name: "Nike Air Max Plus"
+                price: 400.00,
+                originalPrice: 450.00
+                tag: "new drop"
+                category: "Casual"
+                image: "https://res.cloudinary.com/imqjmexy/image/upload/v1794322866/Screenshot_20261110_145703_Snapchat_2.jpg"
+                description: "Original color way with comfortable cushioning"
+            },
+            {
+                id: 18,
+                name: "New Balance x Aime Leon Dore 1960R"
+                price: 400.00,
+                originalPrice: 450.00
+                tag: "new drop"
+                category: "Casual"
+                image: "https://res.cloudinary.com/imqjmexy/image/upload/v1794322866/Screenshot_20261110_145715_Snapchat_2.jpg"
+                description: "Premium suede upper with signature N logo and comfortable ENCAP midsole cushioning"
             }
         ];
 
         // Ensure every sneaker has size-level stock inventory
         const savedInventory = JSON.parse(localStorage.getItem('sneaks_inventory')) || {};
         const DEFAULT_INVENTORY_MAP = {
-            'US 7': 4,
-            'US 8': 5,
-            'US 9': 6,
-            'US 10': 5,
-            'US 11': 4,
-            'US 12': 2
+            'EU 39': 4,
+            'EU 40': 5,
+            'EU 41': 6,
+            'EU 42': 5,
+            'UE 43': 4,
+            'EU 44': 2,
+            'EU 45': 6,
         };
 
         products.forEach(p => {
@@ -3184,10 +3235,10 @@
                     </thead>
                     <tbody>
                         ${products.map(p => {
-                            const inv = p.inventory || { 'US 7': 4, 'US 8': 5, 'US 9': 6, 'US 10': 5, 'US 11': 4, 'US 12': 2 };
-                            const total = Object.values(inv).reduce((sum, q) => sum + (Number(q) || 0), 0);
+                const inv = p.inventory || { 'US 7': 4, 'US 8': 5, 'US 9': 6, 'US 10': 5, 'US 11': 4, 'US 12': 2 };
+                const total = Object.values(inv).reduce((sum, q) => sum + (Number(q) || 0), 0);
 
-                            return `
+                return `
                                 <tr>
                                     <td>
                                         <img src="${p.image}" alt="${p.name}" style="width: 44px; height: 38px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border);" onerror="this.src='${p.fallbackImage}';">
@@ -3200,9 +3251,9 @@
                                     <td>
                                         <div style="display:flex; flex-wrap:wrap; gap:4px;">
                                             ${sizeList.map(s => {
-                                                const count = inv[s] !== undefined ? inv[s] : 5;
-                                                const isZero = count === 0;
-                                                return `
+                    const count = inv[s] !== undefined ? inv[s] : 5;
+                    const isZero = count === 0;
+                    return `
                                                     <span class="inv-size-pill" style="${isZero ? 'border-color:#ef4444; color:#ef4444;' : ''}">
                                                         <strong>${s.replace('US ', '')}:</strong> 
                                                         <span id="inv-val-${p.id}-${s.replace(' ', '-')}">${count}</span>
@@ -3210,7 +3261,7 @@
                                                         <button type="button" onclick="adjustProductStock(${p.id}, '${s}', 1)" title="Increase stock">+</button>
                                                     </span>
                                                 `;
-                                            }).join('')}
+                }).join('')}
                                         </div>
                                     </td>
                                     <td style="text-align:right; font-weight:800; color:${total === 0 ? '#ef4444' : 'var(--primary)'};">
@@ -3218,7 +3269,7 @@
                                     </td>
                                 </tr>
                             `;
-                        }).join('')}
+            }).join('')}
                     </tbody>
                 </table>
             `;
@@ -3839,12 +3890,12 @@
                                     </div>
                                     <div class="size-pills-row" id="sizes-row-${p.id}">
                                         ${sizeOptions.map(s => {
-                                            const sizeQty = inv[s] !== undefined ? inv[s] : 5;
-                                            const isOut = sizeQty <= 0;
-                                            const isLow = sizeQty > 0 && sizeQty <= 2;
+                    const sizeQty = inv[s] !== undefined ? inv[s] : 5;
+                    const isOut = sizeQty <= 0;
+                    const isLow = sizeQty > 0 && sizeQty <= 2;
 
-                                            if (isOut) {
-                                                return `
+                    if (isOut) {
+                        return `
                                                     <button 
                                                         type="button" 
                                                         data-size="${s}"
@@ -3854,9 +3905,9 @@
                                                         ${s.replace('US ', '')}
                                                     </button>
                                                 `;
-                                            }
+                    }
 
-                                            return `
+                    return `
                                                 <button 
                                                     type="button" 
                                                     data-size="${s}"
@@ -3866,7 +3917,7 @@
                                                     ${s.replace('US ', '')}${isLow ? `<span class="low-stock-dot" title="Only ${sizeQty} left!"></span>` : ''}
                                                 </button>
                                             `;
-                                        }).join('')}
+                }).join('')}
                                     </div>
                                 </div>
 
