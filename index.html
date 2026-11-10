@@ -2564,64 +2564,24 @@
         </div>
     </div>
 
-    <!-- CHECKOUT MODAL (MOMO, CARD, CASH ON DELIVERY) -->
+    <!-- CHECKOUT MODAL (CASH ON DELIVERY ONLY) -->
     <div class="modal" id="checkout-modal">
         <div class="modal-content">
             <button class="close" onclick="closeCheckoutModal()">&times;</button>
             <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.4rem;">Complete Your Order</h2>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Choose your preferred payment
-                method and enter delivery details.</p>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Fill in your delivery details
+                below and our dispatch rider will bring your kicks to your door.</p>
 
             <!-- Order Items Preview -->
             <div class="checkout-items-preview" id="checkout-items-preview"></div>
 
-            <!-- Payment Method Selector Tabs -->
-            <div class="payment-methods-tabs">
-                <button type="button" class="pay-tab-btn active" id="tab-momo" onclick="switchPayMethod('momo')">
-                    <i class="fas fa-mobile-screen-button"></i> Mobile Money (MoMo)
-                </button>
-                <button type="button" class="pay-tab-btn" id="tab-cod" onclick="switchPayMethod('cod')">
-                    <i class="fas fa-hand-holding-dollar"></i> Cash on Delivery
-                </button>
-            </div>
-
-            <!-- MOMO PAYMENT PANEL -->
-            <div class="pay-method-panel active" id="panel-momo">
-                <div class="momo-box">
-                    <div class="momo-title">
-                        <i class="fas fa-mobile-screen-button"></i> Mobile Money (MoMo) Line
-                    </div>
-                    <div class="momo-networks">
-                        <span class="momo-badge mtn">MTN MoMo</span>
-                        <span class="momo-badge telecel">Telecel Cash</span>
-                        <span class="momo-badge at">AT Money</span>
-                    </div>
-                    <p style="font-size: 0.85rem; color: var(--text-muted);">Send payment to the official SnEAKs MoMo
-                        number:</p>
-                    <div class="momo-number-wrapper">
-                        <span class="momo-number">0256514988</span>
-                        <button type="button" class="btn-copy-momo" onclick="copyMoMoNumber(this)">
-                            <i class="fas fa-copy"></i> Copy
-                        </button>
-                    </div>
-                    <p style="font-size: 0.82rem; color: var(--gold); font-weight: 600;">
-                        <i class="fas fa-info-circle"></i> Use your <strong>Full Name</strong> as the transaction
-                        reference.
-                    </p>
-                </div>
-            </div>
-
-            <!-- CASH ON DELIVERY PANEL -->
-            <div class="pay-method-panel" id="panel-cod">
-                <div class="cod-box">
-                    <i class="fas fa-motorcycle" style="font-size: 2rem; color: #10b981; margin-bottom: 0.5rem;"></i>
-                    <h4 style="font-size: 1rem; margin-bottom: 0.3rem; color: var(--green);">Cash on Delivery (Accra
-                        Only)</h4>
-                    <p style="font-size: 0.82rem; color: var(--text-muted);">
-                        Pay cash or MoMo directly to the dispatch rider when your sneakers are brought to your doorstep
-                        in Accra.
-                    </p>
-                </div>
+            <!-- CASH ON DELIVERY INFO BOX -->
+            <div class="cod-box" style="margin-bottom: 1rem;">
+                <i class="fas fa-motorcycle" style="font-size: 2rem; color: #10b981; margin-bottom: 0.5rem;"></i>
+                <h4 style="font-size: 1rem; margin-bottom: 0.3rem; color: var(--green);">Cash on Delivery — Inspect &amp; Pay on Arrival</h4>
+                <p style="font-size: 0.82rem; color: var(--text-muted);">
+                    Pay cash directly to the dispatch rider when your sneakers arrive at your doorstep. No upfront payment required.
+                </p>
             </div>
 
             <form id="payment-form">
@@ -2719,10 +2679,10 @@
                 <p>Ghana's premier destination for exclusive kicks, iconic silhouettes, and limited drops. Authentic
                     footwear sourced worldwide and delivered straight to your doorstep.</p>
                 <div class="momo-pay-icons">
-                    <span class="momo-icon-tag"><i class="fas fa-bolt"></i> MTN MoMo</span>
-                    <span class="momo-icon-tag"><i class="fas fa-signal"></i> Telecel</span>
                     <span class="momo-icon-tag"><i class="fas fa-hand-holding-dollar"></i> Cash on Delivery</span>
                     <span class="momo-icon-tag"><i class="fas fa-shield-halved"></i> 100% Original</span>
+                    <span class="momo-icon-tag"><i class="fab fa-whatsapp"></i> WhatsApp Orders</span>
+                    <span class="momo-icon-tag"><i class="fas fa-truck-fast"></i> Fast Dispatch</span>
                 </div>
             </div>
 
@@ -2741,7 +2701,7 @@
             <div class="footer-col">
                 <h4>Help & Payment</h4>
                 <ul class="footer-links">
-                    <li><a href="javascript:void(0)" onclick="showMoMoHelp()">How MoMo Ordering Works</a></li>
+                    <li><a href="javascript:void(0)" onclick="showCodHelp()">How Cash on Delivery Works</a></li>
                     <li><a href="javascript:void(0)" onclick="openTrackOrderModal()">Track an Existing Order</a></li>
                     <li><a href="javascript:void(0)" onclick="openCart()">Shopping Bag</a></li>
                     <li><a href="javascript:void(0)" onclick="openWishlist()">Saved Favorites</a></li>
@@ -2959,22 +2919,22 @@
             },
             {
                 id: 17,
-                name: "Nike Air Max Plus"
+                name: "Nike Air Max Plus",
                 price: 400.00,
-                originalPrice: 450.00
-                tag: "new drop"
-                category: "Casual"
-                image: "https://res.cloudinary.com/imqjmexy/image/upload/v1794322866/Screenshot_20261110_145703_Snapchat_2.jpg"
+                originalPrice: 450.00,
+                tag: "new drop",
+                category: "Casual",
+                image: "https://res.cloudinary.com/imqjmexy/image/upload/v1794322866/Screenshot_20261110_145703_Snapchat_2.jpg",
                 description: "Original color way with comfortable cushioning"
             },
             {
                 id: 18,
-                name: "New Balance x Aime Leon Dore 1960R"
+                name: "New Balance x Aime Leon Dore 1960R",
                 price: 400.00,
-                originalPrice: 450.00
-                tag: "new drop"
-                category: "Casual"
-                image: "https://res.cloudinary.com/imqjmexy/image/upload/v1794322866/Screenshot_20261110_145715_Snapchat_2.jpg"
+                originalPrice: 450.00,
+                tag: "new drop",
+                category: "Casual",
+                image: "https://res.cloudinary.com/imqjmexy/image/upload/v1794322866/Screenshot_20261110_145715_Snapchat_2.jpg",
                 description: "Premium suede upper with signature N logo and comfortable ENCAP midsole cushioning"
             }
         ];
@@ -3001,7 +2961,7 @@
         let selectedCategory = "All";
         let searchQuery = "";
         let currentSort = "featured";
-        let selectedPayMethod = "momo";
+        let selectedPayMethod = "cod";
 
         // Backend API Integration Layer
         let isBackendConnected = false;
