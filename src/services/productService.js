@@ -3,12 +3,13 @@ const path = require('path');
 
 const PRODUCTS_FILE = path.join(__dirname, '..', 'data', 'products.json');
 const DEFAULT_INVENTORY = {
-    'US 7': 5,
-    'US 8': 6,
-    'US 9': 8,
-    'US 10': 7,
-    'US 11': 5,
-    'US 12': 3
+    'EU 39': 5,
+    'EU 40': 5,
+    'EU 41': 6,
+    'EU 42': 8,
+    'EU 43': 7,
+    'EU 44': 5,
+    'EU 45': 3
 };
 
 function ensureInventory(p) {
@@ -162,7 +163,7 @@ const productService = {
         if (!product) return null;
 
         ensureInventory(product);
-        const normalizedSize = size || 'US 9';
+        const normalizedSize = size || 'EU 42';
         const currentQty = product.inventory[normalizedSize] !== undefined ? product.inventory[normalizedSize] : 5;
         const newQty = Math.max(0, currentQty - (parseInt(quantity, 10) || 1));
         product.inventory[normalizedSize] = newQty;
@@ -179,7 +180,7 @@ const productService = {
         if (!product) return null;
 
         ensureInventory(product);
-        const normalizedSize = size || 'US 9';
+        const normalizedSize = size || 'EU 42';
         const currentQty = product.inventory[normalizedSize] !== undefined ? product.inventory[normalizedSize] : 0;
         product.inventory[normalizedSize] = currentQty + (parseInt(quantity, 10) || 1);
 

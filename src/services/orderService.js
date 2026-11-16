@@ -37,7 +37,7 @@ function generateOrderRef() {
 }
 
 const orderService = {
-    getAll({ status, search, limit = 50, page = 1 }) {
+    getAll({ status, search, limit = 50, page = 1 } = {}) {
         let orders = readOrders();
 
         if (status) {
@@ -97,7 +97,7 @@ const orderService = {
             return {
                 id: item.id || null,
                 name: item.name || 'Sneakers',
-                size: item.size || 'US 9',
+                size: item.size || 'EU 42',
                 color: item.color || 'As shown',
                 price: price,
                 quantity: qty,

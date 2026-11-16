@@ -2473,8 +2473,8 @@
             <div id="desk-panel-inv" style="display:none;">
                 <div
                     style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; flex-wrap:wrap; gap:8px;">
-                    <span style="font-size:0.83rem; color:var(--text-muted);">Adjust stock levels per size (US 7 - US
-                        12). Orders automatically decrement available stock.</span>
+                    <span style="font-size:0.83rem; color:var(--text-muted);">Adjust stock levels per size (EU 39 - EU
+                        45). Orders automatically decrement available stock.</span>
                     <button type="button" class="btn-copy-momo" onclick="loadInventoryDesk()"
                         style="padding:4px 10px; font-size:0.75rem;">
                         <i class="fas fa-arrows-rotate"></i> Refresh Stock
@@ -2504,6 +2504,7 @@
                                 <option value="Chunky">Chunky</option>
                                 <option value="Runners">Runners</option>
                                 <option value="Performance">Performance</option>
+                                <option value="Casual">Casual</option>
                             </select>
                         </div>
                     </div>
@@ -2713,9 +2714,8 @@
 
             <div class="footer-col">
                 <h4>Ghana Dispatch Desk</h4>
-                <p><strong>Official MoMo Line:</strong> 0256514988</p>
                 <p><strong>WhatsApp Support:</strong> +233 50 101 9565</p>
-                <p><strong>Payment Accepted:</strong> MoMo, Cash on Delivery (Accra).</p>
+                <p><strong>Payment:</strong> Cash on Delivery — pay rider upon arrival.</p>
                 <p><strong>Delivery Locations:</strong> Greater Accra, Kumasi, Takoradi & All Major Ghana Towns.</p>
                 <div style="margin-top: 10px;">
                     <a href="javascript:void(0)" onclick="openTrackOrderModal()"
@@ -2728,7 +2728,7 @@
 
         <div class="footer-bottom">
             <span>&copy; 2026 SnEAKs Vault Ghana. All rights reserved.</span>
-            <span>Designed for Sneakerheads • MoMo Line: 0256514988</span>
+            <span>Designed for Sneakerheads • 100% Cash on Delivery</span>
         </div>
     </footer>
 
@@ -2946,15 +2946,17 @@
         const DEFAULT_INVENTORY_MAP = {
             'EU 39': 5,
             'EU 40': 5,
-            'EU 41': 5,
-            'EU 42': 5,
-            'UE 43': 5,
+            'EU 41': 6,
+            'EU 42': 8,
+            'EU 43': 7,
             'EU 44': 5,
-            'EU 45': 5,
+            'EU 45': 3
         };
 
         products.forEach(p => {
-            p.inventory = savedInventory[p.id] || p.inventory || { ...DEFAULT_INVENTORY_MAP };
+            const cached = savedInventory[p.id];
+            const isEuFormat = cached && Object.keys(cached).some(k => k.startsWith('EU'));
+            p.inventory = (isEuFormat ? cached : null) || p.inventory || { ...DEFAULT_INVENTORY_MAP };
         });
 
         // State Management
@@ -3044,7 +3046,7 @@
                         products.push(...json.data);
                         products.forEach(p => {
                             if (!cardSelections[p.id]) {
-                                cardSelections[p.id] = { size: 'US 9', color: '' };
+                                cardSelections[p.id] = { size: 'EU 42', color: '' };
                             }
                         });
                         renderFilters();
@@ -3183,7 +3185,7 @@
             const container = document.getElementById('desk-inventory-container');
             if (!container) return;
 
-            const sizeList = ['US 7', 'US 8', 'US 9', 'US 10', 'US 11', 'US 12'];
+            const sizeList = ['EU 39', 'EU 40', 'EU 41', 'EU 42', 'EU 43', 'EU 44', 'EU 45'];
             container.innerHTML = `
                 <table class="inv-table">
                     <thead>
@@ -3197,7 +3199,7 @@
                     </thead>
                     <tbody>
                         ${products.map(p => {
-                const inv = p.inventory || { 'US 7': 4, 'US 8': 5, 'US 9': 6, 'US 10': 5, 'US 11': 4, 'US 12': 2 };
+                const inv = p.inventory || { 'EU 39': 5, 'EU 40': 5, 'EU 41': 6, 'EU 42': 8, 'EU 43': 7, 'EU 44': 5, 'EU 45': 3 };
                 const total = Object.values(inv).reduce((sum, q) => sum + (Number(q) || 0), 0);
 
                 return `
@@ -3217,7 +3219,7 @@
                     const isZero = count === 0;
                     return `
                                                     <span class="inv-size-pill" style="${isZero ? 'border-color:#ef4444; color:#ef4444;' : ''}">
-                                                        <strong>${s.replace('US ', '')}:</strong> 
+                                                        <strong>${s.replace('EU ', '')}:</strong> 
                                                         <span id="inv-val-${p.id}-${s.replace(' ', '-')}">${count}</span>
                                                         <button type="button" onclick="adjustProductStock(${p.id}, '${s}', -1)" title="Decrease stock">-</button>
                                                         <button type="button" onclick="adjustProductStock(${p.id}, '${s}', 1)" title="Increase stock">+</button>
@@ -3242,7 +3244,7 @@
             if (!product) return;
 
             if (!product.inventory) {
-                product.inventory = { 'US 7': 4, 'US 8': 5, 'US 9': 6, 'US 10': 5, 'US 11': 4, 'US 12': 2 };
+                product.inventory = { 'EU 39': 5, 'EU 40': 5, 'EU 41': 6, 'EU 42': 8, 'EU 43': 7, 'EU 44': 5, 'EU 45': 3 };
             }
 
             const current = product.inventory[size] !== undefined ? product.inventory[size] : 5;
@@ -3356,8 +3358,8 @@
             const isStep4Done = status === 'delivered';
 
             const statusLabels = {
-                'pending_payment': 'Awaiting MoMo Payment',
-                'payment_verified': 'Payment Verified',
+                'pending_payment': 'Order Received',
+                'payment_verified': 'Order Confirmed',
                 'pending_dispatch': 'Preparing Dispatch in Vault',
                 'dispatched': 'In Transit / Dispatched',
                 'delivered': 'Delivered to Customer',
@@ -3410,7 +3412,7 @@
                         </div>
                         <div style="background:var(--bg-surface); padding:10px 12px; border-radius:var(--radius-sm); border:1px solid var(--border);">
                             <strong style="color:var(--text-main); display:block; margin-bottom:4px;"><i class="fas fa-wallet" style="color:var(--primary);"></i> Payment & Pricing:</strong>
-                            <div>Method: <strong>${order.payment?.label || order.payment?.method || 'MoMo'}</strong></div>
+                            <div>Method: <strong>${order.payment?.label || order.payment?.method || 'Cash on Delivery'}</strong></div>
                             <div>Total Due: <strong style="color:var(--primary); font-size:0.95rem;">GH₵ ${(order.totalAmount || 0).toFixed(2)}</strong></div>
                         </div>
                     </div>
@@ -3503,7 +3505,7 @@
                             <br>
                             <strong>📍 Address:</strong> ${ord.customer?.address || ''} (${ord.customer?.region || 'Accra'})
                             <br>
-                            <strong>💳 Payment:</strong> ${ord.payment?.label || ord.payment?.method || 'MoMo'}
+                            <strong>💳 Payment:</strong> ${ord.payment?.label || ord.payment?.method || 'Cash on Delivery'}
                         </div>
                         <div style="font-size: 0.82rem; background: var(--bg-surface); padding: 6px 10px; border-radius: 6px; margin-bottom: 0.6rem;">
                             <strong>Items:</strong> ${(ord.items || []).map(i => `${i.name} (${i.size}, ${i.color}) x${i.quantity}`).join('; ')}
@@ -3608,7 +3610,7 @@
             }
 
             products.push(newProduct);
-            cardSelections[newProduct.id] = { size: 'US 9', color: '' };
+            cardSelections[newProduct.id] = { size: 'EU 42', color: '' };
             renderFilters();
             renderProducts();
 
@@ -3622,7 +3624,7 @@
         const cardSelections = {};
         products.forEach(p => {
             const availableSizes = Object.keys(p.inventory || {}).filter(s => p.inventory[s] > 0);
-            const defaultSize = availableSizes.includes('US 9') ? 'US 9' : (availableSizes[0] || 'US 9');
+            const defaultSize = availableSizes.includes('EU 42') ? 'EU 42' : (availableSizes[0] || 'EU 42');
             cardSelections[p.id] = { size: defaultSize, color: '' };
         });
 
@@ -3737,7 +3739,7 @@
                 return;
             }
 
-            if (!cardSelections[productId]) cardSelections[productId] = { size: 'US 9', color: '' };
+            if (!cardSelections[productId]) cardSelections[productId] = { size: 'EU 42', color: '' };
             cardSelections[productId].size = size;
 
             const container = document.getElementById(`sizes-row-${productId}`);
@@ -3755,7 +3757,7 @@
         }
 
         function handleCardColorInput(productId, value) {
-            if (!cardSelections[productId]) cardSelections[productId] = { size: 'US 9', color: '' };
+            if (!cardSelections[productId]) cardSelections[productId] = { size: 'EU 42', color: '' };
             cardSelections[productId].color = value.trim();
         }
 
@@ -3796,14 +3798,14 @@
                 return;
             }
 
-            const sizeOptions = ['US 7', 'US 8', 'US 9', 'US 10', 'US 11', 'US 12'];
+            const sizeOptions = ['EU 39', 'EU 40', 'EU 41', 'EU 42', 'EU 43', 'EU 44', 'EU 45'];
 
             grid.innerHTML = filtered.map(p => {
-                const inv = p.inventory || { 'US 7': 4, 'US 8': 5, 'US 9': 6, 'US 10': 5, 'US 11': 4, 'US 12': 2 };
+                const inv = p.inventory || { 'EU 39': 5, 'EU 40': 5, 'EU 41': 6, 'EU 42': 8, 'EU 43': 7, 'EU 44': 5, 'EU 45': 3 };
                 const totalStock = Object.values(inv).reduce((sum, q) => sum + (Number(q) || 0), 0);
                 const isAllSoldOut = totalStock <= 0;
 
-                const currentSize = cardSelections[p.id]?.size || 'US 9';
+                const currentSize = cardSelections[p.id]?.size || 'EU 42';
                 const currentColor = cardSelections[p.id]?.color || '';
                 const isFavorite = wishlist.includes(p.id);
 
@@ -3864,7 +3866,7 @@
                                                         class="size-pill out-of-stock" 
                                                         title="Size ${s} is sold out"
                                                         onclick="handleSoldOutSizeClick('${s}')">
-                                                        ${s.replace('US ', '')}
+                                                        ${s.replace('EU ', '')}
                                                     </button>
                                                 `;
                     }
@@ -3876,7 +3878,7 @@
                                                     class="size-pill ${s === currentSize ? 'selected' : ''}" 
                                                     title="${sizeQty} available in vault"
                                                     onclick="selectCardSize(${p.id}, '${s}')">
-                                                    ${s.replace('US ', '')}${isLow ? `<span class="low-stock-dot" title="Only ${sizeQty} left!"></span>` : ''}
+                                                    ${s.replace('EU ', '')}${isLow ? `<span class="low-stock-dot" title="Only ${sizeQty} left!"></span>` : ''}
                                                 </button>
                                             `;
                 }).join('')}
@@ -3932,7 +3934,7 @@
             const product = products.find(p => p.id === id);
             if (!product) return;
 
-            const size = cardSelections[id]?.size || 'US 9';
+            const size = cardSelections[id]?.size || 'EU 42';
             const availableStock = product.inventory?.[size] !== undefined ? product.inventory[size] : 5;
             if (availableStock <= 0) {
                 showToast(`<i class="fas fa-ban" style="color:#ef4444;"></i> Size <strong>${size}</strong> is sold out in the vault!`);
@@ -3950,7 +3952,7 @@
             const product = products.find(p => p.id === id);
             if (!product) return;
 
-            const selectedSize = customSize || 'US 9';
+            const selectedSize = customSize || 'EU 42';
             const selectedColor = customColor && customColor.trim() !== '' ? customColor.trim() : 'As shown';
             const availableStock = product.inventory?.[selectedSize] !== undefined ? product.inventory[selectedSize] : 5;
 
@@ -4104,7 +4106,7 @@
             const qvSize = document.getElementById(`qv-size-${productId}`);
             const qvColor = document.getElementById(`qv-color-${productId}`);
 
-            let size = (qvSize && qvSize.value) ? qvSize.value : (cardSelections[productId]?.size || 'US 9');
+            let size = (qvSize && qvSize.value) ? qvSize.value : (cardSelections[productId]?.size || 'EU 42');
             let color = 'As shown in photo';
 
             if (qvColor && qvColor.value.trim() !== '') {
@@ -4123,7 +4125,7 @@
                 `🏷️ Price: GH₵ ${product.price.toFixed(2)}\n` +
                 `📏 Size: ${size}\n` +
                 `🎨 Colorway: ${color}\n\n` +
-                `Please let me know if it's available for dispatch via MoMo or Cash on Delivery. Thank you!`;
+                `Please let me know if it's available for Cash on Delivery dispatch. Thank you!`;
 
             window.open(`https://wa.me/233501019565?text=${encodeURIComponent(message)}`, '_blank');
         }
@@ -4142,7 +4144,7 @@
             });
 
             message += `💰 *Total Amount: GH₵ ${total.toFixed(2)}*\n\n` +
-                `I'm ready to pay via MoMo to 0256514988. Please confirm delivery details.`;
+                `I'll pay via Cash on Delivery upon doorstep arrival. Please confirm delivery details.`;
 
             window.open(`https://wa.me/233501019565?text=${encodeURIComponent(message)}`, '_blank');
         }
@@ -4152,9 +4154,9 @@
             const product = products.find(p => p.id === id);
             if (!product) return;
 
-            const currentSize = cardSelections[id]?.size || 'US 9';
+            const currentSize = cardSelections[id]?.size || 'EU 42';
             const currentColor = cardSelections[id]?.color || '';
-            const sizeOptions = ['US 7', 'US 8', 'US 9', 'US 10', 'US 11', 'US 12'];
+            const sizeOptions = ['EU 39', 'EU 40', 'EU 41', 'EU 42', 'EU 43', 'EU 44', 'EU 45'];
 
             document.getElementById('quick-view-content').innerHTML = `
                 <div class="quick-view-body">
@@ -4289,18 +4291,12 @@
             document.getElementById('wishlist-modal').classList.remove('active');
         }
 
-        // Payment Method Switcher
-        function switchPayMethod(method) {
-            selectedPayMethod = method;
-            ['momo', 'cod'].forEach(m => {
-                const tab = document.getElementById(`tab-${m}`);
-                const panel = document.getElementById(`panel-${m}`);
-                if (tab) tab.classList.toggle('active', m === method);
-                if (panel) panel.classList.toggle('active', m === method);
-            });
+        // Payment Method (Cash on Delivery)
+        function switchPayMethod(method = 'cod') {
+            selectedPayMethod = 'cod';
         }
 
-        // Checkout Modal & MoMo
+        // Checkout Modal
         function openCheckoutModal() {
             if (cart.length === 0) return alert("Your shopping bag is empty!");
             closeCart();
@@ -4353,8 +4349,7 @@
             let orderRef = '#SNK-' + Math.floor(10000 + Math.random() * 90000);
             const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-            let paymentMethodName = "Mobile Money (MoMo to 0256514988)";
-            if (selectedPayMethod === 'cod') paymentMethodName = "Cash on Delivery (Accra)";
+            let paymentMethodName = "Cash on Delivery (Pay rider on arrival)";
 
             let waUrl = null;
             const itemsSnapshot = cart.map(i => ({
@@ -4421,7 +4416,7 @@
                 items: itemsSnapshot,
                 subtotal: total,
                 totalAmount: total,
-                status: selectedPayMethod === 'momo' ? 'pending_payment' : 'pending_dispatch',
+                status: 'pending_dispatch',
                 whatsappDispatchUrl: waUrl
             };
 
@@ -4442,10 +4437,6 @@
                 <p><strong>Payment Chosen:</strong> <span style="font-weight:700; color:var(--primary);">${paymentMethodName}</span></p>
                 <hr style="border:none; border-top:1px solid var(--border); margin: 0.6rem 0;">
                 <p><strong>Total Amount:</strong> <span style="font-size:1.15rem; font-weight:800; color:var(--primary);">GH₵ ${total.toFixed(2)}</span></p>
-                ${selectedPayMethod === 'momo' ? `
-                    <p><strong>MoMo Number:</strong> <span style="font-weight:800;">0256514988</span></p>
-                    <p><strong>Transaction Reference:</strong> Use <u>${name}</u> as MoMo ref</p>
-                ` : ''}
             `;
 
             document.getElementById('btn-wa-confirm-order').href = waUrl;
@@ -4480,8 +4471,12 @@
             document.getElementById('order-success-modal').classList.remove('active');
         }
 
+        function showCodHelp() {
+            alert("How Cash on Delivery Works:\n\n1. Select your size (EU 39–45) and custom color.\n2. Tap 'Add to Bag'.\n3. Tap 'Proceed to Checkout'.\n4. Enter your delivery address in Accra or nationwide.\n5. Inspect your kicks upon doorstep arrival and pay the dispatch rider in cash!");
+        }
+
         function showMoMoHelp() {
-            alert("How MoMo Ordering Works:\n\n1. Select your size and custom color.\n2. Tap 'Add to Bag'.\n3. Tap 'Proceed to Checkout'.\n4. Choose Mobile Money or Cash on Delivery.\n5. If MoMo, transfer total to 0256514988 using your name as reference.\n6. Tap 'Send Receipt via WhatsApp' to get immediate delivery dispatch!");
+            showCodHelp();
         }
 
         // Toast Notification System

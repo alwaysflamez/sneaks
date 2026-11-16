@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "name": "Birkenstock Boston Clog",
+    "name": "Birkenstock",
     "price": 450,
     "originalPrice": 550,
     "tag": "Hot Drop",
@@ -10,12 +10,13 @@
     "fallbackImage": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600",
     "description": "Slip-on suede Boston clog featuring signature contoured cork-latex footbed and adjustable brass buckle.",
     "inventory": {
-      "US 7": 5,
-      "US 8": 6,
-      "US 9": 8,
-      "US 10": 7,
-      "US 11": 5,
-      "US 12": 3
+      "EU 39": 5,
+      "EU 40": 5,
+      "EU 41": 6,
+      "EU 42": 8,
+      "EU 43": 7,
+      "EU 44": 5,
+      "EU 45": 3
     }
   },
   {
@@ -29,17 +30,18 @@
     "fallbackImage": "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600",
     "description": "Iconic patent leather mudguard paired with breathable ballistic mesh and full-length responsive Air unit.",
     "inventory": {
-      "US 7": 5,
-      "US 8": 6,
-      "US 9": 8,
-      "US 10": 7,
-      "US 11": 5,
-      "US 12": 3
+      "EU 39": 5,
+      "EU 40": 5,
+      "EU 41": 6,
+      "EU 42": 8,
+      "EU 43": 7,
+      "EU 44": 5,
+      "EU 45": 3
     }
   },
   {
     "id": 3,
-    "name": "Nike Air Force 1 '07",
+    "name": "Nike Air Force 1",
     "price": 400,
     "originalPrice": 480,
     "tag": "Essential",
@@ -48,12 +50,13 @@
     "fallbackImage": "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600",
     "description": "Crisp stitched leather overlays, clean perforations on the toe box, and encapsulated Air-Sole cushioning.",
     "inventory": {
-      "US 7": 5,
-      "US 8": 6,
-      "US 9": 8,
-      "US 10": 7,
-      "US 11": 5,
-      "US 12": 3
+      "EU 39": 5,
+      "EU 40": 5,
+      "EU 41": 6,
+      "EU 42": 8,
+      "EU 43": 7,
+      "EU 44": 5,
+      "EU 45": 3
     }
   },
   {
@@ -67,17 +70,18 @@
     "fallbackImage": "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=600",
     "description": "Signature triangular wing eyelets, breathable side mesh quarter panels, and visible heel Air cushioning.",
     "inventory": {
-      "US 7": 5,
-      "US 8": 6,
-      "US 9": 8,
-      "US 10": 7,
-      "US 11": 5,
-      "US 12": 3
+      "EU 39": 5,
+      "EU 40": 5,
+      "EU 41": 6,
+      "EU 42": 8,
+      "EU 43": 7,
+      "EU 44": 5,
+      "EU 45": 3
     }
   },
   {
     "id": 5,
-    "name": "Nike Air Force 1 Shadow",
+    "name": "Nike Air Force 1",
     "price": 400,
     "originalPrice": 490,
     "tag": "Trending",
@@ -86,31 +90,33 @@
     "fallbackImage": "https://images.unsplash.com/photo-1539185441755-769473a23570?w=600",
     "description": "Playful layered double-swoosh styling, exaggerated platform midsole, and eye-catching shadow accents.",
     "inventory": {
-      "US 7": 5,
-      "US 8": 6,
-      "US 9": 8,
-      "US 10": 7,
-      "US 11": 5,
-      "US 12": 3
+      "EU 39": 5,
+      "EU 40": 5,
+      "EU 41": 6,
+      "EU 42": 8,
+      "EU 43": 7,
+      "EU 44": 5,
+      "EU 45": 3
     }
   },
   {
     "id": 6,
     "name": "Nike Dunk Low",
-    "price": 650,
-    "originalPrice": 750,
+    "price": 400,
+    "originalPrice": 550,
     "tag": "New",
     "category": "Performance",
     "image": "https://res.cloudinary.com/imqjmexy/image/upload/v1789673740/Screenshot_20260917_192520_Snapchat.jpg",
     "fallbackImage": "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600",
     "description": "Classic two-tone basketball silhouette with padded low-cut collar, durable rubber cupsole, and court grip.",
     "inventory": {
-      "US 7": 5,
-      "US 8": 6,
-      "US 9": 8,
-      "US 10": 7,
-      "US 11": 5,
-      "US 12": 3
+      "EU 39": 5,
+      "EU 40": 5,
+      "EU 41": 6,
+      "EU 42": 8,
+      "EU 43": 7,
+      "EU 44": 5,
+      "EU 45": 3
     }
   },
   {
@@ -124,12 +130,13 @@
     "fallbackImage": "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=600",
     "description": "The iconic 1985 silhouette in smooth red, white, and black leather with embossed Jordan Wings collar logo.",
     "inventory": {
-      "US 7": 5,
-      "US 8": 6,
-      "US 9": 8,
-      "US 10": 7,
-      "US 11": 5,
-      "US 12": 3
+      "EU 39": 5,
+      "EU 40": 5,
+      "EU 41": 6,
+      "EU 42": 8,
+      "EU 43": 7,
+      "EU 44": 5,
+      "EU 45": 3
     }
   },
   {
@@ -143,12 +150,13 @@
     "fallbackImage": "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600",
     "description": "Nike's biggest heel Max Air unit yet wrapped in vibrant crimson mesh for super-soft all-day bounce.",
     "inventory": {
-      "US 7": 5,
-      "US 8": 6,
-      "US 9": 8,
-      "US 10": 7,
-      "US 11": 5,
-      "US 12": 3
+      "EU 39": 5,
+      "EU 40": 5,
+      "EU 41": 6,
+      "EU 42": 8,
+      "EU 43": 7,
+      "EU 44": 5,
+      "EU 45": 3
     }
   },
   {
@@ -162,35 +170,17 @@
     "fallbackImage": "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600",
     "description": "Sturdy mustard canvas and suede uppers, reinforced toe caps, and signature rubber waffle outsoles.",
     "inventory": {
-      "US 7": 5,
-      "US 8": 6,
-      "US 9": 8,
-      "US 10": 7,
-      "US 11": 5,
-      "US 12": 3
+      "EU 39": 5,
+      "EU 40": 5,
+      "EU 41": 6,
+      "EU 42": 8,
+      "EU 43": 7,
+      "EU 44": 5,
+      "EU 45": 3
     }
   },
   {
     "id": 10,
-    "name": "Minimalist Leather Court",
-    "price": 420,
-    "originalPrice": 520,
-    "tag": "Classic",
-    "category": "Lifestyle",
-    "image": "https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=600&q=80",
-    "fallbackImage": "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=600",
-    "description": "Ultra-clean Italian-inspired calfskin leather sneaker with minimal branding and cushioned ortholite insoles.",
-    "inventory": {
-      "US 7": 5,
-      "US 8": 6,
-      "US 9": 8,
-      "US 10": 7,
-      "US 11": 5,
-      "US 12": 3
-    }
-  },
-  {
-    "id": 11,
     "name": "Puma Suede Classic XXI",
     "price": 380,
     "originalPrice": 460,
@@ -200,16 +190,17 @@
     "fallbackImage": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600",
     "description": "Silky full suede upper, synthetic lining, and white Puma formstrip that has defined street style since 1968.",
     "inventory": {
-      "US 7": 5,
-      "US 8": 6,
-      "US 9": 8,
-      "US 10": 7,
-      "US 11": 5,
-      "US 12": 3
+      "EU 39": 5,
+      "EU 40": 5,
+      "EU 41": 6,
+      "EU 42": 8,
+      "EU 43": 7,
+      "EU 44": 5,
+      "EU 45": 3
     }
   },
   {
-    "id": 12,
+    "id": 11,
     "name": "New Balance 990v5 Suede",
     "price": 580,
     "originalPrice": 720,
@@ -219,35 +210,17 @@
     "fallbackImage": "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600",
     "description": "Premium pigskin suede and breathable mesh with ENCAP midsole technology for legendary all-day comfort.",
     "inventory": {
-      "US 7": 5,
-      "US 8": 6,
-      "US 9": 8,
-      "US 10": 7,
-      "US 11": 5,
-      "US 12": 3
+      "EU 39": 5,
+      "EU 40": 5,
+      "EU 41": 6,
+      "EU 42": 8,
+      "EU 43": 7,
+      "EU 44": 5,
+      "EU 45": 3
     }
   },
   {
-    "id": 13,
-    "name": "Nike ZoomX Vaporfly Volt",
-    "price": 680,
-    "originalPrice": 850,
-    "tag": "Pro Runner",
-    "category": "Performance",
-    "image": "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&w=600&q=80",
-    "fallbackImage": "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=600",
-    "description": "Full-length carbon fiber Flyplate paired with ultra-responsive ZoomX foam for record-shattering speed.",
-    "inventory": {
-      "US 7": 5,
-      "US 8": 6,
-      "US 9": 8,
-      "US 10": 7,
-      "US 11": 5,
-      "US 12": 3
-    }
-  },
-  {
-    "id": 14,
+    "id": 12,
     "name": "Asics Gel-Lyte III Retro",
     "price": 460,
     "originalPrice": 560,
@@ -257,16 +230,17 @@
     "fallbackImage": "https://images.unsplash.com/photo-1539185441755-769473a23570?w=600",
     "description": "Original split-tongue design eliminates tongue shifting, coupled with signature GEL technology cushioning.",
     "inventory": {
-      "US 7": 5,
-      "US 8": 6,
-      "US 9": 8,
-      "US 10": 7,
-      "US 11": 5,
-      "US 12": 3
+      "EU 39": 5,
+      "EU 40": 5,
+      "EU 41": 6,
+      "EU 42": 8,
+      "EU 43": 7,
+      "EU 44": 5,
+      "EU 45": 3
     }
   },
   {
-    "id": 15,
+    "id": 13,
     "name": "Nike Air Max 95 Neon",
     "price": 590,
     "originalPrice": 720,
@@ -276,16 +250,17 @@
     "fallbackImage": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600",
     "description": "Human anatomy-inspired wavy side panels with forefoot and heel Air Max units for aggressive 90s presence.",
     "inventory": {
-      "US 7": 5,
-      "US 8": 6,
-      "US 9": 8,
-      "US 10": 7,
-      "US 11": 5,
-      "US 12": 3
+      "EU 39": 5,
+      "EU 40": 5,
+      "EU 41": 6,
+      "EU 42": 8,
+      "EU 43": 7,
+      "EU 44": 5,
+      "EU 45": 3
     }
   },
   {
-    "id": 16,
+    "id": 14,
     "name": "Nike Flyknit Racer Stealth",
     "price": 530,
     "originalPrice": 650,
@@ -295,16 +270,17 @@
     "fallbackImage": "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600",
     "description": "Featherlight seamless Flyknit upper offering second-skin fit with responsive forefoot Zoom Air unit.",
     "inventory": {
-      "US 7": 5,
-      "US 8": 6,
-      "US 9": 8,
-      "US 10": 7,
-      "US 11": 5,
-      "US 12": 3
+      "EU 39": 5,
+      "EU 40": 5,
+      "EU 41": 6,
+      "EU 42": 8,
+      "EU 43": 7,
+      "EU 44": 5,
+      "EU 45": 3
     }
   },
   {
-    "id": 17,
+    "id": 15,
     "name": "Adidas Samba OG White Green",
     "price": 490,
     "originalPrice": 600,
@@ -314,16 +290,17 @@
     "fallbackImage": "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600",
     "description": "The quintessential terrace icon featuring full-grain leather, suede T-toe overlay, and authentic gum rubber sole.",
     "inventory": {
-      "US 7": 5,
-      "US 8": 6,
-      "US 9": 8,
-      "US 10": 7,
-      "US 11": 5,
-      "US 12": 3
+      "EU 39": 5,
+      "EU 40": 5,
+      "EU 41": 6,
+      "EU 42": 8,
+      "EU 43": 7,
+      "EU 44": 5,
+      "EU 45": 3
     }
   },
   {
-    "id": 18,
+    "id": 16,
     "name": "Adidas Samba OG Brown Suede",
     "price": 490,
     "originalPrice": 600,
@@ -333,12 +310,53 @@
     "fallbackImage": "https://images.unsplash.com/photo-1539185441755-769473a23570?w=600",
     "description": "Rich chocolate suede finish with contrasting serrated 3-Stripes and retro low-profile gum cupsole.",
     "inventory": {
-      "US 7": 5,
-      "US 8": 6,
-      "US 9": 8,
-      "US 10": 7,
-      "US 11": 5,
-      "US 12": 3
+      "EU 39": 5,
+      "EU 40": 5,
+      "EU 41": 6,
+      "EU 42": 8,
+      "EU 43": 7,
+      "EU 44": 5,
+      "EU 45": 3
+    }
+  },
+  {
+    "id": 17,
+    "name": "Nike Air Max Plus",
+    "price": 400,
+    "originalPrice": 450,
+    "tag": "new drop",
+    "category": "Casual",
+    "image": "https://res.cloudinary.com/imqjmexy/image/upload/v1794322866/Screenshot_20261110_145703_Snapchat_2.jpg",
+    "fallbackImage": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600",
+    "description": "Original color way with comfortable cushioning",
+    "inventory": {
+      "EU 39": 5,
+      "EU 40": 5,
+      "EU 41": 6,
+      "EU 42": 8,
+      "EU 43": 7,
+      "EU 44": 5,
+      "EU 45": 3
+    }
+  },
+  {
+    "id": 18,
+    "name": "New Balance x Aime Leon Dore 1960R",
+    "price": 400,
+    "originalPrice": 450,
+    "tag": "new drop",
+    "category": "Casual",
+    "image": "https://res.cloudinary.com/imqjmexy/image/upload/v1794322866/Screenshot_20261110_145715_Snapchat_2.jpg",
+    "fallbackImage": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600",
+    "description": "Premium suede upper with signature N logo and comfortable ENCAP midsole cushioning",
+    "inventory": {
+      "EU 39": 5,
+      "EU 40": 5,
+      "EU 41": 6,
+      "EU 42": 8,
+      "EU 43": 7,
+      "EU 44": 5,
+      "EU 45": 3
     }
   }
 ]
