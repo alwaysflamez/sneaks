@@ -32,7 +32,7 @@
     "inventory": {
       "EU 39": 5,
       "EU 40": 5,
-      "EU 41": 5,
+      "EU 41": 6,
       "EU 42": 8,
       "EU 43": 7,
       "EU 44": 5,
@@ -349,6 +349,66 @@
     "image": "https://res.cloudinary.com/imqjmexy/image/upload/v1794322866/Screenshot_20261110_145715_Snapchat_2.jpg",
     "fallbackImage": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600",
     "description": "Premium suede upper with signature N logo and comfortable ENCAP midsole cushioning",
+    "inventory": {
+      "EU 39": 5,
+      "EU 40": 5,
+      "EU 41": 6,
+      "EU 42": 8,
+      "EU 43": 7,
+      "EU 44": 5,
+      "EU 45": 3
+    }
+  },
+  {
+    "id": 19,
+    "name": "Nike Minds",
+    "price": 200,
+    "originalPrice": 250,
+    "tag": "trending",
+    "category": "Low Tops",
+    "image": "https://res.cloudinary.com/imqjmexy/image/upload/v1794852574/Snapchat-80323893.jpg",
+    "fallbackImage": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600",
+    "description": "Comfortable cushioning for everyday activities",
+    "inventory": {
+      "EU 39": 5,
+      "EU 40": 5,
+      "EU 41": 6,
+      "EU 42": 8,
+      "EU 43": 7,
+      "EU 44": 5,
+      "EU 45": 3
+    }
+  },
+  {
+    "id": 20,
+    "name": "Adidas Beige Slip-On Mule",
+    "price": 650,
+    "originalPrice": 700,
+    "tag": "new drop",
+    "category": "Casual",
+    "image": "https://res.cloudinary.com/imqjmexy/image/upload/v1794852574/Snapchat-1793262371.jpg",
+    "fallbackImage": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600",
+    "description": "Luxury and lifestyle focused",
+    "inventory": {
+      "EU 39": 5,
+      "EU 40": 5,
+      "EU 41": 6,
+      "EU 42": 8,
+      "EU 43": 7,
+      "EU 44": 5,
+      "EU 45": 3
+    }
+  },
+  {
+    "id": 21,
+    "name": "Nike Beige Slip-On Mule",
+    "price": 650,
+    "originalPrice": 700,
+    "tag": "new drop",
+    "category": "Casual",
+    "image": "https://res.cloudinary.com/imqjmexy/image/upload/v1794852574/Snapchat-1485722804.jpg",
+    "fallbackImage": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600",
+    "description": "Clean and modern soft suede to look presentable",
     "inventory": {
       "EU 39": 5,
       "EU 40": 5,
