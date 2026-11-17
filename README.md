@@ -109,12 +109,13 @@ Server will start on: **`http://localhost:5000`**
     ```json
     {
       "inventory": {
-        "US 7": 4,
-        "US 8": 5,
-        "US 9": 8,
-        "US 10": 6,
-        "US 11": 4,
-        "US 12": 2
+        "EU 39": 5,
+        "EU 40": 5,
+        "EU 41": 6,
+        "EU 42": 8,
+        "EU 43": 7,
+        "EU 44": 5,
+        "EU 45": 3
       }
     }
     ```
