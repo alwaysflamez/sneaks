@@ -1,7 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+const { getDb, syncBackups } = require('../db/database');
 
-const PRODUCTS_FILE = path.join(__dirname, '..', 'data', 'products.json');
 const DEFAULT_INVENTORY = {
     'EU 39': 5,
     'EU 40': 5,
@@ -12,189 +10,220 @@ const DEFAULT_INVENTORY = {
     'EU 45': 3
 };
 
-function ensureInventory(p) {
-    if (!p.inventory || typeof p.inventory !== 'object') {
-        p.inventory = { ...DEFAULT_INVENTORY };
-    }
-    return p.inventory;
-}
-
-function readProducts() {
+function parseProductRow(row) {
+    if (!row) return null;
+    let inv = {};
     try {
-        if (!fs.existsSync(PRODUCTS_FILE)) {
-            fs.writeFileSync(PRODUCTS_FILE, JSON.stringify([], null, 2), 'utf8');
-            return [];
-        }
-        const data = fs.readFileSync(PRODUCTS_FILE, 'utf8');
-        const list = JSON.parse(data || '[]');
-        return list.map(p => {
-            ensureInventory(p);
-            return p;
-        });
-    } catch (err) {
-        console.error('Error reading products.json:', err);
-        return [];
+        inv = typeof row.inventory === 'string' ? JSON.parse(row.inventory) : (row.inventory || {});
+    } catch (e) {
+        inv = { ...DEFAULT_INVENTORY };
     }
-}
-
-function writeProducts(products) {
-    try {
-        fs.writeFileSync(PRODUCTS_FILE, JSON.stringify(products, null, 2), 'utf8');
-        return true;
-    } catch (err) {
-        console.error('Error writing products.json:', err);
-        throw new Error('Failed to persist product data');
-    }
+    return {
+        id: Number(row.id),
+        name: row.name,
+        price: Number(row.price),
+        originalPrice: Number(row.originalPrice || row.price),
+        tag: row.tag || 'New Drop',
+        category: row.category,
+        image: row.image,
+        fallbackImage: row.fallbackImage || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600',
+        description: row.description || '',
+        inventory: inv,
+        createdAt: row.createdAt,
+        updatedAt: row.updatedAt
+    };
 }
 
 const productService = {
-    getAll({ category, search, sort, minPrice, maxPrice }) {
-        let items = readProducts();
+    getAll({ category, search, sort, minPrice, maxPrice } = {}) {
+        const db = getDb();
+        const conditions = [];
+        const params = [];
 
-        // Filter by category
         if (category && category !== 'All') {
-            items = items.filter(p => p.category.toLowerCase() === category.toLowerCase());
+            conditions.push('LOWER(category) = LOWER(?)');
+            params.push(category);
         }
 
-        // Search in name, category, tag, or description
         if (search && search.trim() !== '') {
-            const q = search.trim().toLowerCase();
-            items = items.filter(p =>
-                p.name.toLowerCase().includes(q) ||
-                p.category.toLowerCase().includes(q) ||
-                (p.tag && p.tag.toLowerCase().includes(q)) ||
-                (p.description && p.description.toLowerCase().includes(q))
-            );
+            const term = `%${search.trim().toLowerCase()}%`;
+            conditions.push('(LOWER(name) LIKE ? OR LOWER(category) LIKE ? OR LOWER(tag) LIKE ? OR LOWER(description) LIKE ?)');
+            params.push(term, term, term, term);
         }
 
-        // Price range
         if (minPrice !== undefined && !isNaN(Number(minPrice))) {
-            items = items.filter(p => p.price >= Number(minPrice));
+            conditions.push('price >= ?');
+            params.push(Number(minPrice));
         }
+
         if (maxPrice !== undefined && !isNaN(Number(maxPrice))) {
-            items = items.filter(p => p.price <= Number(maxPrice));
+            conditions.push('price <= ?');
+            params.push(Number(maxPrice));
         }
 
-        // Sorting
+        let orderBy = 'id ASC';
         if (sort === 'price-low') {
-            items.sort((a, b) => a.price - b.price);
+            orderBy = 'price ASC';
         } else if (sort === 'price-high') {
-            items.sort((a, b) => b.price - a.price);
+            orderBy = 'price DESC';
         } else if (sort === 'name-az') {
-            items.sort((a, b) => a.name.localeCompare(b.name));
+            orderBy = 'name COLLATE NOCASE ASC';
         }
 
-        return items;
+        const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+        const sql = `SELECT * FROM products ${whereClause} ORDER BY ${orderBy}`;
+        const stmt = db.prepare(sql);
+        const rows = stmt.all(...params);
+
+        return rows.map(parseProductRow);
     },
 
     getById(id) {
         const numericId = Number(id);
-        const products = readProducts();
-        return products.find(p => p.id === numericId) || null;
+        if (isNaN(numericId)) return null;
+
+        const db = getDb();
+        const row = db.prepare('SELECT * FROM products WHERE id = ?').get(numericId);
+        return parseProductRow(row);
     },
 
     getCategories() {
-        const products = readProducts();
-        const set = new Set(products.map(p => p.category));
-        return ['All', ...Array.from(set)];
+        const db = getDb();
+        const rows = db.prepare('SELECT DISTINCT category FROM products WHERE category IS NOT NULL ORDER BY category ASC').all();
+        const categories = rows.map(r => r.category);
+        return ['All', ...categories];
     },
 
     create(productData) {
-        const products = readProducts();
-
-        // Validation
         if (!productData.name || typeof productData.price !== 'number') {
             throw new Error('Product "name" and numeric "price" are required.');
         }
 
-        const maxId = products.reduce((max, p) => (p.id > max ? p.id : max), 0);
-        const newProduct = {
-            id: maxId + 1,
-            name: productData.name.trim(),
-            price: Number(productData.price),
-            originalPrice: productData.originalPrice ? Number(productData.originalPrice) : Number(productData.price),
-            tag: productData.tag || 'New Drop',
-            category: productData.category || 'Lifestyle',
-            image: productData.image || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600',
-            fallbackImage: productData.fallbackImage || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600',
-            description: productData.description || 'Authentic limited edition sneakers sourced and verified by SnEAKs Vault.',
-            inventory: productData.inventory && typeof productData.inventory === 'object'
-                ? { ...productData.inventory }
-                : { ...DEFAULT_INVENTORY }
-        };
+        const db = getDb();
+        const maxRow = db.prepare('SELECT MAX(id) as maxId FROM products').get();
+        const nextId = (maxRow && maxRow.maxId ? Number(maxRow.maxId) : 0) + 1;
 
-        products.push(newProduct);
-        writeProducts(products);
-        return newProduct;
+        const inventory = productData.inventory && typeof productData.inventory === 'object'
+            ? { ...productData.inventory }
+            : { ...DEFAULT_INVENTORY };
+
+        const now = new Date().toISOString();
+        const stmt = db.prepare(`
+            INSERT INTO products (id, name, price, originalPrice, tag, category, image, fallbackImage, description, inventory, createdAt, updatedAt)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `);
+
+        stmt.run(
+            nextId,
+            productData.name.trim(),
+            Number(productData.price),
+            productData.originalPrice ? Number(productData.originalPrice) : Number(productData.price),
+            productData.tag || 'New Drop',
+            productData.category || 'Lifestyle',
+            productData.image || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600',
+            productData.fallbackImage || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600',
+            productData.description || 'Authentic limited edition sneakers sourced and verified by SnEAKs Vault.',
+            JSON.stringify(inventory),
+            now,
+            now
+        );
+
+        syncBackups();
+        return this.getById(nextId);
     },
 
     update(id, updates) {
-        const numericId = Number(id);
-        const products = readProducts();
-        const index = products.findIndex(p => p.id === numericId);
+        const current = this.getById(id);
+        if (!current) return null;
 
-        if (index === -1) {
-            return null;
-        }
+        const db = getDb();
+        const updatedName = updates.name !== undefined ? updates.name.trim() : current.name;
+        const updatedPrice = updates.price !== undefined ? Number(updates.price) : current.price;
+        const updatedOriginalPrice = updates.originalPrice !== undefined ? Number(updates.originalPrice) : current.originalPrice;
+        const updatedTag = updates.tag !== undefined ? updates.tag : current.tag;
+        const updatedCategory = updates.category !== undefined ? updates.category : current.category;
+        const updatedImage = updates.image !== undefined ? updates.image : current.image;
+        const updatedFallbackImage = updates.fallbackImage !== undefined ? updates.fallbackImage : current.fallbackImage;
+        const updatedDescription = updates.description !== undefined ? updates.description : current.description;
 
-        const current = products[index];
-        const updated = {
-            ...current,
-            ...updates,
-            id: current.id // Ensure ID remains immutable
-        };
-
-        if (updates.price !== undefined) updated.price = Number(updates.price);
-        if (updates.originalPrice !== undefined) updated.originalPrice = Number(updates.originalPrice);
+        let updatedInventory = { ...current.inventory };
         if (updates.inventory && typeof updates.inventory === 'object') {
-            updated.inventory = { ...current.inventory, ...updates.inventory };
+            updatedInventory = { ...updatedInventory, ...updates.inventory };
         }
 
-        products[index] = updated;
-        writeProducts(products);
-        return updated;
+        const now = new Date().toISOString();
+        const stmt = db.prepare(`
+            UPDATE products SET
+                name = ?,
+                price = ?,
+                originalPrice = ?,
+                tag = ?,
+                category = ?,
+                image = ?,
+                fallbackImage = ?,
+                description = ?,
+                inventory = ?,
+                updatedAt = ?
+            WHERE id = ?
+        `);
+
+        stmt.run(
+            updatedName,
+            updatedPrice,
+            updatedOriginalPrice,
+            updatedTag,
+            updatedCategory,
+            updatedImage,
+            updatedFallbackImage,
+            updatedDescription,
+            JSON.stringify(updatedInventory),
+            now,
+            Number(id)
+        );
+
+        syncBackups();
+        return this.getById(id);
     },
 
     decrementStock(id, size, quantity = 1) {
-        if (!id) return null;
-        const numericId = Number(id);
-        const products = readProducts();
-        const product = products.find(p => p.id === numericId);
+        const product = this.getById(id);
         if (!product) return null;
 
-        ensureInventory(product);
         const normalizedSize = size || 'EU 42';
         const currentQty = product.inventory[normalizedSize] !== undefined ? product.inventory[normalizedSize] : 5;
         const newQty = Math.max(0, currentQty - (parseInt(quantity, 10) || 1));
         product.inventory[normalizedSize] = newQty;
 
-        writeProducts(products);
+        const db = getDb();
+        const now = new Date().toISOString();
+        db.prepare('UPDATE products SET inventory = ?, updatedAt = ? WHERE id = ?')
+            .run(JSON.stringify(product.inventory), now, Number(id));
+
+        syncBackups();
         return product;
     },
 
     incrementStock(id, size, quantity = 1) {
-        if (!id) return null;
-        const numericId = Number(id);
-        const products = readProducts();
-        const product = products.find(p => p.id === numericId);
+        const product = this.getById(id);
         if (!product) return null;
 
-        ensureInventory(product);
         const normalizedSize = size || 'EU 42';
         const currentQty = product.inventory[normalizedSize] !== undefined ? product.inventory[normalizedSize] : 0;
         product.inventory[normalizedSize] = currentQty + (parseInt(quantity, 10) || 1);
 
-        writeProducts(products);
+        const db = getDb();
+        const now = new Date().toISOString();
+        db.prepare('UPDATE products SET inventory = ?, updatedAt = ? WHERE id = ?')
+            .run(JSON.stringify(product.inventory), now, Number(id));
+
+        syncBackups();
         return product;
     },
 
     updateInventory(id, inventoryObj) {
-        const numericId = Number(id);
-        const products = readProducts();
-        const product = products.find(p => p.id === numericId);
+        const product = this.getById(id);
         if (!product) return null;
 
-        ensureInventory(product);
         if (inventoryObj && typeof inventoryObj === 'object') {
             Object.keys(inventoryObj).forEach(sizeKey => {
                 const val = parseInt(inventoryObj[sizeKey], 10);
@@ -204,24 +233,24 @@ const productService = {
             });
         }
 
-        writeProducts(products);
+        const db = getDb();
+        const now = new Date().toISOString();
+        db.prepare('UPDATE products SET inventory = ?, updatedAt = ? WHERE id = ?')
+            .run(JSON.stringify(product.inventory), now, Number(id));
+
+        syncBackups();
         return product;
     },
 
     delete(id) {
-        const numericId = Number(id);
-        const products = readProducts();
-        const index = products.findIndex(p => p.id === numericId);
+        const product = this.getById(id);
+        if (!product) return false;
 
-        if (index === -1) {
-            return false;
-        }
-
-        const [removed] = products.splice(index, 1);
-        writeProducts(products);
-        return removed;
+        const db = getDb();
+        db.prepare('DELETE FROM products WHERE id = ?').run(Number(id));
+        syncBackups();
+        return product;
     }
 };
 
 module.exports = productService;
-

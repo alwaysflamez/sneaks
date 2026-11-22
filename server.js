@@ -27,6 +27,10 @@ function loadEnv() {
 }
 loadEnv();
 
+// Initialize SQLite database
+const { initDatabase } = require('./src/db/database');
+initDatabase();
+
 const PORT = process.env.PORT || 5000;
 
 // Try loading Express and CORS if installed
@@ -57,6 +61,7 @@ try {
             status: 'online',
             service: 'SnEAKs Vault Ghana Backend API',
             mode: 'Express.js',
+            database: 'SQLite (node:sqlite)',
             version: '1.0.0',
             timestamp: new Date().toISOString(),
             paymentMethod: 'Cash on Delivery',
@@ -138,6 +143,7 @@ const nativeServer = http.createServer(async (req, res) => {
                 status: 'online',
                 service: 'SnEAKs Vault Ghana Backend API',
                 mode: 'Native Node.js (Zero Dependency)',
+                database: 'SQLite (node:sqlite)',
                 version: '1.0.0',
                 timestamp: new Date().toISOString(),
                 paymentMethod: 'Cash on Delivery',
@@ -282,6 +288,7 @@ if (require.main === module) {
         console.log(`=================================================`);
         console.log(`👟 SnEAKs Vault Ghana Backend is online!`);
         console.log(`⚡ Engine:              ${mode}`);
+        console.log(`🗄️  Database:            SQLite (src/data/sneaks.db)`);
         console.log(`🚀 Live URL:            http://localhost:${PORT}`);
         console.log(`📡 API Health Check:    http://localhost:${PORT}/api/health`);
         console.log(`📦 Products Endpoint:   http://localhost:${PORT}/api/products`);

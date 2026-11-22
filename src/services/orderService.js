@@ -1,77 +1,70 @@
-const fs = require('fs');
-const path = require('path');
+const { getDb, syncBackups } = require('../db/database');
 const productService = require('./productService');
 
-const ORDERS_FILE = path.join(__dirname, '..', 'data', 'orders.json');
 const DISPATCH_WHATSAPP = process.env.WHATSAPP_SUPPORT_PHONE || '233501019565';
-const OFFICIAL_MOMO_NUMBER = process.env.MOMO_OFFICIAL_NUMBER || '0256514988';
 const FREE_DELIVERY_THRESHOLD = 800.00;
-
-function readOrders() {
-    try {
-        if (!fs.existsSync(ORDERS_FILE)) {
-            fs.writeFileSync(ORDERS_FILE, JSON.stringify([], null, 2), 'utf8');
-            return [];
-        }
-        const data = fs.readFileSync(ORDERS_FILE, 'utf8');
-        return JSON.parse(data || '[]');
-    } catch (err) {
-        console.error('Error reading orders.json:', err);
-        return [];
-    }
-}
-
-function writeOrders(orders) {
-    try {
-        fs.writeFileSync(ORDERS_FILE, JSON.stringify(orders, null, 2), 'utf8');
-        return true;
-    } catch (err) {
-        console.error('Error writing orders.json:', err);
-        throw new Error('Failed to persist order data');
-    }
-}
 
 function generateOrderRef() {
     const randomDigits = Math.floor(10000 + Math.random() * 90000);
     return `#SNK-${randomDigits}`;
 }
 
+function parseOrderRow(row) {
+    if (!row) return null;
+    return {
+        orderRef: row.orderRef,
+        status: row.status,
+        createdAt: row.createdAt,
+        updatedAt: row.updatedAt,
+        customer: typeof row.customer === 'string' ? JSON.parse(row.customer) : (row.customer || {}),
+        payment: typeof row.payment === 'string' ? JSON.parse(row.payment) : (row.payment || {}),
+        delivery: typeof row.delivery === 'string' ? JSON.parse(row.delivery) : (row.delivery || {}),
+        items: typeof row.items === 'string' ? JSON.parse(row.items) : (row.items || []),
+        subtotal: Number(row.subtotal),
+        totalAmount: Number(row.totalAmount),
+        whatsappDispatchUrl: row.whatsappDispatchUrl
+    };
+}
+
 const orderService = {
     getAll({ status, search, limit = 50, page = 1 } = {}) {
-        let orders = readOrders();
+        const db = getDb();
+        const conditions = [];
+        const params = [];
 
         if (status) {
-            orders = orders.filter(o => o.status.toLowerCase() === status.toLowerCase());
+            conditions.push('LOWER(status) = LOWER(?)');
+            params.push(status);
         }
 
         if (search && search.trim() !== '') {
-            const q = search.trim().toLowerCase();
-            orders = orders.filter(o =>
-                o.orderRef.toLowerCase().includes(q) ||
-                o.customer.name.toLowerCase().includes(q) ||
-                o.customer.phone.includes(q) ||
-                (o.customer.email && o.customer.email.toLowerCase().includes(q))
-            );
+            const q = `%${search.trim().toLowerCase()}%`;
+            conditions.push('(LOWER(orderRef) LIKE ? OR LOWER(customer) LIKE ?)');
+            params.push(q, q);
         }
 
-        // Sort latest orders first
-        orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+        const countRow = db.prepare(`SELECT COUNT(*) as total FROM orders ${whereClause}`).get(...params);
+        const total = countRow ? countRow.total : 0;
 
-        const startIndex = (page - 1) * limit;
-        const paginated = orders.slice(startIndex, startIndex + Number(limit));
+        const offset = (Number(page) - 1) * Number(limit);
+        const sql = `SELECT * FROM orders ${whereClause} ORDER BY createdAt DESC LIMIT ? OFFSET ?`;
+        const rows = db.prepare(sql).all(...params, Number(limit), offset);
 
         return {
-            total: orders.length,
+            total,
             page: Number(page),
             limit: Number(limit),
-            orders: paginated
+            orders: rows.map(parseOrderRow)
         };
     },
 
     getByRef(orderRef) {
+        if (!orderRef) return null;
         const cleanRef = orderRef.trim().toUpperCase();
-        const orders = readOrders();
-        return orders.find(o => o.orderRef.toUpperCase() === cleanRef) || null;
+        const db = getDb();
+        const row = db.prepare('SELECT * FROM orders WHERE UPPER(orderRef) = ?').get(cleanRef);
+        return parseOrderRow(row);
     },
 
     create(payload) {
@@ -86,9 +79,8 @@ const orderService = {
             throw new Error('Order must include at least one sneaker item.');
         }
 
-        const validPaymentMethods = ['cod', 'momo'];
         // Default strictly to cash on delivery (cod)
-        const method = 'cod';
+        const paymentLabel = 'Cash on Delivery (Pay rider upon arrival)';
 
         // Compute items with accurate pricing and formatting
         const sanitizedItems = items.map(item => {
@@ -107,11 +99,10 @@ const orderService = {
 
         const subtotal = sanitizedItems.reduce((sum, item) => sum + item.total, 0);
         const qualifiesFreeExpress = subtotal >= FREE_DELIVERY_THRESHOLD;
-        const deliveryFee = 0.00; // Free promo/included
+        const deliveryFee = 0.00;
         const totalAmount = subtotal + deliveryFee;
 
         const orderRef = generateOrderRef();
-        const paymentLabel = 'Cash on Delivery (Pay rider upon arrival)';
 
         // Build pre-formatted WhatsApp Dispatch Message
         let waMsg = `*NEW SNEAKER ORDER ${orderRef}*\n\n` +
@@ -130,10 +121,12 @@ const orderService = {
 
         const whatsappUrl = `https://wa.me/${DISPATCH_WHATSAPP}?text=${encodeURIComponent(waMsg)}`;
 
-        const newOrder = {
+        const now = new Date().toISOString();
+        const orderData = {
             orderRef,
             status: 'pending_dispatch',
-            createdAt: new Date().toISOString(),
+            createdAt: now,
+            updatedAt: now,
             customer: {
                 name: customer.name.trim(),
                 phone: customer.phone.trim(),
@@ -156,11 +149,27 @@ const orderService = {
             whatsappDispatchUrl: whatsappUrl
         };
 
-        const orders = readOrders();
-        orders.push(newOrder);
-        writeOrders(orders);
+        const db = getDb();
+        const stmt = db.prepare(`
+            INSERT INTO orders (orderRef, status, createdAt, updatedAt, customer, payment, delivery, items, subtotal, totalAmount, whatsappDispatchUrl)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `);
 
-        // Decrement sneaker stock for each item ordered
+        stmt.run(
+            orderData.orderRef,
+            orderData.status,
+            orderData.createdAt,
+            orderData.updatedAt,
+            JSON.stringify(orderData.customer),
+            JSON.stringify(orderData.payment),
+            JSON.stringify(orderData.delivery),
+            JSON.stringify(orderData.items),
+            orderData.subtotal,
+            orderData.totalAmount,
+            orderData.whatsappDispatchUrl
+        );
+
+        // Decrement sneaker stock in SQLite
         try {
             sanitizedItems.forEach(item => {
                 if (item.id) {
@@ -171,7 +180,8 @@ const orderService = {
             console.error('Inventory decrement warning:', stockErr);
         }
 
-        return newOrder;
+        syncBackups();
+        return orderData;
     },
 
     updateStatus(orderRef, newStatus) {
@@ -188,25 +198,24 @@ const orderService = {
             throw new Error(`Invalid status "${newStatus}". Allowed: ${allowedStatuses.join(', ')}.`);
         }
 
-        const orders = readOrders();
-        const index = orders.findIndex(o => o.orderRef.toUpperCase() === orderRef.toUpperCase());
+        const existing = this.getByRef(orderRef);
+        if (!existing) return null;
 
-        if (index === -1) {
-            return null;
-        }
-
-        const previousStatus = orders[index].status;
-        orders[index].status = newStatus;
-        orders[index].updatedAt = new Date().toISOString();
-
+        const previousStatus = existing.status;
+        const now = new Date().toISOString();
+        const updatedPayment = { ...existing.payment };
         if (newStatus === 'payment_verified') {
-            orders[index].payment.status = 'verified';
+            updatedPayment.status = 'verified';
         }
 
-        // If order was cancelled and wasn't already cancelled, restock the sneaker inventory
+        const db = getDb();
+        db.prepare('UPDATE orders SET status = ?, payment = ?, updatedAt = ? WHERE UPPER(orderRef) = ?')
+            .run(newStatus, JSON.stringify(updatedPayment), now, orderRef.trim().toUpperCase());
+
+        // If order was cancelled and wasn't already cancelled, restock sneaker inventory
         if (newStatus === 'cancelled' && previousStatus !== 'cancelled') {
             try {
-                (orders[index].items || []).forEach(item => {
+                (existing.items || []).forEach(item => {
                     if (item.id) {
                         productService.incrementStock(item.id, item.size, item.quantity);
                     }
@@ -216,27 +225,28 @@ const orderService = {
             }
         }
 
-        writeOrders(orders);
-        return orders[index];
+        syncBackups();
+        return this.getByRef(orderRef);
     },
 
     verifyMoMoPayment(orderRef, transactionRef) {
-        const orders = readOrders();
-        const index = orders.findIndex(o => o.orderRef.toUpperCase() === orderRef.toUpperCase());
+        const existing = this.getByRef(orderRef);
+        if (!existing) return null;
 
-        if (index === -1) {
-            return null;
-        }
+        const now = new Date().toISOString();
+        const updatedPayment = {
+            ...existing.payment,
+            momoTransactionRef: transactionRef,
+            status: 'verified'
+        };
 
-        orders[index].payment.momoTransactionRef = transactionRef;
-        orders[index].payment.status = 'verified';
-        orders[index].status = 'payment_verified';
-        orders[index].updatedAt = new Date().toISOString();
+        const db = getDb();
+        db.prepare('UPDATE orders SET status = ?, payment = ?, updatedAt = ? WHERE UPPER(orderRef) = ?')
+            .run('payment_verified', JSON.stringify(updatedPayment), now, orderRef.trim().toUpperCase());
 
-        writeOrders(orders);
-        return orders[index];
+        syncBackups();
+        return this.getByRef(orderRef);
     }
 };
 
 module.exports = orderService;
-

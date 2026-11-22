@@ -12,3 +12,7 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 
+# SQLite temporary files
+*.db-wal
+*.db-shm
+
