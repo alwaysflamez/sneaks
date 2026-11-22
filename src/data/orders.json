@@ -1,5 +1,41 @@
 [
   {
+    "orderRef": "#SNK-70467",
+    "status": "pending_dispatch",
+    "createdAt": "2026-11-22T18:21:09.313Z",
+    "updatedAt": "2026-11-22T18:21:09.313Z",
+    "customer": {
+      "name": "Rasheed Acquaye",
+      "phone": "09876543",
+      "email": "rasheedacquaye14@gmail.com",
+      "address": "Obaakrowa Close 7",
+      "region": "Accra - East Legon / Airport / Cantonments"
+    },
+    "payment": {
+      "method": "cod",
+      "label": "Cash on Delivery (Pay rider upon arrival)",
+      "status": "payable_on_delivery"
+    },
+    "delivery": {
+      "tier": "Standard Delivery",
+      "fee": 0
+    },
+    "items": [
+      {
+        "id": 2,
+        "name": "Air Jordan 11 Retro",
+        "size": "EU 42",
+        "color": "As shown",
+        "price": 400,
+        "quantity": 1,
+        "total": 400
+      }
+    ],
+    "subtotal": 400,
+    "totalAmount": 400,
+    "whatsappDispatchUrl": "https://wa.me/233501019565?text=*NEW%20SNEAKER%20ORDER%20%23SNK-70467*%0A%0A%F0%9F%91%A4%20*Name%3A*%20Rasheed%20Acquaye%0A%F0%9F%93%9E%20*Phone%3A*%2009876543%0A%F0%9F%93%8D%20*Dropoff%20Address%3A*%20Obaakrowa%20Close%207%20(Accra%20-%20East%20Legon%20%2F%20Airport%20%2F%20Cantonments)%0A%F0%9F%92%B3%20*Payment%20Method%3A*%20Cash%20on%20Delivery%20(Pay%20rider%20upon%20arrival)%0A%0A*Items%20Ordered%3A*%0A1.%20Air%20Jordan%2011%20Retro%20x1%20%5BEU%2042%2C%20As%20shown%5D%20-%20GH%E2%82%B5%20400.00%0A%0A%F0%9F%92%B0%20*Total%20Due%20on%20Delivery%3A*%20GH%E2%82%B5%20400.00%0A%0APlease%20confirm%20my%20order%20and%20dispatch%20timeline.%20I%20will%20pay%20in%20cash%20upon%20doorstep%20delivery.%20Thank%20you!"
+  },
+  {
     "orderRef": "#SNK-23871",
     "status": "delivered",
     "createdAt": "2026-11-16T17:18:35.022Z",
