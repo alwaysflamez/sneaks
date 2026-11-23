@@ -16,3 +16,6 @@ Thumbs.db
 *.db-wal
 *.db-shm
 
+# Legacy prototype files
+Sneaks/
+
