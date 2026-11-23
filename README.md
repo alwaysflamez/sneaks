@@ -12,7 +12,8 @@ Modern RESTful API and backend server for **SnEAKs Vault**, Ghana's exclusive sn
 - **Live Order Tracking**: Instant customer lookup via `#SNK-` reference code with a 4-step delivery progress stepper (`Order Placed` ➔ `Payment Verified` ➔ `Dispatched` ➔ `Delivered`).
 - **Order Management API**: Submit orders with items, calculate subtotal and free express dispatch thresholds (GH₵ 800+), generate unique `#SNK-XXXXX` order reference codes, and track status (`pending_payment`, `payment_verified`, `pending_dispatch`, `dispatched`, `delivered`, `cancelled`).
 - **Mobile Money (MoMo) Integration**: Pre-formatted WhatsApp order dispatch receipts, official MoMo line verification (`0256514988`), and transaction logging.
-- **Persistent Data Store**: Clean JSON file-based database (`src/data/products.json` and `src/data/orders.json`), running out-of-the-box without requiring external database setups.
+- **Persistent Data Store**: Native SQLite database (`src/data/sneaks.db`) with zero external binary dependencies via Node.js `node:sqlite`, complete with automatic JSON fallback synchronization (`src/data/products.json` and `src/data/orders.json`).
+- **Apple Design & Mobile Optimization**: iOS-inspired Bottom Sheet modal system, responsive 2-column mobile sneaker grid, swipeable horizontal category filter rail, safe-area inset adaptation, and a floating mobile bottom navigation bar.
 - **Static Frontend Serving**: Serves the `index.html` storefront directly at `http://localhost:5000`.
 - **CORS Enabled**: Supports requests from any origin or standalone frontend.
 
@@ -22,19 +23,32 @@ Modern RESTful API and backend server for **SnEAKs Vault**, Ghana's exclusive sn
 
 ```text
 Sneaks/
-├── server.js                      # Express server entry point & static file host
-├── package.json                   # Dependencies and scripts
+├── server.js                      # Express/Native server entry point & static host
+├── package.json                   # Dependencies, scripts (start, dev, db:init)
+├── .env                           # Environment variables (local, git-ignored)
 ├── .env.example                   # Environment configuration template
-├── .gitignore                     # Git ignore rules
+├── .gitignore                     # Git ignore rules (includes db-wal/shm)
 ├── README.md                      # Documentation & API reference
-├── index.html                     # Frontend storefront
+├── index.html                     # Responsive, Apple-grade frontend storefront
+├── start-server.bat               # Windows batch server launcher
+├── start-server.ps1               # Windows PowerShell server launcher
+├── .agents/                       # Agent & UI/UX design intelligence skills
+│   └── skills/
+│       ├── anti-ai-slop-ui/       # Human craft & anti-slop guidelines
+│       ├── apple-design-fluid/    # Apple fluid motion & micro-interactions
+│       ├── apple-design-hig/      # Apple HIG patterns & Bottom Sheet design
+│       ├── ui-ux-pro-max/         # UI/UX design intelligence database
+│       └── unslop/                # Comprehensive redesign & redline passes
 └── src/
     ├── data/
-    │   ├── products.json          # 16 authentic sneaker products
-    │   └── orders.json            # Order storage database
+    │   ├── sneaks.db              # SQLite database (products & orders)
+    │   ├── products.json          # 22 authentic sneaker items (backup sync)
+    │   └── orders.json            # Order records database (backup sync)
+    ├── db/
+    │   └── database.js            # Native SQLite layer (node:sqlite) & migrations
     ├── services/
-    │   ├── productService.js      # Product query, search, and CRUD logic
-    │   └── orderService.js        # Order validation, ref generator, and calculations
+    │   ├── productService.js      # Product query, search, and SQLite CRUD logic
+    │   └── orderService.js        # Order validation, ref generator, & SQLite persistence
     ├── controllers/
     │   ├── productController.js   # Product request handlers
     │   ├── orderController.js     # Order request handlers
@@ -77,6 +91,10 @@ cp .env.example .env
 * **Development mode (auto-reload)**:
   ```bash
   npm run dev
+  ```
+* **Initialize/Seed SQLite Database manually (optional - runs automatically on server start)**:
+  ```bash
+  npm run db:init
   ```
 
 Server will start on: **`http://localhost:5000`**
