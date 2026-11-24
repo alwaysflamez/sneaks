@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
-const { requireAdmin } = require('../middleware/adminAuth');
 
 // Categories lookup
 router.get('/categories', productController.getCategories);
@@ -9,10 +8,10 @@ router.get('/categories', productController.getCategories);
 // Products CRUD
 router.get('/', productController.getAllProducts);
 router.get('/:id', productController.getProductById);
-router.post('/', requireAdmin, productController.createProduct);
-router.put('/:id', requireAdmin, productController.updateProduct);
-router.patch('/:id/inventory', requireAdmin, productController.updateInventory);
-router.delete('/:id', requireAdmin, productController.deleteProduct);
+router.post('/', (req, res) => res.status(404).json({ success: false, message: 'Route not available.' }));
+router.put('/:id', (req, res) => res.status(404).json({ success: false, message: 'Route not available.' }));
+router.patch('/:id/inventory', (req, res) => res.status(404).json({ success: false, message: 'Route not available.' }));
+router.delete('/:id', (req, res) => res.status(404).json({ success: false, message: 'Route not available.' }));
 
 module.exports = router;
 

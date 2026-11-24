@@ -1,7 +1,6 @@
 const path = require('path');
 const fs = require('fs');
 const http = require('http');
-const { createAdminToken, requireAdmin } = require('./src/middleware/adminAuth');
 
 // Auto-load environment variables from .env file
 function loadEnv() {
@@ -44,7 +43,6 @@ try {
     const productRoutes = require('./src/routes/productRoutes');
     const orderRoutes = require('./src/routes/orderRoutes');
     const paymentRoutes = require('./src/routes/paymentRoutes');
-    const adminRoutes = require('./src/routes/adminRoutes');
 
     const app = express();
     app.use(helmet({ contentSecurityPolicy: false }));
@@ -84,7 +82,6 @@ try {
     app.use('/api/products', productRoutes);
     app.use('/api/orders', orderRoutes);
     app.use('/api/payments', paymentRoutes);
-    app.use('/api/admin', adminRoutes);
 
     // Serve only the storefront entry point; private files are never static.
     app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
@@ -125,18 +122,6 @@ function parseBody(req) {
                 resolve({});
             }
 
-            function isNativeAdmin(req) {
-                const authorization = req.headers.authorization || '';
-                const token = authorization.startsWith('Bearer ') ? authorization.slice(7).trim() : '';
-                const expiresAt = nativeAdminTokens.get(token);
-                if (!expiresAt || expiresAt < Date.now()) {
-                    if (expiresAt) nativeAdminTokens.delete(token);
-                    return false;
-                }
-                return true;
-            }
-
-            const nativeAdminTokens = new Map();
         });
         req.on('error', reject);
     });
@@ -165,14 +150,6 @@ const nativeServer = http.createServer(async (req, res) => {
 
     try {
         // --- API ROUTES ---
-        if (pathname === '/api/admin/login' && req.method === 'POST') {
-            const body = await parseBody(req);
-            const token = createAdminToken(body.pin);
-            if (!token) return sendJson(res, 401, { success: false, message: 'Invalid admin PIN.' });
-            nativeAdminTokens.set(token, Date.now() + 8 * 60 * 60 * 1000);
-            return sendJson(res, 200, { success: true, token, expiresIn: 28800 });
-        }
-
         // Health
         if (pathname === '/api/health' && req.method === 'GET') {
             return sendJson(res, 200, {
@@ -210,27 +187,17 @@ const nativeServer = http.createServer(async (req, res) => {
         // Product Inventory Update
         const invMatch = pathname.match(/^\/api\/products\/(\d+)\/inventory$/);
         if (invMatch && req.method === 'PATCH') {
-            if (!isNativeAdmin(req)) return sendJson(res, 401, { success: false, message: 'Admin authentication required.' });
-            const body = await parseBody(req);
-            const updated = productService.updateInventory(invMatch[1], body.inventory);
-            return updated
-                ? sendJson(res, 200, { success: true, message: 'Inventory updated', data: updated })
-                : sendJson(res, 404, { success: false, message: 'Sneaker not found' });
+            return sendJson(res, 404, { success: false, message: 'Route not available.' });
         }
 
         // Create Product
         if (pathname === '/api/products' && req.method === 'POST') {
-            if (!isNativeAdmin(req)) return sendJson(res, 401, { success: false, message: 'Admin authentication required.' });
-            const body = await parseBody(req);
-            const created = productService.create(body);
-            return sendJson(res, 201, { success: true, data: created });
+            return sendJson(res, 404, { success: false, message: 'Route not available.' });
         }
 
         // Orders List
         if (pathname === '/api/orders' && req.method === 'GET') {
-            if (!isNativeAdmin(req)) return sendJson(res, 401, { success: false, message: 'Admin authentication required.' });
-            const orders = orderService.getAll(query);
-            return sendJson(res, 200, { success: true, ...orders });
+            return sendJson(res, 404, { success: false, message: 'Route not available.' });
         }
 
         // Place Order
@@ -252,12 +219,7 @@ const nativeServer = http.createServer(async (req, res) => {
         // Update Order Status (PATCH /api/orders/:ref or PATCH /api/orders/:ref/status)
         const statusMatch = pathname.match(/^\/api\/orders\/([^/]+)(?:\/status)?$/);
         if (statusMatch && req.method === 'PATCH') {
-            if (!isNativeAdmin(req)) return sendJson(res, 401, { success: false, message: 'Admin authentication required.' });
-            const body = await parseBody(req);
-            const updated = orderService.updateStatus(decodeURIComponent(statusMatch[1]), body.status);
-            return updated
-                ? sendJson(res, 200, { success: true, data: updated })
-                : sendJson(res, 404, { success: false, message: 'Order not found' });
+            return sendJson(res, 404, { success: false, message: 'Route not available.' });
         }
 
         // MoMo Info
