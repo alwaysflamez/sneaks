@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const http = require('http');
+const { createAdminToken, requireAdmin } = require('./src/middleware/adminAuth');
 
 // Auto-load environment variables from .env file
 function loadEnv() {
@@ -38,13 +39,24 @@ let expressApp = null;
 try {
     const express = require('express');
     const cors = require('cors');
+    const helmet = require('helmet');
 
     const productRoutes = require('./src/routes/productRoutes');
     const orderRoutes = require('./src/routes/orderRoutes');
     const paymentRoutes = require('./src/routes/paymentRoutes');
+    const adminRoutes = require('./src/routes/adminRoutes');
 
     const app = express();
-    app.use(cors());
+    app.use(helmet({ contentSecurityPolicy: false }));
+    app.use(cors({
+        origin: (origin, callback) => {
+            if (!origin) return callback(null, true);
+            const allowed = (process.env.CORS_ORIGINS || '').split(',').map(value => value.trim()).filter(Boolean);
+            if (allowed.length === 0 || allowed.includes(origin)) return callback(null, true);
+            return callback(new Error('Origin not allowed'));
+        },
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
+    }));
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
 
@@ -72,10 +84,11 @@ try {
     app.use('/api/products', productRoutes);
     app.use('/api/orders', orderRoutes);
     app.use('/api/payments', paymentRoutes);
+    app.use('/api/admin', adminRoutes);
 
-    // Static Frontend Serving
-    app.use(express.static(path.join(__dirname)));
+    // Serve only the storefront entry point; private files are never static.
     app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
+    app.get('/index.html', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 
     // 404 handler
     app.use('/api/*', (req, res) => {
@@ -111,14 +124,30 @@ function parseBody(req) {
             } catch (e) {
                 resolve({});
             }
+
+            function isNativeAdmin(req) {
+                const authorization = req.headers.authorization || '';
+                const token = authorization.startsWith('Bearer ') ? authorization.slice(7).trim() : '';
+                const expiresAt = nativeAdminTokens.get(token);
+                if (!expiresAt || expiresAt < Date.now()) {
+                    if (expiresAt) nativeAdminTokens.delete(token);
+                    return false;
+                }
+                return true;
+            }
+
+            const nativeAdminTokens = new Map();
         });
         req.on('error', reject);
     });
 }
 
 const nativeServer = http.createServer(async (req, res) => {
-    // Enable CORS for all requests
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    const origin = req.headers.origin;
+    const allowedOrigins = (process.env.CORS_ORIGINS || '').split(',').map(value => value.trim()).filter(Boolean);
+    if (!origin || allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin || '*');
+    }
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
@@ -136,6 +165,13 @@ const nativeServer = http.createServer(async (req, res) => {
 
     try {
         // --- API ROUTES ---
+        if (pathname === '/api/admin/login' && req.method === 'POST') {
+            const body = await parseBody(req);
+            const token = createAdminToken(body.pin);
+            if (!token) return sendJson(res, 401, { success: false, message: 'Invalid admin PIN.' });
+            nativeAdminTokens.set(token, Date.now() + 8 * 60 * 60 * 1000);
+            return sendJson(res, 200, { success: true, token, expiresIn: 28800 });
+        }
 
         // Health
         if (pathname === '/api/health' && req.method === 'GET') {
@@ -174,6 +210,7 @@ const nativeServer = http.createServer(async (req, res) => {
         // Product Inventory Update
         const invMatch = pathname.match(/^\/api\/products\/(\d+)\/inventory$/);
         if (invMatch && req.method === 'PATCH') {
+            if (!isNativeAdmin(req)) return sendJson(res, 401, { success: false, message: 'Admin authentication required.' });
             const body = await parseBody(req);
             const updated = productService.updateInventory(invMatch[1], body.inventory);
             return updated
@@ -183,6 +220,7 @@ const nativeServer = http.createServer(async (req, res) => {
 
         // Create Product
         if (pathname === '/api/products' && req.method === 'POST') {
+            if (!isNativeAdmin(req)) return sendJson(res, 401, { success: false, message: 'Admin authentication required.' });
             const body = await parseBody(req);
             const created = productService.create(body);
             return sendJson(res, 201, { success: true, data: created });
@@ -190,6 +228,7 @@ const nativeServer = http.createServer(async (req, res) => {
 
         // Orders List
         if (pathname === '/api/orders' && req.method === 'GET') {
+            if (!isNativeAdmin(req)) return sendJson(res, 401, { success: false, message: 'Admin authentication required.' });
             const orders = orderService.getAll(query);
             return sendJson(res, 200, { success: true, ...orders });
         }
@@ -204,7 +243,7 @@ const nativeServer = http.createServer(async (req, res) => {
         // Track Order by Ref (GET /api/orders/:ref)
         const orderMatch = pathname.match(/^\/api\/orders\/([^/]+)$/);
         if (orderMatch && req.method === 'GET') {
-            const order = orderService.getByRef(decodeURIComponent(orderMatch[1]));
+            const order = orderService.getPublicTracking(decodeURIComponent(orderMatch[1]));
             return order
                 ? sendJson(res, 200, { success: true, data: order })
                 : sendJson(res, 404, { success: false, message: 'Order not found' });
@@ -213,6 +252,7 @@ const nativeServer = http.createServer(async (req, res) => {
         // Update Order Status (PATCH /api/orders/:ref or PATCH /api/orders/:ref/status)
         const statusMatch = pathname.match(/^\/api\/orders\/([^/]+)(?:\/status)?$/);
         if (statusMatch && req.method === 'PATCH') {
+            if (!isNativeAdmin(req)) return sendJson(res, 401, { success: false, message: 'Admin authentication required.' });
             const body = await parseBody(req);
             const updated = orderService.updateStatus(decodeURIComponent(statusMatch[1]), body.status);
             return updated
@@ -233,32 +273,13 @@ const nativeServer = http.createServer(async (req, res) => {
 
         // MoMo Verify
         if (pathname === '/api/payments/momo/verify' && req.method === 'POST') {
-            const body = await parseBody(req);
-            const verified = orderService.verifyMoMoPayment(body.orderRef, body.transactionRef);
-            return verified
-                ? sendJson(res, 200, { success: true, data: verified })
-                : sendJson(res, 404, { success: false, message: 'Order not found' });
+            return sendJson(res, 503, {
+                success: false,
+                message: 'MoMo verification is unavailable. Payment is confirmed by the dispatch desk only.'
+            });
         }
 
         // --- STATIC FILE SERVING (Frontend) ---
-        let filePath = path.join(__dirname, pathname === '/' ? 'index.html' : pathname);
-
-        if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-            const ext = path.extname(filePath).toLowerCase();
-            const contentTypes = {
-                '.html': 'text/html; charset=utf-8',
-                '.js': 'text/javascript; charset=utf-8',
-                '.css': 'text/css; charset=utf-8',
-                '.json': 'application/json',
-                '.png': 'image/png',
-                '.jpg': 'image/jpeg',
-                '.svg': 'image/svg+xml',
-                '.ico': 'image/x-icon'
-            };
-            res.writeHead(200, { 'Content-Type': contentTypes[ext] || 'application/octet-stream' });
-            return fs.createReadStream(filePath).pipe(res);
-        }
-
         // Not Found
         if (pathname.startsWith('/api/')) {
             return sendJson(res, 404, { success: false, message: `Route "${pathname}" not found.` });

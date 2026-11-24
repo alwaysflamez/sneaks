@@ -184,21 +184,6 @@ function syncBackups() {
         }));
         fs.writeFileSync(PRODUCTS_JSON, JSON.stringify(products, null, 2), 'utf8');
 
-        const ordersRaw = db.prepare('SELECT * FROM orders ORDER BY createdAt DESC').all();
-        const orders = ordersRaw.map(r => ({
-            orderRef: r.orderRef,
-            status: r.status,
-            createdAt: r.createdAt,
-            updatedAt: r.updatedAt,
-            customer: JSON.parse(r.customer || '{}'),
-            payment: JSON.parse(r.payment || '{}'),
-            delivery: JSON.parse(r.delivery || '{}'),
-            items: JSON.parse(r.items || '[]'),
-            subtotal: r.subtotal,
-            totalAmount: r.totalAmount,
-            whatsappDispatchUrl: r.whatsappDispatchUrl
-        }));
-        fs.writeFileSync(ORDERS_JSON, JSON.stringify(orders, null, 2), 'utf8');
     } catch (err) {
         console.error('[SQLite] Error syncing backups to JSON:', err);
     }

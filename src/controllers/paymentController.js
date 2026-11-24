@@ -1,33 +1,9 @@
-const orderService = require('../services/orderService');
-
 const paymentController = {
     verifyMoMo(req, res) {
-        try {
-            const { orderRef, transactionRef } = req.body;
-
-            if (!orderRef || !transactionRef) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'Both "orderRef" and "transactionRef" are required.'
-                });
-            }
-
-            const updated = orderService.verifyMoMoPayment(orderRef, transactionRef);
-            if (!updated) {
-                return res.status(404).json({
-                    success: false,
-                    message: `Order reference ${orderRef} not found.`
-                });
-            }
-
-            res.json({
-                success: true,
-                message: 'MoMo transaction recorded and marked verified.',
-                data: updated
-            });
-        } catch (error) {
-            res.status(500).json({ success: false, message: error.message });
-        }
+        res.status(503).json({
+            success: false,
+            message: 'MoMo verification is unavailable. Payment is confirmed by the dispatch desk only.'
+        });
     },
 
     getMoMoDetails(req, res) {

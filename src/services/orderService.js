@@ -67,6 +67,22 @@ const orderService = {
         return parseOrderRow(row);
     },
 
+    getPublicTracking(orderRef) {
+        const order = this.getByRef(orderRef);
+        if (!order) return null;
+        return {
+            orderRef: order.orderRef,
+            status: order.status,
+            createdAt: order.createdAt,
+            updatedAt: order.updatedAt,
+            delivery: order.delivery,
+            totalAmount: order.totalAmount,
+            payment: {
+                status: order.payment.status
+            }
+        };
+    },
+
     create(payload) {
         const { customer, items, paymentMethod } = payload;
 
@@ -82,15 +98,29 @@ const orderService = {
         // Default strictly to cash on delivery (cod)
         const paymentLabel = 'Cash on Delivery (Pay rider upon arrival)';
 
-        // Compute items with accurate pricing and formatting
+        // Recalculate every item from the authoritative catalog.
         const sanitizedItems = items.map(item => {
-            const qty = Math.max(1, parseInt(item.quantity, 10) || 1);
-            const price = parseFloat(item.price) || 0;
+            const product = productService.getById(item.id);
+            if (!product) {
+                throw new Error(`Sneaker ${item.id || ''} no longer exists.`);
+            }
+
+            const qty = parseInt(item.quantity, 10);
+            if (!Number.isInteger(qty) || qty < 1 || qty > 10) {
+                throw new Error('Item quantity must be a whole number from 1 to 10.');
+            }
+
+            const available = Number(product.inventory[item.size] || 0);
+            if (available < qty) {
+                throw new Error(`Only ${available} units are available for size ${item.size || 'EU 42'}.`);
+            }
+
+            const price = product.price;
             return {
-                id: item.id || null,
-                name: item.name || 'Sneakers',
+                id: product.id,
+                name: product.name,
                 size: item.size || 'EU 42',
-                color: item.color || 'As shown',
+                color: typeof item.color === 'string' && item.color.trim() ? item.color.trim().slice(0, 50) : 'As shown',
                 price: price,
                 quantity: qty,
                 total: price * qty
@@ -229,24 +259,6 @@ const orderService = {
         return this.getByRef(orderRef);
     },
 
-    verifyMoMoPayment(orderRef, transactionRef) {
-        const existing = this.getByRef(orderRef);
-        if (!existing) return null;
-
-        const now = new Date().toISOString();
-        const updatedPayment = {
-            ...existing.payment,
-            momoTransactionRef: transactionRef,
-            status: 'verified'
-        };
-
-        const db = getDb();
-        db.prepare('UPDATE orders SET status = ?, payment = ?, updatedAt = ? WHERE UPPER(orderRef) = ?')
-            .run('payment_verified', JSON.stringify(updatedPayment), now, orderRef.trim().toUpperCase());
-
-        syncBackups();
-        return this.getByRef(orderRef);
-    }
 };
 
 module.exports = orderService;

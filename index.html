@@ -2720,10 +2720,6 @@
                     <i class="fas fa-lock-open"></i> Unlock Vault Desk
                 </button>
             </div>
-            <p style="font-size: 0.78rem; color: var(--text-muted);">
-                <i class="fas fa-key"></i> Default Passcode: <strong style="color:var(--primary);">2330</strong> (can be
-                changed in settings)
-            </p>
         </div>
     </div>
 
@@ -3104,6 +3100,15 @@
 
     <!-- JAVASCRIPT -->
     <script>
+        function escapeHtml(value) {
+            return String(value == null ? '' : value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
         // EXPANDED 18-SNEAKER CATALOG WITH EXACT VERIFIED MATCHING IMAGES
         const products = [
             {
@@ -3389,6 +3394,14 @@
             );
         }
 
+        function getAdminHeaders(extraHeaders = {}) {
+            const token = sessionStorage.getItem('sneaks_admin_token');
+            return {
+                ...extraHeaders,
+                ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+            };
+        }
+
         async function checkBackendStatus() {
             const apiUrl = getApiUrl();
             const statusDot = document.getElementById('status-dot');
@@ -3504,43 +3517,47 @@
             document.getElementById('admin-pin-modal').classList.remove('active');
         }
 
-        function submitAdminPin() {
+        async function submitAdminPin() {
             const p1 = document.getElementById('pin-1').value;
             const p2 = document.getElementById('pin-2').value;
             const p3 = document.getElementById('pin-3').value;
             const p4 = document.getElementById('pin-4').value;
             const enteredPin = `${p1}${p2}${p3}${p4}`;
 
-            const validPin = localStorage.getItem('sneaks_admin_pin') || '2330';
-            if (enteredPin === validPin) {
+            try {
+                const res = await fetch(`${getApiUrl()}/admin/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pin: enteredPin })
+                });
+                const json = await res.json();
+                if (!res.ok || !json.token) throw new Error(json.message || 'Invalid PIN');
+
+                sessionStorage.setItem('sneaks_admin_token', json.token);
                 sessionStorage.setItem('sneaks_admin_unlocked', 'true');
                 closeAdminPinModal();
                 showToast('<i class="fas fa-lock-open" style="color:#10b981;"></i> Vault Desk Unlocked!');
                 launchAdminDesk();
-            } else {
+            } catch (error) {
+                sessionStorage.removeItem('sneaks_admin_token');
                 document.querySelectorAll('.pin-box').forEach(b => {
                     b.classList.add('error');
                     setTimeout(() => b.classList.remove('error'), 400);
                 });
-                showToast('<i class="fas fa-times-circle" style="color:#ef4444;"></i> Incorrect PIN! Try default "2330"');
+                showToast('<i class="fas fa-times-circle" style="color:#ef4444;"></i> Incorrect PIN');
             }
         }
 
         function lockAdminDesk() {
             sessionStorage.removeItem('sneaks_admin_unlocked');
+            sessionStorage.removeItem('sneaks_admin_token');
             closeAdminModal();
             showToast('<i class="fas fa-lock" style="color:#f59e0b;"></i> Vault Desk Locked.');
         }
 
         function saveNewAdminPin() {
-            const newPin = document.getElementById('new-admin-pin').value.trim();
-            if (!/^\d{4}$/.test(newPin)) {
-                showToast('<i class="fas fa-exclamation-triangle" style="color:#ef4444;"></i> Passcode must be exactly 4 digits!');
-                return;
-            }
-            localStorage.setItem('sneaks_admin_pin', newPin);
             document.getElementById('new-admin-pin').value = '';
-            showToast(`<i class="fas fa-check-circle" style="color:#10b981;"></i> Vault Passcode updated successfully!`);
+            showToast('<i class="fas fa-lock" style="color:#ef4444;"></i> PIN changes must be made in the server ADMIN_PIN setting.');
         }
 
         function setupPinInputs() {
@@ -3618,10 +3635,10 @@
                                         <img src="${p.image}" alt="${p.name}" style="width: 44px; height: 38px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border);" onerror="this.src='${p.fallbackImage}';">
                                     </td>
                                     <td>
-                                        <strong style="color:var(--text-main); font-size:0.88rem;">${p.name}</strong>
+                                        <strong style="color:var(--text-main); font-size:0.88rem;">${escapeHtml(p.name)}</strong>
                                         <div style="font-size:0.75rem; color:var(--primary); font-weight:700;">GH₵ ${p.price.toFixed(2)}</div>
                                     </td>
-                                    <td><span class="category" style="font-size:0.75rem;">${p.category}</span></td>
+                                    <td><span class="category" style="font-size:0.75rem;">${escapeHtml(p.category)}</span></td>
                                     <td>
                                         <div style="display:flex; flex-wrap:wrap; gap:4px;">
                                             ${sizeList.map(s => {
@@ -3671,7 +3688,7 @@
                 try {
                     await fetch(`${getApiUrl()}/products/${productId}/inventory`, {
                         method: 'PATCH',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: getAdminHeaders({ 'Content-Type': 'application/json' }),
                         body: JSON.stringify({ inventory: product.inventory })
                     });
                 } catch (e) { }
@@ -3831,7 +3848,7 @@
                         <strong style="color:var(--text-main); display:block; margin-bottom:6px;"><i class="fas fa-shoe-prints" style="color:var(--primary);"></i> Ordered Kicks:</strong>
                         ${(order.items || []).map(i => `
                             <div style="display:flex; justify-content:space-between; align-items:center; padding:4px 0; border-bottom:1px dashed var(--border);">
-                                <span><strong>${i.name}</strong> • Size: <em>${i.size}</em> (${i.color || 'Standard'}) x${i.quantity}</span>
+                                <span><strong>${escapeHtml(i.name)}</strong> • Size: <em>${escapeHtml(i.size)}</em> (${escapeHtml(i.color || 'Standard')}) x${escapeHtml(i.quantity)}</span>
                                 <span style="font-weight:700; color:var(--primary);">GH₵ ${(i.price * i.quantity).toFixed(2)}</span>
                             </div>
                         `).join('')}
@@ -3856,7 +3873,10 @@
 
             // 1. Fetch from backend API
             try {
-                const res = await fetch(`${getApiUrl()}/orders`, { signal: AbortSignal.timeout(3000) });
+                const res = await fetch(`${getApiUrl()}/orders`, {
+                    headers: getAdminHeaders(),
+                    signal: AbortSignal.timeout(3000)
+                });
                 if (res.ok) {
                     const json = await res.json();
                     if (json.success && Array.isArray(json.orders)) {
@@ -3905,20 +3925,20 @@
                     <div class="order-card-admin">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.5rem; flex-wrap:wrap; gap:6px;">
                             <div>
-                                <strong style="font-size: 1rem; color: var(--primary);">${ord.orderRef}</strong>
+                                <strong style="font-size: 1rem; color: var(--primary);">${escapeHtml(ord.orderRef)}</strong>
                                 <span style="font-size: 0.78rem; color: var(--text-muted); margin-left: 8px;">${dateStr}</span>
                             </div>
                             <span class="status-badge-admin ${statusClass}">${statusLabel}</span>
                         </div>
                         <div style="font-size: 0.85rem; margin-bottom: 0.5rem;">
-                            <strong>Customer:</strong> ${ord.customer?.name || 'Customer'} • 📞 <a href="tel:${ord.customer?.phone}" style="color:var(--primary); font-weight:700;">${ord.customer?.phone || ''}</a>
+                            <strong>Customer:</strong> ${escapeHtml(ord.customer?.name || 'Customer')} • 📞 <a href="tel:${escapeHtml(ord.customer?.phone)}" style="color:var(--primary); font-weight:700;">${escapeHtml(ord.customer?.phone || '')}</a>
                             <br>
-                            <strong>📍 Address:</strong> ${ord.customer?.address || ''} (${ord.customer?.region || 'Accra'})
+                            <strong>📍 Address:</strong> ${escapeHtml(ord.customer?.address || '')} (${escapeHtml(ord.customer?.region || 'Accra')})
                             <br>
-                            <strong>💳 Payment:</strong> ${ord.payment?.label || ord.payment?.method || 'Cash on Delivery'}
+                            <strong>💳 Payment:</strong> ${escapeHtml(ord.payment?.label || ord.payment?.method || 'Cash on Delivery')}
                         </div>
                         <div style="font-size: 0.82rem; background: var(--bg-surface); padding: 6px 10px; border-radius: 6px; margin-bottom: 0.6rem;">
-                            <strong>Items:</strong> ${(ord.items || []).map(i => `${i.name} (${i.size}, ${i.color}) x${i.quantity}`).join('; ')}
+                            <strong>Items:</strong> ${(ord.items || []).map(i => `${escapeHtml(i.name)} (${escapeHtml(i.size)}, ${escapeHtml(i.color)}) x${escapeHtml(i.quantity)}`).join('; ')}
                             <div style="font-weight: 800; color: var(--primary); margin-top: 3px; font-size: 0.9rem;">
                                 Total: GH₵ ${(ord.totalAmount || 0).toFixed(2)}
                             </div>
@@ -3949,7 +3969,7 @@
                 try {
                     await fetch(`${getApiUrl()}/orders/${encodeURIComponent(orderRef)}/status`, {
                         method: 'PATCH',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: getAdminHeaders({ 'Content-Type': 'application/json' }),
                         body: JSON.stringify({ status: newStatus })
                     });
                 } catch (e) { }
@@ -4009,7 +4029,7 @@
                 try {
                     const res = await fetch(`${getApiUrl()}/products`, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: getAdminHeaders({ 'Content-Type': 'application/json' }),
                         body: JSON.stringify(newProduct)
                     });
                     if (res.ok) {
@@ -4236,7 +4256,7 @@
                 return `
                     <div class="card" id="card-${p.id}">
                         <div class="card-top-badges">
-                            <span class="tag ${p.tag === 'Hot Drop' || p.tag === 'Grail Drop' ? 'hot' : ''}">${p.tag}</span>
+                            <span class="tag ${p.tag === 'Hot Drop' || p.tag === 'Grail Drop' ? 'hot' : ''}">${escapeHtml(p.tag)}</span>
                             <button class="wishlist-btn ${isFavorite ? 'active' : ''}" onclick="toggleWishlist(${p.id})" title="${isFavorite ? 'Remove from favorites' : 'Save to favorites'}">
                                 <i class="${isFavorite ? 'fas' : 'far'} fa-heart"></i>
                             </button>
@@ -4251,11 +4271,11 @@
 
                         <div class="card-body">
                             <div class="card-meta">
-                                <span class="category">${p.category}</span>
+                                <span class="category">${escapeHtml(p.category)}</span>
                                 ${stockBadgeHtml}
                             </div>
 
-                            <h3>${p.name}</h3>
+                            <h3>${escapeHtml(p.name)}</h3>
 
                             <div class="price-row">
                                 <span class="price">GH₵ ${p.price.toFixed(2)}</span>
@@ -4582,11 +4602,11 @@
                     </div>
                     <div class="quick-view-details">
                         <div class="category" style="margin-bottom: 0.3rem;">
-                            ${product.category} • <span style="color:var(--primary); font-weight:800;">${product.tag}</span>
+                            ${escapeHtml(product.category)} • <span style="color:var(--primary); font-weight:800;">${escapeHtml(product.tag)}</span>
                         </div>
-                        <h3>${product.name}</h3>
+                        <h3>${escapeHtml(product.name)}</h3>
                         <div class="price">GH₵ ${product.price.toFixed(2)}</div>
-                        <p class="description">${product.description}</p>
+                        <p class="description">${escapeHtml(product.description)}</p>
                         
                         <div class="input-group" style="margin-bottom: 1rem;">
                             <label style="font-size:0.85rem; font-weight:700;">Select Size:</label>
@@ -4685,7 +4705,7 @@
                         <div style="display:flex; align-items:center; gap:12px;">
                             <img src="${p.image}" alt="${p.name}" style="width:50px; height:50px; object-fit:cover; border-radius:8px;" onerror="this.onerror=null; this.src='${p.fallbackImage}';">
                             <div>
-                                <strong style="font-size:0.95rem;">${p.name}</strong>
+                                <strong style="font-size:0.95rem;">${escapeHtml(p.name)}</strong>
                                 <div style="color:var(--primary); font-weight:800; font-size:0.9rem;">GH₵ ${p.price.toFixed(2)}</div>
                             </div>
                         </div>
@@ -4728,7 +4748,7 @@
                 </div>
                 ${cart.map(item => `
                     <div style="display:flex; justify-content:space-between; font-size:0.85rem; padding: 4px 0; border-top: 1px dashed var(--border);">
-                        <span>${item.quantity}x ${item.name} (${item.size}, ${item.color})</span>
+                        <span>${item.quantity}x ${escapeHtml(item.name)} (${escapeHtml(item.size)}, ${escapeHtml(item.color)})</span>
                         <strong>GH₵ ${(item.price * item.quantity).toFixed(2)}</strong>
                     </div>
                 `).join('')}
@@ -4847,11 +4867,11 @@
 
             document.getElementById('order-ref-code').textContent = orderRef;
             document.getElementById('order-receipt-details').innerHTML = `
-                <p><strong>Customer Name:</strong> ${name}</p>
-                <p><strong>Contact Phone:</strong> ${phone}</p>
-                ${email ? `<p><strong>Email:</strong> ${email}</p>` : ''}
-                <p><strong>Delivery Address:</strong> ${address} (${region})</p>
-                <p><strong>Payment Chosen:</strong> <span style="font-weight:700; color:var(--primary);">${paymentMethodName}</span></p>
+                <p><strong>Customer Name:</strong> ${escapeHtml(name)}</p>
+                <p><strong>Contact Phone:</strong> ${escapeHtml(phone)}</p>
+                ${email ? `<p><strong>Email:</strong> ${escapeHtml(email)}</p>` : ''}
+                <p><strong>Delivery Address:</strong> ${escapeHtml(address)} (${escapeHtml(region)})</p>
+                <p><strong>Payment Chosen:</strong> <span style="font-weight:700; color:var(--primary);">${escapeHtml(paymentMethodName)}</span></p>
                 <hr style="border:none; border-top:1px solid var(--border); margin: 0.6rem 0;">
                 <p><strong>Total Amount:</strong> <span style="font-size:1.15rem; font-weight:800; color:var(--primary);">GH₵ ${total.toFixed(2)}</span></p>
             `;

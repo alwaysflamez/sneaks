@@ -29,7 +29,7 @@ const orderController = {
 
     getOrderByRef(req, res) {
         try {
-            const order = orderService.getByRef(req.params.ref);
+            const order = orderService.getPublicTracking(req.params.ref);
             if (!order) {
                 return res.status(404).json({
                     success: false,

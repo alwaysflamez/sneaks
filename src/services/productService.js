@@ -34,6 +34,22 @@ function parseProductRow(row) {
     };
 }
 
+function validateTextField(value, fieldName, maxLength = 500) {
+    if (typeof value !== 'string') throw new Error(`${fieldName} must be text.`);
+    const clean = value.trim();
+    if (!clean) throw new Error(`${fieldName} is required.`);
+    if (clean.length > maxLength) throw new Error(`${fieldName} is too long.`);
+    if (/[<>&]/.test(clean)) throw new Error(`${fieldName} contains unsupported characters.`);
+    return clean;
+}
+
+function validateImageUrl(value, fieldName) {
+    if (typeof value !== 'string') throw new Error(`${fieldName} must be a URL.`);
+    if (!/^https?:\/\//i.test(value)) throw new Error(`${fieldName} must use HTTP or HTTPS.`);
+    if (value.length > 2000) throw new Error(`${fieldName} is too long.`);
+    return value;
+}
+
 const productService = {
     getAll({ category, search, sort, minPrice, maxPrice } = {}) {
         const db = getDb();
@@ -95,9 +111,23 @@ const productService = {
     },
 
     create(productData) {
-        if (!productData.name || typeof productData.price !== 'number') {
-            throw new Error('Product "name" and numeric "price" are required.');
+        if (typeof productData.price !== 'number' || !Number.isFinite(productData.price) || productData.price < 0) {
+            throw new Error('Product numeric "price" is required.');
         }
+        const name = validateTextField(productData.name, 'Product name', 120);
+        const description = validateTextField(
+            productData.description || 'Authentic limited edition sneakers sourced and verified by SnEAKs Vault.',
+            'Product description',
+            1000
+        );
+        const image = validateImageUrl(
+            productData.image || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600',
+            'Product image'
+        );
+        const fallbackImage = validateImageUrl(
+            productData.fallbackImage || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600',
+            'Fallback product image'
+        );
 
         const db = getDb();
         const maxRow = db.prepare('SELECT MAX(id) as maxId FROM products').get();
@@ -115,14 +145,14 @@ const productService = {
 
         stmt.run(
             nextId,
-            productData.name.trim(),
+            name,
             Number(productData.price),
             productData.originalPrice ? Number(productData.originalPrice) : Number(productData.price),
             productData.tag || 'New Drop',
             productData.category || 'Lifestyle',
-            productData.image || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600',
-            productData.fallbackImage || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600',
-            productData.description || 'Authentic limited edition sneakers sourced and verified by SnEAKs Vault.',
+            image,
+            fallbackImage,
+            description,
             JSON.stringify(inventory),
             now,
             now
@@ -137,14 +167,22 @@ const productService = {
         if (!current) return null;
 
         const db = getDb();
-        const updatedName = updates.name !== undefined ? updates.name.trim() : current.name;
+        const updatedName = updates.name !== undefined
+            ? validateTextField(updates.name, 'Product name', 120)
+            : current.name;
         const updatedPrice = updates.price !== undefined ? Number(updates.price) : current.price;
         const updatedOriginalPrice = updates.originalPrice !== undefined ? Number(updates.originalPrice) : current.originalPrice;
         const updatedTag = updates.tag !== undefined ? updates.tag : current.tag;
         const updatedCategory = updates.category !== undefined ? updates.category : current.category;
-        const updatedImage = updates.image !== undefined ? updates.image : current.image;
-        const updatedFallbackImage = updates.fallbackImage !== undefined ? updates.fallbackImage : current.fallbackImage;
-        const updatedDescription = updates.description !== undefined ? updates.description : current.description;
+        const updatedImage = updates.image !== undefined
+            ? validateImageUrl(updates.image, 'Product image')
+            : current.image;
+        const updatedFallbackImage = updates.fallbackImage !== undefined
+            ? validateImageUrl(updates.fallbackImage, 'Fallback product image')
+            : current.fallbackImage;
+        const updatedDescription = updates.description !== undefined
+            ? validateTextField(updates.description, 'Product description', 1000)
+            : current.description;
 
         let updatedInventory = { ...current.inventory };
         if (updates.inventory && typeof updates.inventory === 'object') {
